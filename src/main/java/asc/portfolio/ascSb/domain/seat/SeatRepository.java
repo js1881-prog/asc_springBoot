@@ -1,4 +1,7 @@
 package asc.portfolio.ascSb.domain.seat;
 
-public class SeatRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+
+public interface SeatRepository extends JpaRepository<Seat, Long> {
 }
