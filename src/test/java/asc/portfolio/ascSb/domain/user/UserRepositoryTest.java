@@ -37,7 +37,6 @@ class UserRepositoryTest {
             .email(email)
             .name(name)
             .nickname(nickname)
-            .qrCode(qrCode)
             .build();
 
     userRepository.save(user);
@@ -49,6 +48,5 @@ class UserRepositoryTest {
     assertThat(findUser.getEmail()).isEqualTo(email);
     assertThat(findUser.getName()).isEqualTo(name);
     assertThat(findUser.getNickname()).isEqualTo(nickname);
-    assertThat(findUser.getQrCode()).isEqualTo(qrCode);
   }
 }

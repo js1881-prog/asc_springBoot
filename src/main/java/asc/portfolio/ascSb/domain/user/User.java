@@ -11,8 +11,8 @@ import javax.persistence.*;
 @Entity
 public class User {
 
+  //TODO 필수값 처리는 어떻게?
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "user_id")
   private Long id;
 
@@ -21,15 +21,16 @@ public class User {
 
   private String name;
   private String nickname;
-
-  private String qrCode;
+  
+  //qrCode : id를 (?) 연산하여 qrCode 생성
+//  private String qrCode;
 
   @Builder
-  public User(String password, String email, String name, String nickname, String qrCode) {
+  public User(Long id, String password, String email, String name, String nickname) {
+    this.id = id;
     this.password = password;
     this.email = email;
     this.name = name;
     this.nickname = nickname;
-    this.qrCode = qrCode;
   }
 }
