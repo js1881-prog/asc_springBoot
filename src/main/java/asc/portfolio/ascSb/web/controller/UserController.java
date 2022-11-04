@@ -1,7 +1,7 @@
 package asc.portfolio.ascSb.web.controller;
 
 import asc.portfolio.ascSb.service.user.UserService;
-import asc.portfolio.ascSb.web.dto.user.SignUpDto;
+import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,14 +23,14 @@ public class UserController {
   private final UserService userService;
 
   @PostMapping("/signup")
-  public ResponseEntity<String> singUp(@RequestBody @Valid SignUpDto signUpDto, BindingResult bindingResult) {
+  public ResponseEntity<Long> singUp(@RequestBody @Valid UserSignupDto signUpDto, BindingResult bindingResult) {
 
     if (bindingResult.hasErrors()) {
-      return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(0L, HttpStatus.BAD_REQUEST);
     }
 
-    userService.signUp(signUpDto);
+    Long signUpUserID = userService.signUp(signUpDto);
 
-    return new ResponseEntity<>("Ok", HttpStatus.OK);
+    return new ResponseEntity<>(signUpUserID, HttpStatus.OK);
   }
 }

@@ -1,6 +1,7 @@
 package asc.portfolio.ascSb.web.dto.user;
 
 import asc.portfolio.ascSb.domain.user.User;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
@@ -10,11 +11,11 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
-public class SignUpDto {
+public class UserSignupDto {
 
   @NotBlank
   @Length(min = 8, max = 16)
-  private Long id;
+  private String loginId;
 
   //TODO Password 암호화 저장
   @NotBlank
@@ -28,8 +29,9 @@ public class SignUpDto {
   private String name;
   private String nickname;
 
-  public SignUpDto(Long id, String password, String email, String name, String nickname) {
-    this.id = id;
+  @Builder
+  public UserSignupDto(String loginId, String password, String email, String name, String nickname) {
+    this.loginId = loginId;
     this.password = password;
     this.email = email;
     this.name = name;
@@ -38,7 +40,7 @@ public class SignUpDto {
 
   public User toEntity() {
     return User.builder()
-            .id(id)
+            .loginId(loginId)
             .password(password)
             .email(email)
             .name(name)

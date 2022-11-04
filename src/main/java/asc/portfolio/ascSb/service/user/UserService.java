@@ -1,9 +1,8 @@
 package asc.portfolio.ascSb.service.user;
 
-import asc.portfolio.ascSb.domain.user.UserRepository;
-import asc.portfolio.ascSb.web.dto.user.SignUpDto;
+import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
 
 public interface UserService {
 
-  public Long signUp(SignUpDto signUpDto);
+  public Long signUp(UserSignupDto signUpDto);
 }

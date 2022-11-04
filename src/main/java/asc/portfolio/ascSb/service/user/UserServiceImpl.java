@@ -2,7 +2,7 @@ package asc.portfolio.ascSb.service.user;
 
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
-import asc.portfolio.ascSb.web.dto.user.SignUpDto;
+import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
 
   @Override
-  public Long signUp(SignUpDto signUpDto) {
+  public Long signUp(UserSignupDto signUpDto) {
 
     //TODO 작성중...
     User user = signUpDto.toEntity();
