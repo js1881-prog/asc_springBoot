@@ -51,19 +51,39 @@ class UserControllerTest {
     String url = "http://localhost:" + port + "/user/signup";
 
     //when
-    ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, requestDto, Long.class);
+    ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestDto, String.class);
 
     //then
     assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-    Long userId = responseEntity.getBody(); //생성 된 Id
-    assertThat(userId).isGreaterThan(0L);
+    User findUser = userRepository.findByLoginId(loginId);
 
-    //TODO: findByLoginId 로 바꾸기.
-    User user = new User(); // User default 값
-    Optional<User> userOptional = userRepository.findById(userId);
-    User findUser = userOptional.orElse(user);
+    assertThat(findUser.getId()).isGreaterThan(0L);
+    assertThat(findUser.getPassword()).isEqualTo(password);
+    assertThat(findUser.getEmail()).isEqualTo(email);
+  }
 
-    assertThat(findUser.getLoginId()).isEqualTo(loginId);
+  @Test
+  public void User_중복등록() {
+    //given
+    String loginId = "ascUser1";
+    String password = "password";
+    String email = "email@gmail.com";
+
+    UserSignupDto requestDto = UserSignupDto.builder()
+            .loginId(loginId)
+            .password(password)
+            .email(email)
+            .build();
+
+    String url = "http://localhost:" + port + "/user/signup";
+
+    //when
+    ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestDto, String.class);
+    ResponseEntity<String> duplicateEntity = restTemplate.postForEntity(url, requestDto, String.class);
+
+    //then
+    assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(duplicateEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
 }

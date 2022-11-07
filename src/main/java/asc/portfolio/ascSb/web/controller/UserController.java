@@ -4,6 +4,7 @@ import asc.portfolio.ascSb.service.user.UserService;
 import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -23,14 +24,18 @@ public class UserController {
   private final UserService userService;
 
   @PostMapping("/signup")
-  public ResponseEntity<Long> singUp(@RequestBody @Valid UserSignupDto signUpDto, BindingResult bindingResult) {
+  public ResponseEntity<String> singUp(@RequestBody @Valid UserSignupDto signUpDto, BindingResult bindingResult) {
 
     if (bindingResult.hasErrors()) {
-      return new ResponseEntity<>(0L, HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>("BAD_REQUEST", HttpStatus.BAD_REQUEST);
     }
 
-    Long signUpUserID = userService.signUp(signUpDto);
+    try {
+      Long signUpUserID = userService.signUp(signUpDto);
+    } catch (DataIntegrityViolationException e) {
+      return new ResponseEntity<>("BAD_REQUEST - Unique violation", HttpStatus.BAD_REQUEST);
+    }
 
-    return new ResponseEntity<>(signUpUserID, HttpStatus.OK);
+    return new ResponseEntity<>("OK", HttpStatus.OK);
   }
 }
