@@ -1,7 +1,11 @@
 package asc.portfolio.ascSb.domain.room;
+import asc.portfolio.ascSb.domain.cafe.Cafe;
+import asc.portfolio.ascSb.domain.room.converter.BooleanToStringConverter;
+import asc.portfolio.ascSb.domain.ticket.Ticket;
+import asc.portfolio.ascSb.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -12,29 +16,37 @@ import javax.persistence.*;
 public class Room {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ROOM_ID", nullable = false)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "R_ID", nullable = false)
+    private Long id; // 별개 PK일뿐이에요
 
-//    @OneToOne
-//    @JoinColumn(name = "cafe_id")
-//    private Cafe cafe;
+    @ManyToOne
+    @JoinColumn(name = "C_ID")
+    private Cafe cafeId; // CAFE FK
 
-    @Column(name = "CAFE_NAME")
-    private String studyCafeName;
+    @Column(name = "SN") // 1~40번
+    private int seatNumber;
 
-    @Column(name = "STATE") // 40개의 좌석에 대한 State
-    private String seatState; // 40개의 String, 0101010~~0 (40개), 0=미사용중, 1=사용중
+    // update 쿼리를 계속날려서 계정 업데이트 되는걸로
 
-    @Column(name = "IS_OPENED") // 영업여부
-    @ColumnDefault("true") // default 24시간
-    private boolean isOpened;
+    @Convert(converter= BooleanToStringConverter.class) // Y,N 상태로 둘 중 하나의 상태로 저장
+    private Boolean seatState; // 비어있으면 N , 사용중이면 Y
 
-    @Column(name = "OPEN_TIME") // 영업시간
-    @ColumnDefault("24") // default 24시간
-    private int openTime;
+    @OneToOne
+    @JoinColumn(name = "L_ID")
+    private User loginId;
 
-    @Column(name = "ADMIN") // 관리자 id (사장님) (후에 관리테이블 추가 후 사용)
-    private Long admin;
+    @OneToOne
+    @JoinColumn(name = "T_ID")
+    private Ticket ticketId;
 
+    @Builder
+    public Room(Long id, int seatNumber, Cafe cafe, Boolean seatState, User loginId, Ticket ticketId) {
+        this.id = id;
+        this.cafeId = cafe;
+        this.seatNumber = seatNumber;
+        this.seatState = seatState;
+        this.loginId = loginId;
+        this.ticketId = ticketId;
+    }
 }

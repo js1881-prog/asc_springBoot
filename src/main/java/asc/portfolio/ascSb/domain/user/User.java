@@ -20,14 +20,16 @@ public class User extends BaseTimeEntity {
   @Column(name = "USER_ID")
   private Long id;
 
+  @Column(name = "L_ID")
   private String loginId;
   private String password;
   private String email;
   private String name;
   private String nickname;
   
-  //qrCode : id를 (?) 연산하여 qrCode 생성
-//  private String qrCode;
+  //  qrCode : id를 (?) 연산하여 qrCode 생성
+  //  private String qrCode;
+
   @Builder
   public User(String loginId, String password, String email, String name, String nickname) {
     this.loginId = loginId;
