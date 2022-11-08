@@ -86,4 +86,56 @@ class UserControllerTest {
     assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(duplicateEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
+
+  @Test
+  public void User_패스워드_UppercaseStart() {
+    //given
+    String loginId = "ascUser1";
+    String password = "Test1234";
+    String email = "email@gmail.com";
+
+    UserSignupDto requestDto = UserSignupDto.builder()
+            .loginId(loginId)
+            .password(password)
+            .email(email)
+            .build();
+
+    String url = "http://localhost:" + port + "/user/signup";
+
+    //when
+    ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestDto, String.class);
+
+    //then
+    assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+    User findUser = userRepository.findByLoginId(loginId);
+
+    assertThat(findUser.getPassword()).isEqualTo(password);
+  }
+
+  @Test
+  public void User_패스워드_LowercaseStart() {
+    //given
+    String loginId = "ascUser1";
+    String password = "test1234";
+    String email = "email@gmail.com";
+
+    UserSignupDto requestDto = UserSignupDto.builder()
+            .loginId(loginId)
+            .password(password)
+            .email(email)
+            .build();
+
+    String url = "http://localhost:" + port + "/user/signup";
+
+    //when
+    ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestDto, String.class);
+
+    //then
+    assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+    User findUser = userRepository.findByLoginId(loginId);
+
+    assertThat(findUser.getPassword()).isEqualTo(password);
+  }
 }
