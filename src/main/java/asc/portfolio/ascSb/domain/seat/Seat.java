@@ -1,10 +1,10 @@
 package asc.portfolio.ascSb.domain.seat;
 import asc.portfolio.ascSb.domain.BaseTimeEntity;
+import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -15,26 +15,26 @@ import javax.persistence.*;
 public class Seat extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "SEAT_ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "S_ID", nullable = false)
     private Long id; // 좌석번호 X 사용구분을 위한 table 입니다 ex) 몇시,몇분에 어느좌석에 어떤user가 몇시간을 사용했다~
 
     @ManyToOne
+    @JoinColumn(name = "C_ID")
+    private Cafe cafeId;
+
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private User user;
+    private User user; // 어떤 유저가
 
     @OneToOne
-    @JoinColumn(name = "TICKET_ID")
+    @JoinColumn(name = "T_ID") // 어떤 ticket을
     private Ticket ticket;
 
-    @Column(name = "SN")
+    @Column(name = "SN") // 어느 좌석에서
     private int seatNumber;
 
     @Column(name = "T_IU")
-    private int timeInUse; // 사용 결제한 시간
-
-    @Column(name = "IS_N_ES")
-    @ColumnDefault("true")
-    private boolean isNotEmptySeat;
+    private int timeInUse; // 실제 사용한 시간 ( 이용종료시 )
 
 }
