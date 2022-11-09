@@ -25,4 +25,11 @@ public class UserServiceImpl implements UserService {
 
     return saveUser.getId();
   }
+
+  @Override
+  public User checkPassword(String loginId, String password) {
+    return userRepository.findByLoginId(loginId)
+            .filter(m -> m.getPassword().equals(password))
+            .orElse(null);
+  }
 }
