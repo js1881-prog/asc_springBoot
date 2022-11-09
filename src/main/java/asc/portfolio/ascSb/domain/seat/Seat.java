@@ -1,12 +1,10 @@
 package asc.portfolio.ascSb.domain.seat;
 import asc.portfolio.ascSb.domain.BaseTimeEntity;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
-import asc.portfolio.ascSb.domain.room.Room;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 

@@ -1,8 +1,5 @@
 package asc.portfolio.ascSb.domain.ticket;
 import asc.portfolio.ascSb.domain.BaseTimeEntity;
-import asc.portfolio.ascSb.domain.room.Room;
-import asc.portfolio.ascSb.domain.room.converter.BooleanToStringConverter;
-import asc.portfolio.ascSb.domain.seat.Seat;
 import asc.portfolio.ascSb.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,9 +21,7 @@ public class Ticket extends BaseTimeEntity {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @Convert(converter= BooleanToStringConverter.class) // Y,N 상태로 둘 중 하나의 상태로 저장
-    @Column(name = "IS_D_T") // 사용만기된 티켓인지 여부
-    private Boolean isDeprecatedTicket;
+    private String isDeprecatedTicket;
 
     @Column(name = "T_P")
     private int ticketPrice;
