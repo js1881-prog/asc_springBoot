@@ -4,6 +4,7 @@ import asc.portfolio.ascSb.service.jwt.JwtService;
 import asc.portfolio.ascSb.service.user.UserService;
 import asc.portfolio.ascSb.web.dto.user.UserLoginDto;
 import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -13,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.HashMap;
 
 @Slf4j
@@ -54,10 +56,17 @@ public class UserController {
 
     //TODO null 체크 코드 삽입
     String token = jwtService.createToken(loginDto.getLoginId(), loginDto.getPassword());
+    ObjectMapper mapper = new ObjectMapper();
 
-    HashMap<String, String> response = new HashMap<>();
-    response.put("accessToken", token);
+    HashMap<String, String> responseMap = new HashMap<>();
+    responseMap.put("accessToken", token);
 
-    return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+    try {
+      String responseJson = mapper.writeValueAsString(responseMap);
+      return new ResponseEntity<>(responseJson, HttpStatus.OK);
+    } catch (IOException e) {
+      log.error("Failed to convert map to json");
+      return new ResponseEntity<>("BAD_REQUEST", HttpStatus.BAD_REQUEST);
+    }
   }
 }
