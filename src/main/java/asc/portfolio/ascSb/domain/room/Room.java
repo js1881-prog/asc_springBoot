@@ -1,7 +1,10 @@
 package asc.portfolio.ascSb.domain.room;
+import asc.portfolio.ascSb.domain.cafe.Cafe;
+import asc.portfolio.ascSb.domain.ticket.Ticket;
+import asc.portfolio.ascSb.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -12,29 +15,36 @@ import javax.persistence.*;
 public class Room {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ROOM_ID", nullable = false)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "R_ID", nullable = false)
+    private Long id; // 별개 PK일뿐이에요
+
+//    @ManyToOne
+//    @JoinColumn(name = "C_ID")
+//    private Cafe cafeId; // CAFE FK
+
+    @Column(name = "SN") // 1~40번
+    private int seatNumber;
+
+    // update 쿼리를 계속날려서 계정 업데이트 되는걸로
+    // 좌석 상태
+    private String seatState;
 
 //    @OneToOne
-//    @JoinColumn(name = "cafe_id")
-//    private Cafe cafe;
+//    @JoinColumn(name = "USER_ID")
+//    private User loginId;
+//
+//    @OneToOne
+//    @JoinColumn(name = "T_ID")
+//    private Ticket ticketId;
 
-    @Column(name = "CAFE_NAME")
-    private String studyCafeName;
-
-    @Column(name = "STATE") // 40개의 좌석에 대한 State
-    private String seatState; // 40개의 String, 0101010~~0 (40개), 0=미사용중, 1=사용중
-
-    @Column(name = "IS_OPENED") // 영업여부
-    @ColumnDefault("true") // default 24시간
-    private boolean isOpened;
-
-    @Column(name = "OPEN_TIME") // 영업시간
-    @ColumnDefault("24") // default 24시간
-    private int openTime;
-
-    @Column(name = "ADMIN") // 관리자 id (사장님) (후에 관리테이블 추가 후 사용)
-    private Long admin;
-
+    @Builder
+    public Room(Long id, int seatNumber, Cafe cafe, String seatState, User loginId, Ticket ticketId) {
+        this.id = id;
+//        this.cafeId = cafe;
+        this.seatNumber = seatNumber;
+        this.seatState = seatState;
+//        this.loginId = loginId;
+//        this.ticketId = ticketId;
+    }
 }
