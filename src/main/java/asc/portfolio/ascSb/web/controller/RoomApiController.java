@@ -1,7 +1,7 @@
 package asc.portfolio.ascSb.web.controller;
 
 import asc.portfolio.ascSb.service.room.RoomService;
-import asc.portfolio.ascSb.web.dto.room.RoomListResponseDto;
+import asc.portfolio.ascSb.web.dto.room.RoomSelectResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,7 @@ public class RoomApiController {
     private final RoomService roomService;
 
     @GetMapping("/api/v1/room")
-    public List<RoomListResponseDto> roomState() {
+    public List<RoomSelectResponseDto> roomState() {
         return roomService.showAllRoom();
     }
 }

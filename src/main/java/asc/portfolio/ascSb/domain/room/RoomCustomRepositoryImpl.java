@@ -1,4 +1,6 @@
 package asc.portfolio.ascSb.domain.room;
+import asc.portfolio.ascSb.web.dto.room.RoomSelectResponseDto;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -10,12 +12,15 @@ import static asc.portfolio.ascSb.domain.room.QRoom.room;
 @Repository
 public class RoomCustomRepositoryImpl implements RoomCustomRepository {
 
-    private final JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory query;
 
     @Override
-    public List<Room> show() {
-        return jpaQueryFactory
-                .selectFrom(room)
+    public List<RoomSelectResponseDto> show() {
+        return query
+                .select(Projections.bean(RoomSelectResponseDto.class, room.seatNumber, room.seatState))
+                .from(room)
+                .orderBy(room.seatNumber.asc())
                 .fetch();
+
     }
 }
