@@ -26,7 +26,7 @@ class UserRepositoryTest {
   public void user_저장및불러오기() {
 
     //given
-    String password = "1234";
+    String password = "ascUser1234";
     String email = "asc@gmail.com";
     String name = "asc";
     String nickname = "asc";

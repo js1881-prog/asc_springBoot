@@ -1,5 +1,7 @@
 package asc.portfolio.ascSb.web.controller;
 
+import asc.portfolio.ascSb.domain.user.User;
+import asc.portfolio.ascSb.jwt.LoginUser;
 import asc.portfolio.ascSb.service.jwt.JwtService;
 import asc.portfolio.ascSb.service.user.UserService;
 import asc.portfolio.ascSb.web.dto.user.UserLoginDto;
@@ -68,5 +70,31 @@ public class UserController {
       log.error("Failed to convert map to json");
       return new ResponseEntity<>("BAD_REQUEST", HttpStatus.BAD_REQUEST);
     }
+  }
+
+  @RequestMapping("/login-check") //Test
+  public ResponseEntity<String> loginCheck(@LoginUser User user) {
+    // LoginCheckInterceptor 를 통과한 Controller
+
+    log.info("user.getId()={}", user.getId());
+    log.info("user.getLoginId()={}", user.getLoginId());
+    log.info("user.getEmail()={}", user.getEmail());
+
+    return new ResponseEntity<>("OK", HttpStatus.OK);
+  }
+
+  @RequestMapping("/login-test") //Test
+  public ResponseEntity<String> loginCheckWithoutInterceptor(@LoginUser User user) {
+    // LoginCheckInterceptor 를 통과하지 않은 Controller
+
+    if (user != null) {
+      log.info("user.getId()={}", user.getId());
+      log.info("user.getLoginId()={}", user.getLoginId());
+      log.info("user.getEmail()={}", user.getEmail());
+    } else {
+      log.info("user=null");
+    }
+
+    return new ResponseEntity<>("OK", HttpStatus.OK);
   }
 }

@@ -50,7 +50,7 @@ public class JwtTokenProvider {
     } catch (ExpiredJwtException e) {
       throw new IllegalStateException("만료된 JWT 토큰입니다.");
     } catch (JwtException e) {
-      throw new IllegalStateException("올바르지 않은 JWT 토근입니다.");
+      throw new IllegalStateException("올바르지 않은 JWT 토큰입니다.");
     }
   }
 }

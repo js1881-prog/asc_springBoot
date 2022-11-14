@@ -22,9 +22,7 @@ public class User extends BaseTimeEntity {
   private Long id;
 
   @Size(min = 8, max = 16)
-  @Column(unique = true)
-
-  @Column(name = "L_ID")
+  @Column(name = "L_ID", unique = true)
   private String loginId;
 
   @Size(min = 8, max = 16)

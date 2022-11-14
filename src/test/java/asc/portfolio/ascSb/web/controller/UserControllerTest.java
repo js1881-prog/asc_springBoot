@@ -4,6 +4,10 @@ import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
 import asc.portfolio.ascSb.web.dto.user.UserLoginDto;
 import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -11,9 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -29,6 +37,9 @@ class UserControllerTest {
 
   @Autowired
   private TestRestTemplate restTemplate;
+
+  @Autowired
+  private ObjectMapper objectMapper;
 
   @AfterEach
   public void clearAll() {
@@ -160,6 +171,7 @@ class UserControllerTest {
 
     String urlSignup = "http://localhost:" + port + "/user/signup";
     String urlLogin = "http://localhost:" + port + "/user/login";
+    String urlLoginCheck = "http://localhost:" + port + "/user/login-check";
 
     //when
     //선 회원가입
@@ -167,11 +179,24 @@ class UserControllerTest {
     //후 토큰 수령
     ResponseEntity<String> respLoginEntity = restTemplate.postForEntity(urlLogin, requestLoginDto, String.class);
 
+    //토큰 수령 후 jwt 인증 시도
+    Map<String, String> jsonToMap;
+    try {
+      jsonToMap = objectMapper.readValue(respLoginEntity.getBody(), new TypeReference<Map<String, String>>() {});
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
+
+    String accessToken = jsonToMap.get("accessToken");
+    HttpHeaders headers = new HttpHeaders();
+
+    headers.add("Authorization", accessToken);
+    ResponseEntity<String> respLoginCheck = restTemplate.postForEntity(urlLoginCheck, new HttpEntity<>(headers), String.class);
+
     //then
     //Http Status 확인
     assertThat(respSignupEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(respLoginEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-
-    //TODO 토큰 인가 여부 확인
+    assertThat(respLoginCheck.getStatusCode()).isEqualTo(HttpStatus.OK);
   }
 }

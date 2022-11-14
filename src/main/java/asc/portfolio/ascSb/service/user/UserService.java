@@ -8,4 +8,6 @@ public interface UserService {
   public Long signUp(UserSignupDto signUpDto);
 
   public User checkPassword(String loginId, String password);
+
+  public User checkJsonWebToken(String jwt);
 }
