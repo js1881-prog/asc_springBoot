@@ -1,33 +1,38 @@
 package asc.portfolio.ascSb.domain.room;
-import asc.portfolio.ascSb.domain.cafe.Cafe;
-import asc.portfolio.ascSb.domain.ticket.Ticket;
-import asc.portfolio.ascSb.domain.user.User;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.querydsl.jpa.impl.JPAQuery;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import javax.persistence.EntityManager;
+import java.util.List;
 
-import javax.persistence.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class RoomRepositoryTest {
 
-    @Autowired
-    RoomRepository roomRepository;
+    private final TestEntityManager testEntityManager;
 
-//    @After
-//    public void cleanup() { roomRepository.deleteAll(); }
+    public RoomRepositoryTest(TestEntityManager testEntityManager) {
+        this.testEntityManager = testEntityManager;
+    }
 
+    @DisplayName("Room의 전체 테이블 조회")
     @Test
-    public void roomInsert() {
+    void querydsl_showRoom() {
 
-        Integer seatNumber = 5;
-        String seatState = "Y";
+        EntityManager entityManager = testEntityManager.getEntityManager();
 
+        JPAQuery<Room> query = new JPAQuery<>(entityManager);
+        QRoom qRoom = new QRoom("p");
+
+        List<Room> roomList = query
+                .from(qRoom)
+                .orderBy(qRoom.id.desc())
+                .fetch();
+
+        assertThat(roomList).hasSize(3);
 
     }
 }

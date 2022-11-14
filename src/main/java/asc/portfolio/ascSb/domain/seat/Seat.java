@@ -32,9 +32,9 @@ public class Seat extends BaseTimeEntity {
     private Ticket ticket;
 
     @Column(name = "SN") // 어느 좌석에서
-    private Integer seatNumber;
+    private int seatNumber;
 
     @Column(name = "T_IU")
-    private Integer timeInUse; // 실제 사용한 시간 ( 이용종료시 )
+    private int timeInUse; // 실제 사용한 시간 ( 이용종료시 )
 
 }

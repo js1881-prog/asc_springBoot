@@ -10,17 +10,17 @@ public class RoomResponseDto {
 
     private Long id;
     private Cafe cafeId;
-    private Integer seatNumber;
+    private int seatNumber;
     private String seatState;
     private User loginId;
     private Ticket ticketId;
 
     public RoomResponseDto(Room entity) {
         this.id = entity.getId();
-        this.cafeId = entity.getCafeId();
+//        this.cafeId = entity.getCafeId();
         this.seatNumber = entity.getSeatNumber();
         this.seatState = entity.getSeatState();
-        this.loginId = entity.getLoginId();
-        this.ticketId = entity.getTicketId();
+//        this.loginId = entity.getLoginId();
+//        this.ticketId = entity.getTicketId();
     }
 }
