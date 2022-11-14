@@ -5,6 +5,7 @@ import asc.portfolio.ascSb.jwt.LoginUser;
 import asc.portfolio.ascSb.service.jwt.JwtService;
 import asc.portfolio.ascSb.service.user.UserService;
 import asc.portfolio.ascSb.web.dto.user.UserLoginDto;
+import asc.portfolio.ascSb.web.dto.user.UserQrAndNameResponseDto;
 import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -96,5 +98,11 @@ public class UserController {
     }
 
     return new ResponseEntity<>("OK", HttpStatus.OK);
+  }
+
+  @GetMapping("/api/v1")
+  public List<UserQrAndNameResponseDto> findQrAndNameById(@LoginUser User user) {
+
+    return userService.userQrAndName(user.getId());
   }
 }

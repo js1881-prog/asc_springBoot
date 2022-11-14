@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Random;
 
 @Getter
 @NoArgsConstructor
@@ -38,7 +39,7 @@ public class User extends BaseTimeEntity {
   
 
   //  qrCode : id를 (?) 연산하여 qrCode 생성
-  //  private String qrCode;
+  private String qrCode;
 
 
   @Builder
@@ -48,5 +49,21 @@ public class User extends BaseTimeEntity {
     this.email = email;
     this.name = name;
     this.nickname = nickname;
+    this.qrCode = createQrString();
+  }
+
+  public String createQrString() {
+    int leftLimit = 48; // numeral '0'
+    int rightLimit = 122; // letter 'z'
+    int targetStringLength = 10;
+    Random random = new Random();
+
+    String generatedString = random.ints(leftLimit,rightLimit + 1)
+            .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+            .limit(targetStringLength)
+            .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+            .toString();
+
+    return generatedString;
   }
 }
