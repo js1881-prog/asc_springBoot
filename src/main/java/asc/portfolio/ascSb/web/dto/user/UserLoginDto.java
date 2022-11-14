@@ -15,7 +15,6 @@ public class UserLoginDto {
   @Length(min = 8, max = 16)
   private String loginId;
 
-  //TODO Password 암호화 저장
   @NotBlank
   @Length(min = 8, max = 16)
   private String password;
