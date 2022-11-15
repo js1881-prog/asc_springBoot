@@ -1,6 +1,7 @@
 package asc.portfolio.ascSb.domain.user;
 
 import asc.portfolio.ascSb.domain.BaseTimeEntity;
+import asc.portfolio.ascSb.domain.ticket.Ticket;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Getter
@@ -20,6 +23,9 @@ public class User extends BaseTimeEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "USER_ID")
   private Long id;
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  private List<Ticket> tickets = new ArrayList<>();
 
   @Size(min = 8, max = 16)
   @Column(name = "L_ID", unique = true)
@@ -35,9 +41,6 @@ public class User extends BaseTimeEntity {
   //TODO 추후 기능 추가
   private String name;
   private String nickname;
-  
-
-  //  qrCode : id를 (?) 연산하여 qrCode 생성
   private String qrCode;
 
 

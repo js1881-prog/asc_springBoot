@@ -16,7 +16,6 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
 
     private final JPAQueryFactory query;
 
-
     @Override
     public List<UserQrAndNameResponseDto> findQrAndUserNameById(Long id) {
         return query

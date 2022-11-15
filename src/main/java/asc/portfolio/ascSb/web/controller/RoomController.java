@@ -1,7 +1,6 @@
 package asc.portfolio.ascSb.web.controller;
 
 import asc.portfolio.ascSb.service.room.RoomService;
-import asc.portfolio.ascSb.web.dto.room.RoomListResponseDto;
 import asc.portfolio.ascSb.web.dto.room.RoomSelectResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +10,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin(origins = "*")
-public class RoomApiController {
+public class RoomController {
 
     private final RoomService roomService;
 

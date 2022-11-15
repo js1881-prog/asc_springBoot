@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -39,9 +40,14 @@ public class TicketRepositoryTest {
         ticket.setRemainingTime(0);
 
         Ticket ticketResult = ticketRepository.save(ticket);
-
-        // then
+         //then
         assertThat(ticketResult.getFixedTermTicket().isEqual(date));
 
+    }
+
+    @Test
+    public void ticket_갱신테스트() {
+
+        ticketRepository.findAvailableTicketInfoById(1L);
     }
 }
