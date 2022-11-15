@@ -1,38 +1,44 @@
 package asc.portfolio.ascSb.domain.room;
-import com.querydsl.jpa.impl.JPAQuery;
-import org.junit.jupiter.api.DisplayName;
+import asc.portfolio.ascSb.domain.cafe.CafeRepository;
+import asc.portfolio.ascSb.domain.ticket.TicketRepository;
+import asc.portfolio.ascSb.domain.user.UserRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import javax.persistence.EntityManager;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class RoomRepositoryTest {
 
-    private final TestEntityManager testEntityManager;
+    @Autowired
+    RoomRepository roomRepository;
 
-    public RoomRepositoryTest(TestEntityManager testEntityManager) {
-        this.testEntityManager = testEntityManager;
-    }
+    @Autowired
+    UserRepository userRepository;
 
-    @DisplayName("Room의 전체 테이블 조회")
+    @Autowired
+    TicketRepository ticketRepository;
+
+    @Autowired
+    CafeRepository cafeRepository;
+
     @Test
-    void querydsl_showRoom() {
+    public void Room_좌석생성기() {
 
-        EntityManager entityManager = testEntityManager.getEntityManager();
+        for(int i=0; i < 40; i ++) {
+            Room room = new Room();
+            room.setSeatNumber(i);
+            if (i % 2 == 0) {
+                room.setSeatState("Y");
+            } else {
+                room.setSeatState("N");
+            }
 
-        JPAQuery<Room> query = new JPAQuery<>(entityManager);
-        QRoom qRoom = new QRoom("p");
+            room.setCafeId(cafeRepository.getReferenceById(1L));
+            room.setLoginId(userRepository.getReferenceById(1L));
+            room.setTicketId(ticketRepository.getReferenceById(2L));
 
-        List<Room> roomList = query
-                .from(qRoom)
-                .orderBy(qRoom.id.desc())
-                .fetch();
+            Room roomResult = roomRepository.save(room);
 
-        assertThat(roomList).hasSize(3);
-
+        }
     }
 }

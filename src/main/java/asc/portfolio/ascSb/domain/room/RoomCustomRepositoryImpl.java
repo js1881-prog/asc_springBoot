@@ -14,7 +14,7 @@ public class RoomCustomRepositoryImpl implements RoomCustomRepository {
 
     private final JPAQueryFactory query;
 
-    public List<RoomSelectResponseDto> show() {
+    public List<RoomSelectResponseDto> findSeatNumberAndSeatState() {
         return query
                 .select(Projections.bean(RoomSelectResponseDto.class, room.seatNumber, room.seatState))
                 .from(room)

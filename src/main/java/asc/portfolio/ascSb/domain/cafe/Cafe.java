@@ -1,9 +1,13 @@
 package asc.portfolio.ascSb.domain.cafe;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
+
+
+@Setter // test를 위한 setter 나중에 제거
 @Getter
 @NoArgsConstructor
 @Entity
@@ -11,7 +15,7 @@ import javax.persistence.*;
 public class Cafe {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "C_ID", nullable = false)
     private Long id;
 

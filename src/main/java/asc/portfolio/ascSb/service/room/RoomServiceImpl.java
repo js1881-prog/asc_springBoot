@@ -20,7 +20,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomSelectResponseDto> showAllRoom() {
-        return roomRepository.show().stream()
+        return roomRepository.findSeatNumberAndSeatState().stream()
                 .map(RoomSelectResponseDto::new)
                 .collect(Collectors.toList());
     }

@@ -3,10 +3,13 @@ import asc.portfolio.ascSb.domain.BaseTimeEntity;
 import asc.portfolio.ascSb.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Getter
+@Setter // test를 위한 setter 나중에 제거
 @NoArgsConstructor
 @Entity
 @Table(name = "TICKET")
@@ -27,7 +30,7 @@ public class Ticket extends BaseTimeEntity {
     private Integer ticketPrice;
 
     @Column(name = "FT_T")
-    private Date fixedTermTicket; // 기간제 티켓 날짜 => fixedTermTicket - createDate 시간으로 남은기간 계산
+    private LocalDateTime fixedTermTicket; // 기간제 티켓 날짜 => fixedTermTicket - createDate 시간으로 남은기간 계산
 
     @Column(name = "PT_T") // 결제한 시간제 티켓시간
     private Integer partTimeTicket; // 50시간, 100시간
