@@ -17,7 +17,7 @@ public class RoomListResponseDto {
         this.id = entity.getId();
         this.seatNumber = entity.getSeatNumber();
         this.seatState = entity.getSeatState();
-//        this.loginId = entity.getLoginId();
-//        this.ticketId = entity.getTicketId();
+        this.loginId = entity.getLoginId();
+        this.ticketId = entity.getTicketId();
     }
 }

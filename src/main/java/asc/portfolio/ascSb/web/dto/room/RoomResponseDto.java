@@ -17,10 +17,10 @@ public class RoomResponseDto {
 
     public RoomResponseDto(Room entity) {
         this.id = entity.getId();
-//        this.cafeId = entity.getCafeId();
+        this.cafeId = entity.getCafeId();
         this.seatNumber = entity.getSeatNumber();
         this.seatState = entity.getSeatState();
-//        this.loginId = entity.getLoginId();
-//        this.ticketId = entity.getTicketId();
+        this.loginId = entity.getLoginId();
+        this.ticketId = entity.getTicketId();
     }
 }
