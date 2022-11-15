@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface TicketCustomRepository {
 
-    List<TicketSelectResponseDto> findEnableTicketInfo();
+    List<TicketSelectResponseDto> findAvailableTicketInfo();
 
 }

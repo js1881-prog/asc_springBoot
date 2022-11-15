@@ -18,14 +18,8 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
 
     private final JPAQueryFactory query;
 
-
-
-
     @Override
-    public List<TicketSelectResponseDto> findEnableTicketInfo() {
-
-
-
+    public List<TicketSelectResponseDto> findAvailableTicketInfo() {
         return query
                 .select(Projections.bean(TicketSelectResponseDto.class,
                 ticket.isDeprecatedTicket, ticket.fixedTermTicket, ticket.partTimeTicket, ticket.remainingTime))
