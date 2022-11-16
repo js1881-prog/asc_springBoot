@@ -1,4 +1,5 @@
 package asc.portfolio.ascSb.domain.cafe;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,4 +28,11 @@ public class Cafe {
 
     private int businessHour; // 영업시간 24시간,12시간
 
+    @Builder
+    public Cafe(String cafeName, String cafeArea, String cafeState, int businessHour) {
+        this.cafeName = cafeName;
+        this.cafeArea = cafeArea;
+        this.cafeState = cafeState;
+        this.businessHour = businessHour;
+    }
 }
