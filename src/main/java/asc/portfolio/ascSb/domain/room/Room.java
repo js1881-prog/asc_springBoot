@@ -21,7 +21,7 @@ public class Room {
     @Column(name = "R_ID", nullable = false)
     private Long id; // 별개 PK일뿐이에요
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "C_ID")
     private Cafe cafeId; // CAFE FK
 
@@ -31,11 +31,11 @@ public class Room {
     // 좌석 상태
     private String seatState;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User loginId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "T_ID")
     private Ticket ticketId;
 

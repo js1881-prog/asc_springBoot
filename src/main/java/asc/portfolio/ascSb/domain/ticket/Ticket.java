@@ -20,7 +20,7 @@ public class Ticket extends BaseTimeEntity {
     @Column(name = "T_ID", nullable = false)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="USER_ID")
     private User user;
 
