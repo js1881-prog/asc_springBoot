@@ -5,6 +5,7 @@ import asc.portfolio.ascSb.domain.ticket.Ticket;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@Setter
 @Getter
 @NoArgsConstructor
 @Entity

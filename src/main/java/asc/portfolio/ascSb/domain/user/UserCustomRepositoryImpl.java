@@ -24,4 +24,6 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
                 .where(user.id.eq(id))
                 .fetch();
     }
+
+
 }

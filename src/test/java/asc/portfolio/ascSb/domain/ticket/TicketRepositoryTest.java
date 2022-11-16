@@ -32,7 +32,7 @@ public class TicketRepositoryTest {
         LocalDateTime date = LocalDateTime.now();
 
         Ticket ticket = new Ticket();
-        ticket.setUser(userRepository.getReferenceById(1L));
+        ticket.setUser(userRepository.getReferenceById(2L));
         ticket.setIsDeprecatedTicket("N");
         ticket.setTicketPrice(3000);
         ticket.setFixedTermTicket(LocalDateTime.now());

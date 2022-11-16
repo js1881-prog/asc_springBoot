@@ -35,7 +35,7 @@ public class RoomRepositoryTest {
 
             room.setCafeId(cafeRepository.getReferenceById(1L));
             room.setLoginId(userRepository.getReferenceById(1L));
-            room.setTicketId(ticketRepository.getReferenceById(2L));
+            room.setTicketId(ticketRepository.getReferenceById(1L));
 
             Room roomResult = roomRepository.save(room);
 
