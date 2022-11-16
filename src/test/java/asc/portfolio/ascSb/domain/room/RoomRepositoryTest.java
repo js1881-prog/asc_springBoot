@@ -67,9 +67,9 @@ public class RoomRepositoryTest {
                 room.setSeatState("N");
             }
 
-            room.setCafeId(cafe);
-            room.setLoginId(user);
-            room.setTicketId(ticket);
+            room.setCafe(cafe);
+            room.setUser(user);
+            room.setTicket(ticket);
 
             Room roomResult = roomRepository.save(room);
         }

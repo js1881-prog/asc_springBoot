@@ -23,7 +23,7 @@ public class Room {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "C_ID")
-    private Cafe cafeId; // CAFE FK
+    private Cafe cafe; // CAFE FK
 
     @Column(name = "SN") // 1~40번
     private int seatNumber;
@@ -33,19 +33,19 @@ public class Room {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
-    private User loginId;
+    private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "T_ID")
-    private Ticket ticketId;
+    private Ticket ticket;
 
     @Builder
-    public Room(Long id, int seatNumber, Cafe cafe, String seatState, User loginId, Ticket ticketId) {
+    public Room(Long id, int seatNumber, Cafe cafe, String seatState, User user, Ticket ticket) {
         this.id = id;
-        this.cafeId = cafe;
+        this.cafe = cafe;
         this.seatNumber = seatNumber;
         this.seatState = seatState;
-        this.loginId = loginId;
-        this.ticketId = ticketId;
+        this.user = user;
+        this.ticket = ticket;
     }
 }

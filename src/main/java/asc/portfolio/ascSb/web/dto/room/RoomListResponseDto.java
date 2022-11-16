@@ -10,14 +10,14 @@ public class RoomListResponseDto {
     private Long id;
     private int seatNumber;
     private String seatState;
-    private User loginId;
-    private Ticket ticketId;
+    private User user;
+    private Ticket ticket;
 
     public RoomListResponseDto(Room entity) {
         this.id = entity.getId();
         this.seatNumber = entity.getSeatNumber();
         this.seatState = entity.getSeatState();
-        this.loginId = entity.getLoginId();
-        this.ticketId = entity.getTicketId();
+        this.user = entity.getUser();
+        this.ticket = entity.getTicket();
     }
 }

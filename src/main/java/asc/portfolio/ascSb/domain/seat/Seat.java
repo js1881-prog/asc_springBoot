@@ -21,7 +21,7 @@ public class Seat extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "C_ID")
-    private Cafe cafeId;
+    private Cafe cafe;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
