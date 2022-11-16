@@ -1,6 +1,7 @@
 package asc.portfolio.ascSb.domain.ticket;
 import asc.portfolio.ascSb.domain.BaseTimeEntity;
 import asc.portfolio.ascSb.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +21,7 @@ public class Ticket extends BaseTimeEntity {
     @Column(name = "T_ID", nullable = false)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="USER_ID")
     private User user;
 
@@ -38,4 +39,13 @@ public class Ticket extends BaseTimeEntity {
     @Column(name = "R_T") // 시간제 티켓 남은시간
     private Integer remainingTime;
 
+    @Builder
+    public Ticket(User user, String isDeprecatedTicket, Integer ticketPrice, LocalDateTime fixedTermTicket, Integer partTimeTicket, Integer remainingTime) {
+        this.user = user;
+        this.isDeprecatedTicket = isDeprecatedTicket;
+        this.ticketPrice = ticketPrice;
+        this.fixedTermTicket = fixedTermTicket;
+        this.partTimeTicket = partTimeTicket;
+        this.remainingTime = remainingTime;
+    }
 }

@@ -26,7 +26,7 @@ public class User extends BaseTimeEntity {
   @Column(name = "USER_ID")
   private Long id;
 
-  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "user")
   private List<Ticket> tickets = new ArrayList<>();
 
   @Size(min = 8, max = 16)

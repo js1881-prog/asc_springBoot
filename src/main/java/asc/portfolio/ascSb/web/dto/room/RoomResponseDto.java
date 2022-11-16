@@ -9,18 +9,18 @@ import lombok.Getter;
 public class RoomResponseDto {
 
     private Long id;
-    private Cafe cafeId;
+    private Cafe cafe;
     private int seatNumber;
     private String seatState;
-    private User loginId;
+    private User user;
     private Ticket ticketId;
 
     public RoomResponseDto(Room entity) {
         this.id = entity.getId();
-        this.cafeId = entity.getCafeId();
+        this.cafe = entity.getCafe();
         this.seatNumber = entity.getSeatNumber();
         this.seatState = entity.getSeatState();
-        this.loginId = entity.getLoginId();
-        this.ticketId = entity.getTicketId();
+        this.user = entity.getUser();
+        this.ticketId = entity.getTicket();
     }
 }

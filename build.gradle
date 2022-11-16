@@ -42,8 +42,8 @@ dependencies {
 
     // querydsl 디펜던시 추가 11/09 by padonan
 
-    implementation 'com.querydsl:querydsl-jpa:5.0.0'
-    implementation 'com.querydsl:querydsl-apt:5.0.0'
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
 }
 

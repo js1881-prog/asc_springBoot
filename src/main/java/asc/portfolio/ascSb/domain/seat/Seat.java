@@ -19,15 +19,15 @@ public class Seat extends BaseTimeEntity {
     @Column(name = "S_ID", nullable = false)
     private Long id; // 좌석번호 X 사용구분을 위한 table 입니다 ex) 몇시,몇분에 어느좌석에 어떤user가 몇시간을 사용했다~
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "C_ID")
-    private Cafe cafeId;
+    private Cafe cafe;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user; // 어떤 유저가
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "T_ID") // 어떤 ticket을
     private Ticket ticket;
 
