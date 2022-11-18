@@ -1,8 +1,5 @@
 package asc.portfolio.ascSb.domain.cafe;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,7 +7,7 @@ import javax.persistence.*;
 
 @Setter // test를 위한 setter 나중에 제거
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "CAFE")
 public class Cafe {
@@ -20,6 +17,7 @@ public class Cafe {
     @Column(name = "C_ID", nullable = false)
     private Long id;
 
+    @Column(nullable = false)
     private String cafeName;
 
     private String cafeArea;

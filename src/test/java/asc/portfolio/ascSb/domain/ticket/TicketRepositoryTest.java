@@ -29,12 +29,14 @@ public class TicketRepositoryTest {
 
     @BeforeEach
     public void insert_TestData() {
+        String loginId = "ascUser1234";
         String password = "ascUser1234";
         String email = "asc@gmail.com";
         String name = "asc";
         String nickname = "asc";
 
         user = User.builder()
+                .loginId(loginId)
                 .password(password)
                 .email(email)
                 .name(name)

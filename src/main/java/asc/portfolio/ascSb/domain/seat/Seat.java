@@ -3,13 +3,14 @@ import asc.portfolio.ascSb.domain.BaseTimeEntity;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.user.User;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "SEAT")
 public class Seat extends BaseTimeEntity {
@@ -17,7 +18,7 @@ public class Seat extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "S_ID", nullable = false)
-    private Long id; // 좌석번호 X 사용구분을 위한 table 입니다 ex) 몇시,몇분에 어느좌석에 어떤user가 몇시간을 사용했다~
+    private Long id; // 좌석번호 X 사용구분을 위한 table 입니다 ex) 몇시,몇분에 어느좌석에 어떤 user가 몇시간을 사용했다~
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "C_ID")

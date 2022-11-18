@@ -2,10 +2,7 @@ package asc.portfolio.ascSb.domain.user;
 
 import asc.portfolio.ascSb.domain.BaseTimeEntity;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -14,11 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@Setter
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "USER_TABLE") // user =  SQL 예약어로 에러 발생 => user_table 로 교체했습니다 참고: https://onedaythreecoding.tistory.com/entry/ERROR-JPA-%EC%9E%90%EB%8F%99-%ED%85%8C%EC%9D%B4%EB%B8%94-%EC%83%9D%EC%84%B1-create-drop-%EC%8B%9C-GenerationTarget-encountered-exception-accepting-command-Error-executing-DDL
+@Table(name = "USER_TABLE")
 public class User extends BaseTimeEntity {
 
   @Id
@@ -30,10 +26,10 @@ public class User extends BaseTimeEntity {
   private List<Ticket> tickets = new ArrayList<>();
 
   @Size(min = 8, max = 16)
-  @Column(name = "L_ID", unique = true)
+  @Column(name = "L_ID", unique = true, nullable = false)
   private String loginId;
 
-  @Size(min = 8, max = 16)
+  @Size(min = 8)
   private String password;
 
   @Email
@@ -45,7 +41,6 @@ public class User extends BaseTimeEntity {
   private String nickname;
   private String qrCode;
 
-
   @Builder
   public User(String loginId, String password, String email, String name, String nickname) {
     this.loginId = loginId;
@@ -55,6 +50,8 @@ public class User extends BaseTimeEntity {
     this.nickname = nickname;
     this.qrCode = createQrString();
   }
+
+  //TODO ChangePassword 따로 만들기.
 
   public String createQrString() {
     int leftLimit = 48; // numeral '0'

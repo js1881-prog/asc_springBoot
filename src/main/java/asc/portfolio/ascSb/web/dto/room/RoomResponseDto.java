@@ -19,7 +19,7 @@ public class RoomResponseDto {
         this.id = entity.getId();
         this.cafe = entity.getCafe();
         this.seatNumber = entity.getSeatNumber();
-        this.seatState = entity.getSeatState();
+        this.seatState = entity.getSeatState().name();
         this.user = entity.getUser();
         this.ticketId = entity.getTicket();
     }

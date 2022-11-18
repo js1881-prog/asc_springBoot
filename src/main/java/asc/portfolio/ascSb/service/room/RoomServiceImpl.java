@@ -1,6 +1,7 @@
 package asc.portfolio.ascSb.service.room;
 import asc.portfolio.ascSb.domain.room.Room;
 import asc.portfolio.ascSb.domain.room.RoomRepository;
+import asc.portfolio.ascSb.domain.seat.SeatRepository;
 import asc.portfolio.ascSb.web.dto.room.RoomListResponseDto;
 import asc.portfolio.ascSb.web.dto.room.RoomResponseDto;
 import asc.portfolio.ascSb.web.dto.room.RoomSelectResponseDto;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
+    private final SeatRepository seatRepository;
 
     @Override
     public List<RoomSelectResponseDto> showAllRoom() {

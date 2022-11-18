@@ -1,6 +1,7 @@
 package asc.portfolio.ascSb.web.dto.room;
 
 
+import asc.portfolio.ascSb.domain.room.SeatStateType;
 import lombok.*;
 
 @NoArgsConstructor
@@ -10,7 +11,7 @@ import lombok.*;
 public class RoomSelectResponseDto {
 
     private Integer seatNumber;
-    private String seatState;
+    private SeatStateType seatState;
 
     public RoomSelectResponseDto(RoomSelectResponseDto entity) {
         this.seatNumber = entity.getSeatNumber();

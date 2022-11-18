@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -27,19 +28,21 @@ public class RoomRepositoryTest {
     @Autowired
     CafeRepository cafeRepository;
 
-    User user;
-    Cafe cafe;
-    Ticket ticket;
+    private void setRoomTestData() {
+        Cafe cafe = Cafe.builder()
+                .cafeName("testData_서울")
+                .build();
 
-    @BeforeEach
-    public void insert_TestData() {
-        //User Test Data
+        cafeRepository.save(cafe);
+
+        String loginId = "ascUser1234";
         String password = "ascUser1234";
         String email = "asc@gmail.com";
         String name = "asc";
         String nickname = "asc";
 
-        user = User.builder()
+        User user = User.builder()
+                .loginId(loginId)
                 .password(password)
                 .email(email)
                 .name(name)
@@ -48,30 +51,23 @@ public class RoomRepositoryTest {
 
         userRepository.save(user);
 
-        //Cafe Test Data
-        cafe = Cafe.builder().build();
+        for(int i=0; i < 40; i ++) {
 
-        //ticket Test Data
-        ticket = Ticket.builder().build();
+            Room room = Room.builder()
+                    .seatNumber(i)
+                    .cafe(cafe)
+                    .build();
+
+            if (i % 2 == 0) {
+                room.reserveRoom(user);
+            }
+
+            roomRepository.save(room);
+        }
     }
 
     @Test
     public void Room_좌석생성기() {
-
-        for(int i=0; i < 40; i ++) {
-            Room room = new Room();
-            room.setSeatNumber(i);
-            if (i % 2 == 0) {
-                room.setSeatState("Y");
-            } else {
-                room.setSeatState("N");
-            }
-
-            room.setCafe(cafe);
-            room.setUser(user);
-            room.setTicket(ticket);
-
-            Room roomResult = roomRepository.save(room);
-        }
+        setRoomTestData();
     }
 }

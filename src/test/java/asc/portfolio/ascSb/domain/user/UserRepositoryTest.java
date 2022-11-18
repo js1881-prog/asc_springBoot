@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -28,14 +29,15 @@ class UserRepositoryTest {
   public void user_저장및불러오기() {
 
     //given
+    String loginId = "ascUser1234";
     String password = "ascUser1234";
     String email = "asc@gmail.com";
     String name = "asc";
     String nickname = "asc";
-    String qrCode = "qrcode";
 
     //when
     User user = User.builder()
+            .loginId(loginId)
             .password(password)
             .email(email)
             .name(name)

@@ -2,16 +2,12 @@ package asc.portfolio.ascSb.domain.room;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.user.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Setter // test를 위한 setter 나중에 제거
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "ROOM")
 public class Room {
@@ -25,11 +21,12 @@ public class Room {
     @JoinColumn(name = "C_ID")
     private Cafe cafe; // CAFE FK
 
-    @Column(name = "SN") // 1~40번
+    @Column(name = "SN", nullable = false) // 1~40번
     private int seatNumber;
 
     // 좌석 상태
-    private String seatState;
+    @Enumerated(EnumType.STRING)
+    private SeatStateType seatState;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
@@ -40,12 +37,20 @@ public class Room {
     private Ticket ticket;
 
     @Builder
-    public Room(Long id, int seatNumber, Cafe cafe, String seatState, User user, Ticket ticket) {
-        this.id = id;
+    public Room(int seatNumber, Cafe cafe) {
         this.cafe = cafe;
         this.seatNumber = seatNumber;
-        this.seatState = seatState;
+        this.seatState = SeatStateType.UNRESERVED;
+    }
+
+    public void reserveRoom(User user) {
         this.user = user;
-        this.ticket = ticket;
+        this.seatState = SeatStateType.RESERVED;
+        //this.ticket
+    }
+
+    public void exitRoom(User user) {
+        this.user = null;
+        this.seatState = SeatStateType.UNRESERVED;
     }
 }

@@ -16,7 +16,7 @@ public class RoomListResponseDto {
     public RoomListResponseDto(Room entity) {
         this.id = entity.getId();
         this.seatNumber = entity.getSeatNumber();
-        this.seatState = entity.getSeatState();
+        this.seatState = entity.getSeatState().name();
         this.user = entity.getUser();
         this.ticket = entity.getTicket();
     }
