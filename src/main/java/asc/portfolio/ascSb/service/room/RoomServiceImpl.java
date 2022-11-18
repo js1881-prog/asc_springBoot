@@ -1,9 +1,6 @@
 package asc.portfolio.ascSb.service.room;
-import asc.portfolio.ascSb.domain.room.Room;
 import asc.portfolio.ascSb.domain.room.RoomRepository;
-import asc.portfolio.ascSb.domain.seat.SeatRepository;
-import asc.portfolio.ascSb.web.dto.room.RoomListResponseDto;
-import asc.portfolio.ascSb.web.dto.room.RoomResponseDto;
+import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfoRepository;
 import asc.portfolio.ascSb.web.dto.room.RoomSelectResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +15,7 @@ import java.util.stream.Collectors;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
-    private final SeatRepository seatRepository;
+    private final SeatReservationInfoRepository seatReservationInfoRepository;
 
     @Override
     public List<RoomSelectResponseDto> showAllRoom() {

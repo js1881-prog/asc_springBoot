@@ -85,7 +85,7 @@ public class TestDataGeneration {
     for (int i = 0; i < userName.length; i++) {
       String userString = userName[i];
       User user = User.builder()
-              .loginId(userString + "loginId")
+              .loginId(userString + "_login")
               .password(userString + "_password")
               .email(userString + "@gmail.com")
               .name(userString)

@@ -1,4 +1,4 @@
-package asc.portfolio.ascSb.domain.seat;
+package asc.portfolio.ascSb.domain.seatreservationinfo;
 import asc.portfolio.ascSb.domain.BaseTimeEntity;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "SEAT")
-public class Seat extends BaseTimeEntity {
+public class SeatReservationInfo extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
