@@ -14,7 +14,7 @@ public class CafeRepositoryTest {
     CafeRepository cafeRepository;
 
     @Test
-    public void Room_카페생성기() {
+    public void Seat_카페생성기() {
 
         Cafe cafe = new Cafe();
         cafe.setBusinessHour(24);

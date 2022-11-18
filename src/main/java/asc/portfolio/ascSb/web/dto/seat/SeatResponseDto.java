@@ -1,12 +1,12 @@
-package asc.portfolio.ascSb.web.dto.room;
+package asc.portfolio.ascSb.web.dto.seat;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
-import asc.portfolio.ascSb.domain.room.Room;
+import asc.portfolio.ascSb.domain.seat.Seat;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.user.User;
 import lombok.Getter;
 
 @Getter
-public class RoomResponseDto {
+public class SeatResponseDto {
 
     private Long id;
     private Cafe cafe;
@@ -15,7 +15,7 @@ public class RoomResponseDto {
     private User user;
     private Ticket ticketId;
 
-    public RoomResponseDto(Room entity) {
+    public SeatResponseDto(Seat entity) {
         this.id = entity.getId();
         this.cafe = entity.getCafe();
         this.seatNumber = entity.getSeatNumber();

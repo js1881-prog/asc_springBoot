@@ -1,7 +1,7 @@
-package asc.portfolio.ascSb.service.room;
-import asc.portfolio.ascSb.domain.room.RoomRepository;
+package asc.portfolio.ascSb.service.seat;
+import asc.portfolio.ascSb.domain.seat.SeatRepository;
 import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfoRepository;
-import asc.portfolio.ascSb.web.dto.room.RoomSelectResponseDto;
+import asc.portfolio.ascSb.web.dto.seat.SeatSelectResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,15 +12,15 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class RoomServiceImpl implements RoomService {
+public class SeatServiceImpl implements SeatService {
 
-    private final RoomRepository roomRepository;
+    private final SeatRepository seatRepository;
     private final SeatReservationInfoRepository seatReservationInfoRepository;
 
     @Override
-    public List<RoomSelectResponseDto> showAllRoom() {
-        return roomRepository.findSeatNumberAndSeatState().stream()
-                .map(RoomSelectResponseDto::new)
+    public List<SeatSelectResponseDto> showAllSeat() {
+        return seatRepository.findSeatNumberAndSeatState().stream()
+                .map(SeatSelectResponseDto::new)
                 .collect(Collectors.toList());
     }
 }

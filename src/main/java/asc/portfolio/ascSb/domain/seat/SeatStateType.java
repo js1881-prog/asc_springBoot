@@ -1,4 +1,4 @@
-package asc.portfolio.ascSb.domain.room;
+package asc.portfolio.ascSb.domain.seat;
 
 public enum SeatStateType {
   RESERVED,

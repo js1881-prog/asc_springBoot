@@ -2,11 +2,10 @@ package asc.portfolio.ascSb.domain;
 
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.cafe.CafeRepository;
-import asc.portfolio.ascSb.domain.room.Room;
-import asc.portfolio.ascSb.domain.room.RoomRepository;
+import asc.portfolio.ascSb.domain.seat.Seat;
+import asc.portfolio.ascSb.domain.seat.SeatRepository;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Random;
 
 @SpringBootTest
 @Transactional
@@ -27,7 +25,7 @@ public class TestDataGeneration {
   CafeRepository cafeRepository;
 
   @Autowired
-  RoomRepository roomRepository;
+  SeatRepository seatRepository;
 
   @Autowired
   UserRepository userRepository;
@@ -35,11 +33,11 @@ public class TestDataGeneration {
   @BeforeEach
   public void clearRepository() {
     cafeRepository.deleteAll();
-    roomRepository.deleteAll();
+    seatRepository.deleteAll();
     userRepository.deleteAll();
   }
 
-  private void generateCafeRoomData() {
+  private void generateCafeSeatData() {
 
     String[] cafeName = {"tCafe_A", "tCafe_B", "tCafe_C", "tCafe_D", "tCafe_E", "tCafe_F"};
     String[] cafeArea = {
@@ -58,22 +56,22 @@ public class TestDataGeneration {
       cafeRepository.save(cafe);
     }
 
-    generateRoomData();
+    generateSeatData();
   }
 
-  private void generateRoomData() {
+  private void generateSeatData() {
     List<Cafe> cafeList = cafeRepository.findAll();
 
     for (Cafe cafe : cafeList) {
 
       for(int i=0; i < 40; i ++) {
 
-        Room room = Room.builder()
+        Seat seat = Seat.builder()
                 .seatNumber(i)
                 .cafe(cafe)
                 .build();
 
-        roomRepository.save(room);
+        seatRepository.save(seat);
       }
     }
   }
@@ -94,13 +92,11 @@ public class TestDataGeneration {
 
       userRepository.save(user);
     }
-
-
   }
 
   @Test
   public void setTestData() {
-    generateCafeRoomData();
+    generateCafeSeatData();
     generateUserData();
   }
 }

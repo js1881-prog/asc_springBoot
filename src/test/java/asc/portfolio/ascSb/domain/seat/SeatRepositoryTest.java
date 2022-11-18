@@ -1,23 +1,20 @@
-package asc.portfolio.ascSb.domain.room;
+package asc.portfolio.ascSb.domain.seat;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.cafe.CafeRepository;
-import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.ticket.TicketRepository;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-public class RoomRepositoryTest {
+public class SeatRepositoryTest {
 
     @Autowired
-    RoomRepository roomRepository;
+    SeatRepository seatRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -28,7 +25,7 @@ public class RoomRepositoryTest {
     @Autowired
     CafeRepository cafeRepository;
 
-    private void setRoomTestData() {
+    private void setSeatTestData() {
         Cafe cafe = Cafe.builder()
                 .cafeName("testData_서울")
                 .build();
@@ -53,21 +50,21 @@ public class RoomRepositoryTest {
 
         for(int i=0; i < 40; i ++) {
 
-            Room room = Room.builder()
+            Seat seat = Seat.builder()
                     .seatNumber(i)
                     .cafe(cafe)
                     .build();
 
             if (i % 2 == 0) {
-                room.reserveRoom(user);
+                seat.reserveSeat(user);
             }
 
-            roomRepository.save(room);
+            seatRepository.save(seat);
         }
     }
 
     @Test
-    public void Room_좌석생성기() {
-        setRoomTestData();
+    public void Seat_좌석생성기() {
+        setSeatTestData();
     }
 }

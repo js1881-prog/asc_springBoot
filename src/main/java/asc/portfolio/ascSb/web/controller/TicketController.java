@@ -3,7 +3,6 @@ package asc.portfolio.ascSb.web.controller;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.jwt.LoginUser;
 import asc.portfolio.ascSb.service.ticket.TicketService;
-import asc.portfolio.ascSb.web.dto.room.RoomSelectResponseDto;
 import asc.portfolio.ascSb.web.dto.ticket.TicketSelectResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;

@@ -1,4 +1,4 @@
-package asc.portfolio.ascSb.domain.room;
+package asc.portfolio.ascSb.domain.seat;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.user.User;
@@ -9,8 +9,8 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "ROOM")
-public class Room {
+@Table(name = "SEAT")
+public class Seat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,19 +37,19 @@ public class Room {
     private Ticket ticket;
 
     @Builder
-    public Room(int seatNumber, Cafe cafe) {
+    public Seat(int seatNumber, Cafe cafe) {
         this.cafe = cafe;
         this.seatNumber = seatNumber;
         this.seatState = SeatStateType.UNRESERVED;
     }
 
-    public void reserveRoom(User user) {
+    public void reserveSeat(User user) {
         this.user = user;
         this.seatState = SeatStateType.RESERVED;
         //this.ticket
     }
 
-    public void exitRoom(User user) {
+    public void exitSeat(User user) {
         this.user = null;
         this.seatState = SeatStateType.UNRESERVED;
     }

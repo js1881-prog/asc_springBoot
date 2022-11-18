@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "SEAT")
+@Table(name = "SEAT_REZ_INFO")
 public class SeatReservationInfo extends BaseTimeEntity {
 
     @Id
