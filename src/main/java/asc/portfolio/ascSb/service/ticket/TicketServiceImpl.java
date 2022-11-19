@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,10 +20,13 @@ public class TicketServiceImpl implements TicketService {
 
 
     @Override
-    public List<TicketSelectResponseDto> userTicket(Long id) {
-        return ticketRepository.findAvailableTicketInfoById(id)
-                .stream()
-                .map(TicketSelectResponseDto::new)
-                .collect(Collectors.toList());
+    public TicketSelectResponseDto userTicket(Long id) {
+        LocalDateTime dateTime = LocalDateTime.now();
+
+        List<TicketSelectResponseDto> dtoList = ticketRepository.findAvailableTicketInfoById(id);
+        TicketSelectResponseDto dto = dtoList.get(0);
+        Duration termData = Duration.between(dto.getFixedTermTicket(), dateTime);
+        dto.setPeriod(termData);
+        return dto;
     }
 }

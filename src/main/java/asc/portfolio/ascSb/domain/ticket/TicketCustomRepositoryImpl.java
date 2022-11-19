@@ -1,7 +1,10 @@
 package asc.portfolio.ascSb.domain.ticket;
 
 import asc.portfolio.ascSb.web.dto.ticket.TicketSelectResponseDto;
+import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface TicketService {
 
-    List<TicketSelectResponseDto> userTicket(Long id);
+    TicketSelectResponseDto userTicket(Long id);
 }

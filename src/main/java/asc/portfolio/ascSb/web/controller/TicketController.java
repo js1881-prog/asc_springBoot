@@ -18,8 +18,8 @@ public class TicketController {
 
     private final TicketService ticketService;
 
-    @GetMapping("/api/v1/ticket")
-    public List<TicketSelectResponseDto> userTicket(@LoginUser User user) {
+    @GetMapping("/api/v2/ticket")
+    public TicketSelectResponseDto userTicket(@LoginUser User user) {
         return ticketService.userTicket(user.getId());
     }
 }

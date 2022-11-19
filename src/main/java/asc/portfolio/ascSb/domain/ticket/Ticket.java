@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter // test를 위한 setter 나중에 제거
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "TICKET")
