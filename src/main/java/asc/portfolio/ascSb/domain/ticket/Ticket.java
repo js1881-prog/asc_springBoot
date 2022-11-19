@@ -1,5 +1,6 @@
 package asc.portfolio.ascSb.domain.ticket;
 import asc.portfolio.ascSb.domain.BaseTimeEntity;
+import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.user.User;
 import lombok.*;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter // 테스트 용도 후에 제거
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "TICKET")
@@ -17,6 +19,10 @@ public class Ticket extends BaseTimeEntity {
     @Column(name = "T_ID", nullable = false)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "C_ID")
+    private Cafe cafe;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="USER_ID")
     private User user;
@@ -25,6 +31,7 @@ public class Ticket extends BaseTimeEntity {
 
     @Column(name = "T_P")
     private Integer ticketPrice;
+
 
     @Column(name = "FT_T")
     private LocalDateTime fixedTermTicket; // 기간제 티켓 날짜 => fixedTermTicket - createDate 시간으로 남은기간 계산

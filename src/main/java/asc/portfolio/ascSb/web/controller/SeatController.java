@@ -16,6 +16,6 @@ public class SeatController {
 
     @GetMapping("/api/v1/seat")
     public List<SeatSelectResponseDto> seatState() {
-        return seatService.showAllSeat();
+        return seatService.showCurrentSeatState();
     }
 }

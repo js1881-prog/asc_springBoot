@@ -1,6 +1,7 @@
 package asc.portfolio.ascSb.domain.ticket;
 
 
+import asc.portfolio.ascSb.domain.cafe.CafeRepository;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -17,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Slf4j
 @Transactional
+@Commit
 public class TicketRepositoryTest {
 
     @Autowired
@@ -24,6 +27,9 @@ public class TicketRepositoryTest {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    CafeRepository cafeRepository;
 
     User user;
 
@@ -58,6 +64,7 @@ public class TicketRepositoryTest {
         ticket.setFixedTermTicket(LocalDateTime.now());
         ticket.setPartTimeTicket(0);
         ticket.setRemainingTime(0);
+        ticket.setCafe(cafeRepository.getReferenceById(1L));
         //when
         Ticket ticketResult = ticketRepository.save(ticket);
 
@@ -65,9 +72,9 @@ public class TicketRepositoryTest {
         assertThat(ticketResult.getFixedTermTicket().isEqual(date));
     }
 
-    @Test
-    public void ticket_갱신테스트() {
-
-        ticketRepository.findAvailableTicketInfoById(1L);
-    }
+//    @Test
+//    public void ticket_갱신테스트() {
+//
+//        ticketRepository.findAvailableTicketInfoById(1L);
+//    }
 }

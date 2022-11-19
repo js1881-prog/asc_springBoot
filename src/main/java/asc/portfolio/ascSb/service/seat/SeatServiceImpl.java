@@ -15,10 +15,9 @@ import java.util.stream.Collectors;
 public class SeatServiceImpl implements SeatService {
 
     private final SeatRepository seatRepository;
-    private final SeatReservationInfoRepository seatReservationInfoRepository;
 
     @Override
-    public List<SeatSelectResponseDto> showAllSeat() {
+    public List<SeatSelectResponseDto> showCurrentSeatState() {
         return seatRepository.findSeatNumberAndSeatState().stream()
                 .map(SeatSelectResponseDto::new)
                 .collect(Collectors.toList());

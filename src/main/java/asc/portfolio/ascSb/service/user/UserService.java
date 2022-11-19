@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface UserService {
 
-  public Long signUp(UserSignupDto signUpDto);
+  Long signUp(UserSignupDto signUpDto);
 
-  public User checkPassword(String loginId, String password);
+  User checkPassword(String loginId, String password);
 
-  public User checkJsonWebToken(String jwt);
+  User checkJsonWebToken(String jwt);
 
   List<UserQrAndNameResponseDto> userQrAndName(Long id);
 }

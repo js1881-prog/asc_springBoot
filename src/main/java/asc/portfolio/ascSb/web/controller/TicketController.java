@@ -7,9 +7,8 @@ import asc.portfolio.ascSb.web.dto.ticket.TicketSelectResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,8 +17,8 @@ public class TicketController {
 
     private final TicketService ticketService;
 
-    @GetMapping("/api/v2/ticket")
-    public TicketSelectResponseDto userTicket(@LoginUser User user) {
-        return ticketService.userTicket(user.getId());
+    @GetMapping("/api/v1/ticket/{cafeName}")
+    public TicketSelectResponseDto userTicket(@LoginUser User user, @PathVariable String cafeName) {
+        return ticketService.userTicket(user.getId(), cafeName);
     }
 }

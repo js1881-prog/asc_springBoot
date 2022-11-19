@@ -21,13 +21,13 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
     private final JPAQueryFactory query;
 
     @Override
-    public List<TicketSelectResponseDto> findAvailableTicketInfoById(Long id) {
+    public List<TicketSelectResponseDto> findAvailableTicketInfoById(Long id, String cafeName) {
 
         return query
                 .select(Projections.bean(TicketSelectResponseDto.class,
                 ticket.isDeprecatedTicket, ticket.fixedTermTicket, ticket.partTimeTicket, ticket.remainingTime))
                 .from(ticket)
-                .where(ticket.user.id.eq(id), ticket.isDeprecatedTicket.contains("N"))
+                .where(ticket.cafe.cafeName.eq(cafeName), ticket.user.id.eq(id), ticket.isDeprecatedTicket.eq("N"))
                 .fetch();
     }
 
