@@ -1,9 +1,11 @@
 package asc.portfolio.ascSb.domain.ticket;
 
 
+import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.cafe.CafeRepository;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
+import asc.portfolio.ascSb.domain.user.UserRoleType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +19,6 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Slf4j
 @Transactional
 @Commit
 public class TicketRepositoryTest {
@@ -32,6 +33,7 @@ public class TicketRepositoryTest {
     CafeRepository cafeRepository;
 
     User user;
+    Cafe cafe;
 
     @BeforeEach
     public void insert_TestData() {
@@ -39,17 +41,23 @@ public class TicketRepositoryTest {
         String password = "ascUser1234";
         String email = "asc@gmail.com";
         String name = "asc";
-        String nickname = "asc";
 
         user = User.builder()
                 .loginId(loginId)
                 .password(password)
                 .email(email)
                 .name(name)
-                .nickname(nickname)
+                .role(UserRoleType.USER)
                 .build();
 
         userRepository.save(user);
+
+        cafe = Cafe.builder()
+                .cafeName("testCafe")
+                .cafeArea("testArea")
+                .build();
+
+        cafeRepository.save(cafe);
     }
 
     @Test
@@ -64,7 +72,8 @@ public class TicketRepositoryTest {
         ticket.setFixedTermTicket(LocalDateTime.now());
         ticket.setPartTimeTicket(0);
         ticket.setRemainingTime(0);
-        ticket.setCafe(cafeRepository.getReferenceById(1L));
+        ticket.setCafe(cafe);
+
         //when
         Ticket ticketResult = ticketRepository.save(ticket);
 

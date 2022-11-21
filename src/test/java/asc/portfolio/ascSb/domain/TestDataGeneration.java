@@ -6,6 +6,7 @@ import asc.portfolio.ascSb.domain.seat.Seat;
 import asc.portfolio.ascSb.domain.seat.SeatRepository;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
+import asc.portfolio.ascSb.domain.user.UserRoleType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +88,7 @@ public class TestDataGeneration {
               .password(userString + "_password")
               .email(userString + "@gmail.com")
               .name(userString)
-              .nickname(userString)
+              .role(UserRoleType.USER)
               .build();
 
       userRepository.save(user);

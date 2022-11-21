@@ -3,6 +3,8 @@ package asc.portfolio.ascSb.domain.user;
 import asc.portfolio.ascSb.domain.BaseTimeEntity;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -22,6 +24,10 @@ public class User extends BaseTimeEntity {
   @Column(name = "USER_ID")
   private Long id;
 
+  @Column(name = "USER_ROLE", nullable = false)
+  @Enumerated(EnumType.STRING)
+  private UserRoleType role;
+
   @OneToMany(mappedBy = "user")
   private List<Ticket> tickets = new ArrayList<>();
 
@@ -36,18 +42,16 @@ public class User extends BaseTimeEntity {
   @Column(unique = true)
   private String email;
 
-  //TODO 추후 기능 추가
   private String name;
-  private String nickname;
   private String qrCode;
 
   @Builder
-  public User(String loginId, String password, String email, String name, String nickname) {
+  public User(String loginId, String password, String email, String name, UserRoleType role) {
     this.loginId = loginId;
     this.password = password;
     this.email = email;
     this.name = name;
-    this.nickname = nickname;
+    this.role = role;
     this.qrCode = createQrString();
   }
 

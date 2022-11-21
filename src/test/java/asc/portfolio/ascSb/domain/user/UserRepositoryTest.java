@@ -20,11 +20,6 @@ class UserRepositoryTest {
   @Autowired
   UserRepository userRepository;
 
-  @AfterEach
-  public void cleanup() {
-    userRepository.deleteAll();
-  }
-
   @Test
   public void user_저장및불러오기() {
 
@@ -33,7 +28,6 @@ class UserRepositoryTest {
     String password = "ascUser1234";
     String email = "asc@gmail.com";
     String name = "asc";
-    String nickname = "asc";
 
     //when
     User user = User.builder()
@@ -41,7 +35,7 @@ class UserRepositoryTest {
             .password(password)
             .email(email)
             .name(name)
-            .nickname(nickname)
+            .role(UserRoleType.USER)
             .build();
 
     userRepository.save(user);
@@ -52,6 +46,5 @@ class UserRepositoryTest {
     assertThat(findUser.getPassword()).isEqualTo(password);
     assertThat(findUser.getEmail()).isEqualTo(email);
     assertThat(findUser.getName()).isEqualTo(name);
-    assertThat(findUser.getNickname()).isEqualTo(nickname);
   }
 }

@@ -1,6 +1,7 @@
 package asc.portfolio.ascSb.web.dto.user;
 
 import asc.portfolio.ascSb.domain.user.User;
+import asc.portfolio.ascSb.domain.user.UserRoleType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,17 +26,14 @@ public class UserSignupDto {
   @Email
   private String email;
 
-  //TODO 추후 기능 추가 (name, nickname)
   private String name;
-  private String nickname;
 
   @Builder
-  public UserSignupDto(String loginId, String password, String email, String name, String nickname) {
+  public UserSignupDto(String loginId, String password, String email, String name) {
     this.loginId = loginId;
     this.password = password;
     this.email = email;
     this.name = name;
-    this.nickname = nickname;
   }
 
   public User toEntity() {
@@ -44,7 +42,7 @@ public class UserSignupDto {
             .password(password)
             .email(email)
             .name(name)
-            .nickname(nickname)
+            .role(UserRoleType.USER)
             .build();
   }
 }

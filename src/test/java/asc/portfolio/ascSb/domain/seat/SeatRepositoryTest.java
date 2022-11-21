@@ -4,6 +4,7 @@ import asc.portfolio.ascSb.domain.cafe.CafeRepository;
 import asc.portfolio.ascSb.domain.ticket.TicketRepository;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
+import asc.portfolio.ascSb.domain.user.UserRoleType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,14 +37,13 @@ public class SeatRepositoryTest {
         String password = "ascUser1234";
         String email = "asc@gmail.com";
         String name = "asc";
-        String nickname = "asc";
 
         User user = User.builder()
                 .loginId(loginId)
                 .password(password)
                 .email(email)
                 .name(name)
-                .nickname(nickname)
+                .role(UserRoleType.USER)
                 .build();
 
         userRepository.save(user);
