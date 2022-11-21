@@ -4,7 +4,8 @@ import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.jwt.LoginUser;
 import asc.portfolio.ascSb.service.jwt.JwtService;
 import asc.portfolio.ascSb.service.user.UserService;
-import asc.portfolio.ascSb.web.dto.user.UserLoginDto;
+import asc.portfolio.ascSb.web.dto.user.UserLoginRequestDto;
+import asc.portfolio.ascSb.web.dto.user.UserLoginResponseDto;
 import asc.portfolio.ascSb.web.dto.user.UserQrAndNameResponseDto;
 import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,28 +51,24 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<String> login(@RequestBody @Valid UserLoginDto loginDto, BindingResult bindingResult) {
+  public ResponseEntity<UserLoginResponseDto> login(@RequestBody @Valid UserLoginRequestDto loginDto, BindingResult bindingResult) {
 
     log.info("try login. LoginId={}", loginDto.getLoginId());
 
     if (bindingResult.hasErrors()) {
-      return new ResponseEntity<>("BAD_REQUEST", HttpStatus.BAD_REQUEST);
+      log.error("Validation error : Login DTO");
+      return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
-    //TODO null 체크 코드 삽입
-    String token = jwtService.createToken(loginDto.getLoginId(), loginDto.getPassword());
-    ObjectMapper mapper = new ObjectMapper();
+    UserLoginResponseDto loginRespDto = jwtService.createToken(loginDto.getLoginId(), loginDto.getPassword());
 
-    HashMap<String, String> responseMap = new HashMap<>();
-    responseMap.put("accessToken", token);
-
-    try {
-      String responseJson = mapper.writeValueAsString(responseMap);
-      return new ResponseEntity<>(responseJson, HttpStatus.OK);
-    } catch (IOException e) {
-      log.error("Failed to convert map to json");
-      return new ResponseEntity<>("BAD_REQUEST", HttpStatus.BAD_REQUEST);
+    if (loginRespDto == null) {
+      log.error("Unknown User");
+      return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
+
+    log.info("Response Login Dto");
+    return new ResponseEntity<>(loginRespDto, HttpStatus.OK);
   }
 
   @RequestMapping("/login-check") //Test

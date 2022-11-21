@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
-public class UserLoginDto {
+public class UserLoginRequestDto {
 
   @NotBlank
   @Length(min = 8, max = 16)
@@ -20,7 +20,7 @@ public class UserLoginDto {
   private String password;
 
   @Builder
-  public UserLoginDto(String loginId, String password) {
+  public UserLoginRequestDto(String loginId, String password) {
     this.loginId = loginId;
     this.password = password;
   }

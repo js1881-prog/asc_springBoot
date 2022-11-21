@@ -95,9 +95,24 @@ public class TestDataGeneration {
     }
   }
 
+  private void generateAdminUserData() {
+    String userName = "tUser_Admin";
+
+    User user = User.builder()
+            .loginId(userName)
+            .password(userName + "_password")
+            .email(userName + "@gmail.com")
+            .name(userName)
+            .role(UserRoleType.ADMIN)
+            .build();
+
+    userRepository.save(user);
+  }
+
   @Test
   public void setTestData() {
     generateCafeSeatData();
     generateUserData();
+    generateAdminUserData();
   }
 }

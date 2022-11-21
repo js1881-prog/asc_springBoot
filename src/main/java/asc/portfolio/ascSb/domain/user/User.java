@@ -24,10 +24,6 @@ public class User extends BaseTimeEntity {
   @Column(name = "USER_ID")
   private Long id;
 
-  @Column(name = "USER_ROLE", nullable = false)
-  @Enumerated(EnumType.STRING)
-  private UserRoleType role;
-
   @OneToMany(mappedBy = "user")
   private List<Ticket> tickets = new ArrayList<>();
 
@@ -44,6 +40,10 @@ public class User extends BaseTimeEntity {
 
   private String name;
   private String qrCode;
+
+  @Column(name = "USER_ROLE", nullable = false)
+  @Enumerated(EnumType.STRING)
+  private UserRoleType role;
 
   @Builder
   public User(String loginId, String password, String email, String name, UserRoleType role) {

@@ -2,13 +2,11 @@ package asc.portfolio.ascSb.web.controller;
 
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
-import asc.portfolio.ascSb.web.dto.user.UserLoginDto;
+import asc.portfolio.ascSb.web.dto.user.UserLoginRequestDto;
 import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -164,7 +160,7 @@ class UserControllerTest {
             .email(email)
             .build();
 
-    UserLoginDto requestLoginDto = UserLoginDto.builder()
+    UserLoginRequestDto requestLoginDto = UserLoginRequestDto.builder()
             .loginId(loginId)
             .password(password)
             .build();
