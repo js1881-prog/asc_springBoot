@@ -1,10 +1,7 @@
 package asc.portfolio.ascSb.domain.ticket;
 
 import asc.portfolio.ascSb.web.dto.ticket.TicketSelectResponseDto;
-import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -25,9 +22,9 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
 
         return query
                 .select(Projections.bean(TicketSelectResponseDto.class,
-                ticket.isDeprecatedTicket, ticket.fixedTermTicket, ticket.partTimeTicket, ticket.remainingTime))
+                ticket.isValidTicket, ticket.fixedTermTicket, ticket.partTimeTicket, ticket.remainingTime))
                 .from(ticket)
-                .where(ticket.cafe.cafeName.eq(cafeName), ticket.user.id.eq(id), ticket.isDeprecatedTicket.eq("N"))
+                .where(ticket.cafe.cafeName.eq(cafeName), ticket.user.id.eq(id), ticket.isValidTicket.eq(TicketStateType.VALID))
                 .fetch();
     }
 
@@ -37,7 +34,7 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
 
         return query
                 .update(ticket)
-                .set(ticket.isDeprecatedTicket, "Y")
+                .set(ticket.isValidTicket, TicketStateType.INVALID)
                 .where(ticket.fixedTermTicket.lt(date))
                 .execute();
     }

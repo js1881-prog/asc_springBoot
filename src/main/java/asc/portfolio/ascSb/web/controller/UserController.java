@@ -73,7 +73,6 @@ public class UserController {
 
   @RequestMapping("/login-check") //Test
   public ResponseEntity<String> loginCheck(@LoginUser User user) {
-    // LoginCheckInterceptor 를 통과한 Controller
 
     log.info("user.getId()={}", user.getId());
     log.info("user.getLoginId()={}", user.getLoginId());

@@ -1,7 +1,6 @@
 package asc.portfolio.ascSb.service.ticket;
 
 import asc.portfolio.ascSb.domain.ticket.TicketRepository;
-import asc.portfolio.ascSb.web.dto.ticket.TicketRequestDto;
 import asc.portfolio.ascSb.web.dto.ticket.TicketSelectResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -21,17 +19,19 @@ public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
 
-
     @Override
-    public TicketSelectResponseDto userTicket(Long id, String cafeName) {
+    public TicketSelectResponseDto userTicket(Long id, String cafeName) throws IndexOutOfBoundsException {
         LocalDateTime dateTime = LocalDateTime.now();
-
-        List<TicketSelectResponseDto> dtoList = ticketRepository.findAvailableTicketInfoById(id, cafeName);
-        TicketSelectResponseDto dto = dtoList.get(0);
-        Duration termData = Duration.between(dto.getFixedTermTicket(), dateTime);
-        dto.setPeriod(termData);
-        return dto;
-
+        try {
+            List<TicketSelectResponseDto> dtoList = ticketRepository.findAvailableTicketInfoById(id, cafeName);
+            TicketSelectResponseDto dto = dtoList.get(0);
+            long termData = Duration.between(dateTime, dto.getFixedTermTicket()).toMinutes();
+            dto.setPeriod(termData);
+            return dto;
+        } catch (IndexOutOfBoundsException exception) {
+            log.info("티켓이 존재하지 않습니다.");
+        }
+        return null;
     }
 
 //    @Override

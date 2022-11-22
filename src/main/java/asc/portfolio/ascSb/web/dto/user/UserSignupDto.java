@@ -28,6 +28,7 @@ public class UserSignupDto {
 
   private String name;
 
+
   @Builder
   public UserSignupDto(String loginId, String password, String email, String name) {
     this.loginId = loginId;

@@ -17,8 +17,8 @@ public class SeatServiceImpl implements SeatService {
     private final SeatRepository seatRepository;
 
     @Override
-    public List<SeatSelectResponseDto> showCurrentSeatState() {
-        return seatRepository.findSeatNumberAndSeatState().stream()
+    public List<SeatSelectResponseDto> showCurrentSeatState(String cafeName) {
+        return seatRepository.findSeatNumberAndSeatState(cafeName).stream()
                 .map(SeatSelectResponseDto::new)
                 .collect(Collectors.toList());
     }

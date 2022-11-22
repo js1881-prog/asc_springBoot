@@ -1,5 +1,4 @@
 package asc.portfolio.ascSb.config;
-
 import asc.portfolio.ascSb.jwt.LoginUserArgumentResolver;
 import asc.portfolio.ascSb.web.interceptor.LoginCheckInterceptor;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
     registry.addInterceptor(loginCheckInterceptor)
             .order(1)
             .addPathPatterns("/**")
-            .excludePathPatterns("/user/signup", "/user/login", "/user/login-test","api/v1/seat");
+            .excludePathPatterns("/user/signup", "/user/login", "/user/login-test","/api/v1/seat/");
   }
 
   @Override

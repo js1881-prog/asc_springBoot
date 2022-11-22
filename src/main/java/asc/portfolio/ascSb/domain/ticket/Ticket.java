@@ -27,11 +27,11 @@ public class Ticket extends BaseTimeEntity {
     @JoinColumn(name ="USER_ID")
     private User user;
 
-    private String isDeprecatedTicket;
+    @Enumerated(EnumType.STRING)
+    private TicketStateType isValidTicket;
 
     @Column(name = "T_P")
     private Integer ticketPrice;
-
 
     @Column(name = "FT_T")
     private LocalDateTime fixedTermTicket; // 기간제 티켓 날짜 => fixedTermTicket - createDate 시간으로 남은기간 계산
@@ -43,9 +43,9 @@ public class Ticket extends BaseTimeEntity {
     private Integer remainingTime;
 
     @Builder
-    public Ticket(User user, String isDeprecatedTicket, Integer ticketPrice, LocalDateTime fixedTermTicket, Integer partTimeTicket, Integer remainingTime) {
+    public Ticket(User user, TicketStateType isValidTicket, Integer ticketPrice, LocalDateTime fixedTermTicket, Integer partTimeTicket, Integer remainingTime) {
         this.user = user;
-        this.isDeprecatedTicket = isDeprecatedTicket;
+        this.isValidTicket = isValidTicket;
         this.ticketPrice = ticketPrice;
         this.fixedTermTicket = fixedTermTicket;
         this.partTimeTicket = partTimeTicket;

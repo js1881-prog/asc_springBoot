@@ -67,7 +67,7 @@ public class TicketRepositoryTest {
 
         Ticket ticket = new Ticket();
         ticket.setUser(user);
-        ticket.setIsDeprecatedTicket("N");
+        ticket.setIsValidTicket(TicketStateType.VALID);
         ticket.setTicketPrice(3000);
         ticket.setFixedTermTicket(LocalDateTime.now());
         ticket.setPartTimeTicket(0);

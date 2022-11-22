@@ -1,6 +1,7 @@
 package asc.portfolio.ascSb.web.dto.ticket;
 
 import asc.portfolio.ascSb.domain.ticket.Ticket;
+import asc.portfolio.ascSb.domain.ticket.TicketStateType;
 import asc.portfolio.ascSb.domain.user.User;
 import lombok.*;
 
@@ -13,19 +14,19 @@ public class TicketRequestDto {
 
     private Long id;
     private User user;
-    private String isDeprecatedTicket;
+    private TicketStateType isValidTicket;
     private Integer ticketPrice;
     private LocalDateTime fixedTermTicket;
     private Integer partTimeTicket;
     private Integer remainingTime;
 
     @Builder
-    public TicketRequestDto(Long id, User user, String isDeprecatedTicket, Integer ticketPrice,
+    public TicketRequestDto(Long id, User user, TicketStateType isValidTicket, Integer ticketPrice,
                                       LocalDateTime fixedTermTicket, Integer partTimeTicket, Integer remainingTime)
     {
         this.id = id;
         this.user = user;
-        this.isDeprecatedTicket = isDeprecatedTicket;
+        this.isValidTicket = isValidTicket;
         this.ticketPrice = ticketPrice;
         this.fixedTermTicket = fixedTermTicket;
         this.partTimeTicket = partTimeTicket;
@@ -35,7 +36,7 @@ public class TicketRequestDto {
     public Ticket toEntity() {
         return Ticket.builder()
                 .user(user)
-                .isDeprecatedTicket(isDeprecatedTicket)
+                .isValidTicket(isValidTicket)
                 .ticketPrice(ticketPrice)
                 .fixedTermTicket(fixedTermTicket)
                 .partTimeTicket(partTimeTicket)

@@ -14,8 +14,8 @@ public class SeatController {
 
     private final SeatService seatService;
 
-    @GetMapping("/api/v1/seat")
-    public List<SeatSelectResponseDto> seatState() {
-        return seatService.showCurrentSeatState();
+    @GetMapping("/api/v1/seat/{cafeName}")
+    public List<SeatSelectResponseDto> seatState(@PathVariable String cafeName) {
+        return seatService.showCurrentSeatState(cafeName);
     }
 }

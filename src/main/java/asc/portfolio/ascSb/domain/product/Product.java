@@ -3,6 +3,7 @@ package asc.portfolio.ascSb.domain.product;
 
 import asc.portfolio.ascSb.domain.BaseTimeEntity;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
+import asc.portfolio.ascSb.domain.commonenum.ProductNameType;
 import asc.portfolio.ascSb.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Product extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "C_ID")
     private Cafe cafe;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,8 +36,8 @@ public class Product extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ProductStateType productState;
 
-    @Column(name = "P_N")
-    private String productName;
+    @Enumerated(EnumType.STRING)
+    private ProductNameType productName;
 
     @Column(name = "DE")
     private String description;

@@ -14,10 +14,11 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
 
     private final JPAQueryFactory query;
 
-    public List<SeatSelectResponseDto> findSeatNumberAndSeatState() {
+    public List<SeatSelectResponseDto> findSeatNumberAndSeatState(String cafeName) {
         return query
                 .select(Projections.bean(SeatSelectResponseDto.class, seat.seatNumber, seat.seatState))
                 .from(seat)
+                .where(seat.cafe.cafeName.eq(cafeName))
                 .orderBy(seat.seatNumber.asc())
                 .fetch();
     }

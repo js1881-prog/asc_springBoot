@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface SeatService {
 
-    List<SeatSelectResponseDto> showCurrentSeatState();
+    List<SeatSelectResponseDto> showCurrentSeatState(String cafeName);
 }
