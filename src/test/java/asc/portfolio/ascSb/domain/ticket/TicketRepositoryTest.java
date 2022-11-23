@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-@Commit
 public class TicketRepositoryTest {
 
     @Autowired
@@ -37,10 +36,10 @@ public class TicketRepositoryTest {
 
     @BeforeEach
     public void insert_TestData() {
-        String loginId = "ascUser1234";
-        String password = "ascUser1234";
-        String email = "asc@gmail.com";
-        String name = "asc";
+        String loginId = "insetTest1234";
+        String password = "insetTest1234";
+        String email = "insetTest1234@gmail.com";
+        String name = "insetTest1234";
 
         user = User.builder()
                 .loginId(loginId)

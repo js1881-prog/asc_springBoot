@@ -15,7 +15,7 @@ public class Seat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "R_ID", nullable = false)
-    private Long id; // 별개 PK일뿐이에요
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "C_ID")
@@ -29,7 +29,7 @@ public class Seat {
     private SeatStateType seatState;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "USER_ID", unique = true)
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -46,10 +46,9 @@ public class Seat {
     public void reserveSeat(User user) {
         this.user = user;
         this.seatState = SeatStateType.RESERVED;
-        //this.ticket
     }
 
-    public void exitSeat(User user) {
+    public void exitSeat() {
         this.user = null;
         this.seatState = SeatStateType.UNRESERVED;
     }

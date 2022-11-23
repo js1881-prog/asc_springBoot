@@ -48,19 +48,14 @@ public class SeatRepositoryTest {
 
         userRepository.save(user);
 
-        for(int i=0; i < 40; i ++) {
+        Seat seat = Seat.builder()
+                .seatNumber(0)
+                .cafe(cafe)
+                .build();
 
-            Seat seat = Seat.builder()
-                    .seatNumber(i)
-                    .cafe(cafe)
-                    .build();
+        seat.reserveSeat(user);
 
-            if (i % 2 == 0) {
-                seat.reserveSeat(user);
-            }
-
-            seatRepository.save(seat);
-        }
+        seatRepository.save(seat);
     }
 
     @Test

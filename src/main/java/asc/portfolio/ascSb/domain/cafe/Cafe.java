@@ -17,7 +17,7 @@ public class Cafe {
     @Column(name = "C_ID", nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String cafeName;
 
     private String cafeArea;

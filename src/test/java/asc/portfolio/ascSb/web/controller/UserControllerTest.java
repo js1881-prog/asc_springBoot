@@ -7,7 +7,10 @@ import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +25,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 
+@Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserControllerTest {
 
@@ -38,7 +42,8 @@ class UserControllerTest {
   private ObjectMapper objectMapper;
 
   @AfterEach
-  public void clearAll() {
+  public void clearRepository2() {
+    log.error("Delete user repository");
     userRepository.deleteAll();
   }
 

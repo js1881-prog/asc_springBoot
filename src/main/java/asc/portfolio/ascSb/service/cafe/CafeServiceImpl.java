@@ -1,13 +1,18 @@
 package asc.portfolio.ascSb.service.cafe;
 
+import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.cafe.CafeRepository;
+import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.web.dto.cafe.CafeResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -18,5 +23,19 @@ public class CafeServiceImpl implements CafeService {
   @Override
   public List<CafeResponseDto> showAllCafeList() {
     return cafeRepository.findAllCafeNameAndArea();
+  }
+
+  @Override
+  public boolean changeReservedUserCafe(User user, String cafeName) {
+
+    Optional<Cafe> findCafeOpt = cafeRepository.findByCafeName(cafeName);
+
+    if (findCafeOpt.isEmpty()) {
+      log.error("Unknown Cafe Name = {}", cafeName);
+      return false;
+    } else {
+      findCafeOpt.ifPresent(c -> user.changeCafe(c));
+      return true;
+    }
   }
 }

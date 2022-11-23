@@ -1,10 +1,9 @@
 package asc.portfolio.ascSb.domain.user;
 
 import asc.portfolio.ascSb.domain.BaseTimeEntity;
+import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -26,6 +25,10 @@ public class User extends BaseTimeEntity {
 
   @OneToMany(mappedBy = "user")
   private List<Ticket> tickets = new ArrayList<>();
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "C_ID")
+  private Cafe cafe;
 
   @Size(min = 8, max = 16)
   @Column(name = "L_ID", unique = true, nullable = false)
@@ -56,6 +59,10 @@ public class User extends BaseTimeEntity {
   }
 
   //TODO ChangePassword 따로 만들기.
+
+  public void changeCafe(Cafe cafe) {
+    this.cafe = cafe;
+  }
 
   public String createQrString() {
     int leftLimit = 48; // numeral '0'

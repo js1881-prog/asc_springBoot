@@ -4,6 +4,7 @@ import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.cafe.CafeRepository;
 import asc.portfolio.ascSb.domain.seat.Seat;
 import asc.portfolio.ascSb.domain.seat.SeatRepository;
+import asc.portfolio.ascSb.domain.ticket.TicketRepository;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
 import asc.portfolio.ascSb.domain.user.UserRoleType;
@@ -31,10 +32,14 @@ public class TestDataGeneration {
   @Autowired
   UserRepository userRepository;
 
+  @Autowired
+  TicketRepository ticketRepository;
+
   @BeforeEach
   public void clearRepository() {
-    cafeRepository.deleteAll();
+    ticketRepository.deleteAll();
     seatRepository.deleteAll();
+    cafeRepository.deleteAll();
     userRepository.deleteAll();
   }
 

@@ -38,12 +38,14 @@ public class UserController {
     log.info("try signup. LoginId={}", signUpDto.getLoginId());
 
     if (bindingResult.hasErrors()) {
+      log.error("Invalid Signup Format");
       return new ResponseEntity<>("BAD_REQUEST", HttpStatus.BAD_REQUEST);
     }
 
     try {
       Long signUpUserID = userService.signUp(signUpDto);
     } catch (DataIntegrityViolationException e) {
+      log.error("Signup Unique violation");
       return new ResponseEntity<>("BAD_REQUEST - Unique violation", HttpStatus.BAD_REQUEST);
     }
 

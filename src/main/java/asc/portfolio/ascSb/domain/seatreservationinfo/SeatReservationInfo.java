@@ -20,6 +20,9 @@ public class SeatReservationInfo extends BaseTimeEntity {
     @Column(name = "S_ID", nullable = false)
     private Long id; // 좌석번호 X 사용구분을 위한 table 입니다 ex) 몇시,몇분에 어느좌석에 어떤 user가 몇시간을 사용했다~
 
+    @Enumerated(EnumType.STRING)
+    private SeatReservationInfoType isValid;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "C_ID")
     private Cafe cafe;
@@ -32,10 +35,12 @@ public class SeatReservationInfo extends BaseTimeEntity {
     @JoinColumn(name = "T_ID") // 어떤 ticket을
     private Ticket ticket;
 
-    @Column(name = "SN") // 어느 좌석에서
+    @Column(name = "S_N") // 어느 좌석에서
     private Integer seatNumber;
+
+    @Column(name = "S_T")
+    private Integer startTime;
 
     @Column(name = "T_IU")
     private Integer timeInUse; // 실제 사용한 시간 ( 이용종료시 )
-
 }
