@@ -8,6 +8,7 @@ import asc.portfolio.ascSb.domain.ticket.TicketRepository;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
 import asc.portfolio.ascSb.domain.user.UserRoleType;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +117,10 @@ public class TestDataGeneration {
 
   @Test
   public void setTestData() {
+    Assertions.assertThat(cafeRepository.count()).isEqualTo(0);
+    Assertions.assertThat(seatRepository.count()).isEqualTo(0);
+    Assertions.assertThat(userRepository.count()).isEqualTo(0);
+
     generateCafeSeatData();
     generateUserData();
     generateAdminUserData();

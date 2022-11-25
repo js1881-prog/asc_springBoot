@@ -3,6 +3,8 @@ import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.seat.Seat;
 import asc.portfolio.ascSb.domain.seat.SeatRepository;
 import asc.portfolio.ascSb.domain.seat.SeatStateType;
+import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfo;
+import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfoRepository;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.web.dto.seat.SeatSelectResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 public class SeatServiceImpl implements SeatService {
 
     private final SeatRepository seatRepository;
+
+    private final SeatReservationInfoRepository reservationInfoRepository;
 
     @Override
     public List<SeatSelectResponseDto> showCurrentSeatState(String cafeName) {
@@ -44,6 +48,12 @@ public class SeatServiceImpl implements SeatService {
         // seat Table 의 User_ID Unique 를 유지하기 위해, 먼저 반영
         seatRepository.flush();
 
+        //ReservationInfo 수정
+        SeatReservationInfo userRezInfo = reservationInfoRepository.findUserValidTypeReservationInfo(user.getLoginId());
+        if (userRezInfo != null) {
+            userRezInfo.endUsingSeat();
+        }
+
         return true;
     }
 
@@ -57,12 +67,22 @@ public class SeatServiceImpl implements SeatService {
             return false;
         }
 
-        //ticket 유효성 확인
+        //TODO ticket 유효성 확인
 
         //기존에 차지하고 있던 자리가 있으면 exit
         exitSeat(user);
 
+        //seat 에 User 를 할당
         findSeat.reserveSeat(user);
+
+        //ReservationInfo 저장
+        SeatReservationInfo reservationInfo = SeatReservationInfo.builder()
+                .user(user)
+                .cafe(cafe)
+                .seat(findSeat)
+                .ticket(null) //TODO
+                .build();
+        reservationInfoRepository.save(reservationInfo);
 
         return true;
     }
