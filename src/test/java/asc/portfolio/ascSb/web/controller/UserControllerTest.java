@@ -25,7 +25,6 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 
-@Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserControllerTest {
 
@@ -43,7 +42,6 @@ class UserControllerTest {
 
   @AfterEach
   public void clearRepository2() {
-    log.error("Delete user repository");
     userRepository.deleteAll();
   }
 

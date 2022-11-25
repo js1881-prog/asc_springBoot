@@ -38,4 +38,15 @@ public class SeatController {
 
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
+
+    @GetMapping("/api/v1/seat/exit")
+    public ResponseEntity<String> exitSeat(@LoginUser User user) {
+
+        Boolean isSuccess = seatService.exitSeat(user);
+        if (!isSuccess) {
+            return new ResponseEntity<>("No seat where the user sat", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>("Success", HttpStatus.OK);
+    }
 }

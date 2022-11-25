@@ -9,5 +9,7 @@ public interface SeatService {
 
     List<SeatSelectResponseDto> showCurrentSeatState(String cafeName);
 
+    public Boolean exitSeat(User user);
+
     public Boolean reserveSeat(User user, Cafe cafe, int seatNumber);
 }
