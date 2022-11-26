@@ -14,5 +14,5 @@ public interface UserService {
 
   User checkJsonWebToken(String jwt);
 
-  List<UserQrAndNameResponseDto> userQrAndName(Long id);
+  UserQrAndNameResponseDto userQrAndName(Long id);
 }

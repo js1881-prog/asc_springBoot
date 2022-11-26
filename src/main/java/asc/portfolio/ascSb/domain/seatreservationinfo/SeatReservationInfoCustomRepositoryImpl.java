@@ -4,6 +4,10 @@ import asc.portfolio.ascSb.domain.user.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import asc.portfolio.ascSb.domain.ticket.TicketStateType;
+import asc.portfolio.ascSb.web.dto.seatReservationInfo.SeatReservationInfoSelectResponseDto;
+import com.querydsl.core.types.Projections;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,7 +28,7 @@ public class SeatReservationInfoCustomRepositoryImpl implements SeatReservationI
             .select(seatReservationInfo)
             .from(seatReservationInfo)
             .where(seatReservationInfo.userLoginId.eq(loginId),
-                    seatReservationInfo.isValid.eq(SeatReservationInfoType.VALID))
+                    seatReservationInfo.isValid.eq(SeatReservationInfoStateType.VALID))
             .orderBy(seatReservationInfo.startTime.desc())
             .fetch();
 
@@ -39,5 +43,16 @@ public class SeatReservationInfoCustomRepositoryImpl implements SeatReservationI
     }
 
     return result;
+  }
+
+  @Override
+  public SeatReservationInfoSelectResponseDto findSeatInfoByUserIdAndCafeName(String loginId, String cafeName) {
+      return query
+              .select(Projections.bean(SeatReservationInfoSelectResponseDto.class, seatReservationInfo.seatNumber,
+                      seatReservationInfo.startTime, seatReservationInfo.timeInUse, seatReservationInfo.createDate))
+              .from(seatReservationInfo)
+              .where(seatReservationInfo.userLoginId.eq(loginId),
+                      seatReservationInfo.ticket.isValidTicket.eq(TicketStateType.VALID))
+              .fetchOne();
   }
 }

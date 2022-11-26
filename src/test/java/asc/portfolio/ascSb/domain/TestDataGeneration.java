@@ -2,9 +2,16 @@ package asc.portfolio.ascSb.domain;
 
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.cafe.CafeRepository;
+import asc.portfolio.ascSb.domain.commonenum.ProductNameType;
+import asc.portfolio.ascSb.domain.product.Product;
+import asc.portfolio.ascSb.domain.product.ProductRepository;
+import asc.portfolio.ascSb.domain.product.ProductStateType;
 import asc.portfolio.ascSb.domain.seat.Seat;
 import asc.portfolio.ascSb.domain.seat.SeatRepository;
 import asc.portfolio.ascSb.domain.ticket.TicketRepository;
+import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfoRepository;
+import asc.portfolio.ascSb.domain.ticket.Ticket;
+import asc.portfolio.ascSb.domain.ticket.TicketStateType;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
 import asc.portfolio.ascSb.domain.user.UserRoleType;
@@ -16,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootTest
@@ -34,7 +42,13 @@ public class TestDataGeneration {
   UserRepository userRepository;
 
   @Autowired
+  SeatReservationInfoRepository seatReservationInfoRepository;
+
+  @Autowired
   TicketRepository ticketRepository;
+
+  @Autowired
+  ProductRepository productRepository;
 
   @BeforeEach
   public void clearRepository() {
@@ -102,17 +116,56 @@ public class TestDataGeneration {
   }
 
   private void generateAdminUserData() {
-    String userName = "tUser_Admin";
+    String userName = "tUserAdmin";
 
     User user = User.builder()
             .loginId(userName)
-            .password(userName + "_password")
+            .password(userName + "password")
             .email(userName + "@gmail.com")
             .name(userName)
             .role(UserRoleType.ADMIN)
             .build();
 
     userRepository.save(user);
+  }
+
+  private void generateTicketData() {
+    LocalDateTime date = LocalDateTime.now();
+
+    Ticket ticket = Ticket.builder()
+            .cafe(cafeRepository.findByCafeNameContains("tCafe_A"))
+            .user(userRepository.findByNameContains("tUser_F"))
+            .isValidTicket(TicketStateType.VALID)
+            .ticketPrice(3000)
+            .fixedTermTicket(date)
+            .partTimeTicket(0)
+            .remainingTime(0)
+            .build();
+    ticketRepository.save(ticket);
+  }
+
+  private void generateProductData() {
+    ProductStateType productState;
+    ProductNameType productName;
+
+    for(int i=0; i < 20; i ++) {
+      if (i % 2 == 0) {
+        productState = ProductStateType.SALE;
+        productName = ProductNameType.FOUR_WEEK_FIXED_TERM_TICKET;
+      } else {
+        productState = ProductStateType.CANCEL;
+        productName = ProductNameType.WEEK_FIXED_TERM_TICKET;
+      }
+      Product product = Product.builder()
+              .cafe(cafeRepository.findByCafeNameContains("tCafe_A"))
+              .productName(productName)
+              .user(userRepository.findByNameContains("tUser_F"))
+              .productState(productState)
+              .description("테스트 product")
+              .productPrice(1000 * i)
+              .build();
+      productRepository.save(product);
+    }
   }
 
   @Test
@@ -124,5 +177,7 @@ public class TestDataGeneration {
     generateCafeSeatData();
     generateUserData();
     generateAdminUserData();
+    generateTicketData();
+    generateProductData();
   }
 }

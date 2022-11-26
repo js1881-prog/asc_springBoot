@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface TicketCustomRepository {
 
-    List<TicketSelectResponseDto> findAvailableTicketInfoById(Long id, String cafeName);
+    TicketSelectResponseDto findAvailableTicketInfoById(Long id, String cafeName);
 
     Long verifyTicket(); // update가 진행된 isDeprecatedTicket 갯수를 return
 

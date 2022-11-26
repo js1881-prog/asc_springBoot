@@ -13,9 +13,7 @@ public enum ProductNameType {
     HUNDRED_HOUR_PART_TIME_TICKET("100시간권");
 
     private final String value;
-
     ProductNameType(String value) { this.value = value; }
-
     public String getValue() { return value; }
 
 }

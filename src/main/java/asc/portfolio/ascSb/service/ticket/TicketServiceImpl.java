@@ -20,16 +20,15 @@ public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
 
     @Override
-    public TicketSelectResponseDto userTicket(Long id, String cafeName) throws IndexOutOfBoundsException {
+    public TicketSelectResponseDto userTicket(Long id, String cafeName) {
         LocalDateTime dateTime = LocalDateTime.now();
         try {
-            List<TicketSelectResponseDto> dtoList = ticketRepository.findAvailableTicketInfoById(id, cafeName);
-            TicketSelectResponseDto dto = dtoList.get(0);
+            TicketSelectResponseDto dto = ticketRepository.findAvailableTicketInfoById(id, cafeName);
             long termData = Duration.between(dateTime, dto.getFixedTermTicket()).toMinutes();
             dto.setPeriod(termData);
             return dto;
-        } catch (IndexOutOfBoundsException exception) {
-            log.info("티켓이 존재하지 않습니다.");
+        } catch (Exception exception) {
+            log.info("보유중인 티켓이 존재하지 않습니다.");
         }
         return null;
     }

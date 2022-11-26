@@ -18,14 +18,14 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
     private final JPAQueryFactory query;
 
     @Override
-    public List<TicketSelectResponseDto> findAvailableTicketInfoById(Long id, String cafeName) {
+    public TicketSelectResponseDto findAvailableTicketInfoById(Long id, String cafeName) {
 
         return query
                 .select(Projections.bean(TicketSelectResponseDto.class,
                 ticket.isValidTicket, ticket.fixedTermTicket, ticket.partTimeTicket, ticket.remainingTime))
                 .from(ticket)
                 .where(ticket.cafe.cafeName.eq(cafeName), ticket.user.id.eq(id), ticket.isValidTicket.eq(TicketStateType.VALID))
-                .fetch();
+                .fetchOne();
     }
 
     @Override

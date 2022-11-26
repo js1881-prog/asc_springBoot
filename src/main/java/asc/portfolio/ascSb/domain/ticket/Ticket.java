@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter // 테스트 용도 후에 제거
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "TICKET")
@@ -43,7 +42,8 @@ public class Ticket extends BaseTimeEntity {
     private Integer remainingTime;
 
     @Builder
-    public Ticket(User user, TicketStateType isValidTicket, Integer ticketPrice, LocalDateTime fixedTermTicket, Integer partTimeTicket, Integer remainingTime) {
+    public Ticket(Cafe cafe, User user, TicketStateType isValidTicket, Integer ticketPrice, LocalDateTime fixedTermTicket, Integer partTimeTicket, Integer remainingTime) {
+        this.cafe = cafe;
         this.user = user;
         this.isValidTicket = isValidTicket;
         this.ticketPrice = ticketPrice;

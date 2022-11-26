@@ -7,8 +7,6 @@ import java.util.List;
 public interface UserCustomRepository {
 
     // TODO findAllById 구현.
-    List<UserQrAndNameResponseDto> findQrAndUserNameById(Long id);
-
-
+    UserQrAndNameResponseDto findQrAndUserNameById(Long id);
 
 }

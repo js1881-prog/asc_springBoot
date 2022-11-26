@@ -98,9 +98,14 @@ public class UserController {
     return new ResponseEntity<>("OK", HttpStatus.OK);
   }
 
-  @GetMapping("/api/v1")
-  public List<UserQrAndNameResponseDto> findQrAndNameById(@LoginUser User user) {
+  @GetMapping("/api/v1/Info")
+  public ResponseEntity<UserQrAndNameResponseDto> findQrAndNameById(@LoginUser User user) {
 
-    return userService.userQrAndName(user.getId());
+    if (user == null) {
+      log.error("유효하지 않은 로그인 입니다.");
+      return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    }
+
+    return new ResponseEntity<>(userService.userQrAndName(user.getId()), HttpStatus.OK);
   }
 }

@@ -59,10 +59,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<UserQrAndNameResponseDto> userQrAndName(Long id) {
-    return userRepository.findQrAndUserNameById(id)
-            .stream()
-            .map(UserQrAndNameResponseDto::new)
-            .collect(Collectors.toList());
+  public UserQrAndNameResponseDto userQrAndName(Long id) {
+    return userRepository.findQrAndUserNameById(id);
   }
 }

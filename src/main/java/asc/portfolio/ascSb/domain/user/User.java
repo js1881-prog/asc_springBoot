@@ -3,6 +3,8 @@ package asc.portfolio.ascSb.domain.user;
 import asc.portfolio.ascSb.domain.BaseTimeEntity;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,6 +29,7 @@ public class User extends BaseTimeEntity {
   private List<Ticket> tickets = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @JsonIgnore
   @JoinColumn(name = "C_ID")
   private Cafe cafe;
 

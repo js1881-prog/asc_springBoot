@@ -5,15 +5,15 @@ import asc.portfolio.ascSb.domain.BaseTimeEntity;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.commonenum.ProductNameType;
 import asc.portfolio.ascSb.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
-@Setter // test를 위한 setter 나중에 제거
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -25,12 +25,14 @@ public class Product extends BaseTimeEntity {
     @Column(name = "P_ID", nullable = false)
     private Long id;
 
-    @ManyToOne
     @JoinColumn(name = "C_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Cafe cafe;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="USER_ID")
+    @JsonIgnore
     private User user;
 
     @Enumerated(EnumType.STRING)
@@ -45,4 +47,15 @@ public class Product extends BaseTimeEntity {
     @Column(name = "P_P")
     private Integer productPrice;
 
+    @Builder
+    public Product(Cafe cafe, User user, ProductStateType productState, ProductNameType productName,
+                   String description, Integer productPrice)
+    {
+        this.cafe = cafe;
+        this.user = user;
+        this.productState = productState;
+        this.productName = productName;
+        this.description = description;
+        this.productPrice = productPrice;
+    }
 }

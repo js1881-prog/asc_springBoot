@@ -17,13 +17,11 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
     private final JPAQueryFactory query;
 
     @Override
-    public List<UserQrAndNameResponseDto> findQrAndUserNameById(Long id) {
+    public UserQrAndNameResponseDto findQrAndUserNameById(Long id) {
         return query
                 .select(Projections.bean(UserQrAndNameResponseDto.class, user.name, user.qrCode))
                 .from(user)
                 .where(user.id.eq(id))
-                .fetch();
+                .fetchOne();
     }
-
-
 }

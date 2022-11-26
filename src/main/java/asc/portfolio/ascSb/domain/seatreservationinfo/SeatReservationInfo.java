@@ -25,7 +25,7 @@ public class SeatReservationInfo extends BaseTimeEntity {
     private Long id; // 사용구분을 위한 table 입니다 ex) 몇시,몇분에 어느좌석에 어떤 user가 몇시간을 사용했다~
 
     @Enumerated(EnumType.STRING)
-    private SeatReservationInfoType isValid;
+    private SeatReservationInfoStateType isValid;
 
     //Entity User
     @Column(name = "USER_ID")
@@ -54,12 +54,12 @@ public class SeatReservationInfo extends BaseTimeEntity {
         this.seatNumber = seat.getSeatNumber();
         this.ticket = ticket;
         //자동 값 입력
-        this.isValid = SeatReservationInfoType.VALID;
+        this.isValid = SeatReservationInfoStateType.VALID;
         this.startTime = LocalDateTime.now();
     }
 
     public void endUsingSeat() {
-        this.isValid = SeatReservationInfoType.INVALID;
+        this.isValid = SeatReservationInfoStateType.INVALID;
         this.timeInUse = Duration.between(startTime, LocalDateTime.now()).getSeconds();
     }
 }
