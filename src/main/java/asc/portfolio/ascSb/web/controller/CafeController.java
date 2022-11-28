@@ -1,6 +1,5 @@
 package asc.portfolio.ascSb.web.controller;
 
-import asc.portfolio.ascSb.domain.cafe.CafeRepository;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.jwt.LoginUser;
 import asc.portfolio.ascSb.service.cafe.CafeService;

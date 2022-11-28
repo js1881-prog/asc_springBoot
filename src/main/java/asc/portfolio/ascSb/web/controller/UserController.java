@@ -8,7 +8,6 @@ import asc.portfolio.ascSb.web.dto.user.UserLoginRequestDto;
 import asc.portfolio.ascSb.web.dto.user.UserLoginResponseDto;
 import asc.portfolio.ascSb.web.dto.user.UserQrAndNameResponseDto;
 import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,9 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 
 @Slf4j
 @RestController

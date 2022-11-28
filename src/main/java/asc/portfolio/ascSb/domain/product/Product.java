@@ -5,7 +5,6 @@ import asc.portfolio.ascSb.domain.BaseTimeEntity;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.commonenum.ProductNameType;
 import asc.portfolio.ascSb.domain.user.User;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -57,5 +56,13 @@ public class Product extends BaseTimeEntity {
         this.productName = productName;
         this.description = description;
         this.productPrice = productPrice;
+    }
+
+    public void completeOrder() {
+        this.productState = ProductStateType.SALE;
+    }
+
+    public void failOrder() {
+        this.productState = ProductStateType.CANCEL;
     }
 }
