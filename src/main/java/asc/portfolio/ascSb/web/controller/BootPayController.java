@@ -1,6 +1,6 @@
 package asc.portfolio.ascSb.web.controller;
 
-import asc.portfolio.ascSb.service.product.order.Order;
+import asc.portfolio.ascSb.domain.order.Order;
 import asc.portfolio.ascSb.service.order.OrderService;
 import asc.portfolio.ascSb.web.bootpay.Bootpay;
 import asc.portfolio.ascSb.web.dto.bootpay.BootPayOrderDto;
@@ -23,19 +23,16 @@ public class BootPayController {
 
     private final OrderService orderService;
 
-
     @PostMapping("/api/v1/pay")
     public ResponseEntity<String> pay(@RequestBody OrderDto dto) {
         try {
-            Long orderId = orderService.saveOrder(dto);
-            log.info("주문번호={}", orderId);
+            Long receiptOrderId = orderService.saveOrder(dto);
+            log.info("주문번호={}", receiptOrderId);
         } catch (Exception e) {
             return new ResponseEntity<>("유효하지 않은 주문입니다.", HttpStatus.BAD_REQUEST);
         }
        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
-
-
 
     @GetMapping("/api/v1/pay/confirm")
     public ResponseEntity confirmPay(
@@ -73,7 +70,7 @@ public class BootPayController {
             //status가 1이고
             if (dto.getData().getPrice() == price && dto.getData().getStatus() == 1) {
                 //결제 완료
-                //orderService.completeOrder(orderId);
+
                 return ResponseEntity.ok("결제완료");
             }
         }

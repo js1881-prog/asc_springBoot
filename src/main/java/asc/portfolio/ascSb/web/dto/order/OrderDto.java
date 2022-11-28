@@ -1,7 +1,7 @@
 package asc.portfolio.ascSb.web.dto.order;
 
-import asc.portfolio.ascSb.service.product.order.Order;
-import asc.portfolio.ascSb.service.product.order.OrderStateType;
+import asc.portfolio.ascSb.domain.order.Order;
+import asc.portfolio.ascSb.domain.order.OrderStateType;
 import lombok.Builder;
 import lombok.Data;
 

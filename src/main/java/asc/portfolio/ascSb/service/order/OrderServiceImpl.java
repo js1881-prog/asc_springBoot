@@ -1,8 +1,8 @@
 package asc.portfolio.ascSb.service.order;
 
 
-import asc.portfolio.ascSb.service.product.order.Order;
-import asc.portfolio.ascSb.service.product.order.OrderRepository;
+import asc.portfolio.ascSb.domain.order.Order;
+import asc.portfolio.ascSb.domain.order.OrderRepository;
 import asc.portfolio.ascSb.web.dto.order.OrderDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,5 +1,4 @@
-package asc.portfolio.ascSb.service.product.order;
-
+package asc.portfolio.ascSb.domain.order;
 
 import asc.portfolio.ascSb.domain.BaseTimeEntity;
 import lombok.AccessLevel;

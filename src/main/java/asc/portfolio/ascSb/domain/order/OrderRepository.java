@@ -1,4 +1,4 @@
-package asc.portfolio.ascSb.service.product.order;
+package asc.portfolio.ascSb.domain.order;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
