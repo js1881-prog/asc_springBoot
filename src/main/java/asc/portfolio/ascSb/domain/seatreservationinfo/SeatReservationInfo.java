@@ -4,6 +4,7 @@ import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.seat.Seat;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.user.User;
+import asc.portfolio.ascSb.domain.seat.Seat;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,6 +47,7 @@ public class SeatReservationInfo extends BaseTimeEntity {
 
     @Column(name = "T_IU")
     private Long timeInUse; // 실제 사용한 시간 ( 이용종료시 )
+
 
     @Builder
     public SeatReservationInfo(User user, Cafe cafe, Seat seat, Ticket ticket) {
