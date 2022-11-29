@@ -18,7 +18,7 @@ public class SeatReservationInfoCustomRepositoryImpl implements SeatReservationI
   private final JPAQueryFactory query;
 
   @Override
-  public SeatReservationInfo findUserValidTypeReservationInfo(String loginId) {
+  public List<SeatReservationInfo> findValidSeatRezInfoByLoginId(String loginId) {
 
     List<SeatReservationInfo> result = query
             .select(seatReservationInfo)
@@ -34,10 +34,10 @@ public class SeatReservationInfoCustomRepositoryImpl implements SeatReservationI
       log.error("No valid reservation. user = {}", loginId);
       return null;
     } else if (listSize > 1) {
-      // Valid 상태의 reservation info 는 한개여야 한다.
-      log.error("The user{}'s valid state information exceed one.", loginId);
+      // Valid 상태의 reservation info 는 한개여야 한다. 런타임 예외 필요.
+      log.error("The user[{}]'s valid state information exceed one.", loginId);
     }
 
-    return result.get(0);
+    return result;
   }
 }

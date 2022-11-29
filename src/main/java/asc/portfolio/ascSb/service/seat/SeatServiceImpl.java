@@ -49,9 +49,11 @@ public class SeatServiceImpl implements SeatService {
         seatRepository.flush();
 
         //ReservationInfo 수정
-        SeatReservationInfo userRezInfo = reservationInfoRepository.findUserValidTypeReservationInfo(user.getLoginId());
+        List<SeatReservationInfo> userRezInfo = reservationInfoRepository.findValidSeatRezInfoByLoginId(user.getLoginId());
         if (userRezInfo != null) {
-            userRezInfo.endUsingSeat();
+            for (int i = 0; i < userRezInfo.size(); i++) {
+                userRezInfo.get(i).endUsingSeat();
+            }
         }
 
         return true;

@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface SeatReservationInfoCustomRepository {
 
-  public SeatReservationInfo findUserValidTypeReservationInfo(String loginId);
+  public List<SeatReservationInfo> findValidSeatRezInfoByLoginId(String loginId);
 }

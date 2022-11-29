@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -40,10 +42,10 @@ public class SeatReservationInfo extends BaseTimeEntity {
     private Ticket ticket;
 
     @Column(name = "S_T")
-    private Integer startTime;
+    private LocalDateTime startTime;
 
     @Column(name = "T_IU")
-    private Integer timeInUse; // 실제 사용한 시간 ( 이용종료시 )
+    private Long timeInUse; // 실제 사용한 시간 ( 이용종료시 )
 
     @Builder
     public SeatReservationInfo(User user, Cafe cafe, Seat seat, Ticket ticket) {
@@ -53,11 +55,11 @@ public class SeatReservationInfo extends BaseTimeEntity {
         this.ticket = ticket;
         //자동 값 입력
         this.isValid = SeatReservationInfoType.VALID;
-        this.startTime = 0; //TODO
+        this.startTime = LocalDateTime.now();
     }
 
     public void endUsingSeat() {
         this.isValid = SeatReservationInfoType.INVALID;
-        this.timeInUse = 0; //TODO
+        this.timeInUse = Duration.between(startTime, LocalDateTime.now()).getSeconds();
     }
 }
