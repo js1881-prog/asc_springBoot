@@ -1,17 +1,13 @@
 package asc.portfolio.ascSb.web.dto.ticket;
 
 import asc.portfolio.ascSb.domain.ticket.TicketStateType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class TicketResponseDto {
 
     private TicketStateType isValidTicket;
@@ -21,10 +17,10 @@ public class TicketResponseDto {
 
     private long period;
 
-    public TicketResponseDto(TicketResponseDto entity) {
-        this.isValidTicket = entity.getIsValidTicket();
-        this.fixedTermTicket = entity.getFixedTermTicket();
-        this.partTimeTicket = entity.getPartTimeTicket();
-        this.remainingTime = entity.getRemainingTime();
-    }
+//    public TicketResponseDto(TicketResponseDto entity) {
+//        this.isValidTicket = entity.getIsValidTicket();
+//        this.fixedTermTicket = entity.getFixedTermTicket();
+//        this.partTimeTicket = entity.getPartTimeTicket();
+//        this.remainingTime = entity.getRemainingTime();
+//    }
 }

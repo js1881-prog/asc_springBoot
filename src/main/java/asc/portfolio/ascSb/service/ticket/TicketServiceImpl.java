@@ -1,5 +1,6 @@
 package asc.portfolio.ascSb.service.ticket;
 
+import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.ticket.TicketRepository;
 import asc.portfolio.ascSb.web.dto.ticket.TicketResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
@@ -27,12 +29,17 @@ public class TicketServiceImpl implements TicketService {
             dto.setPeriod(termData);
             return dto;
         } catch (Exception exception) {
-            log.info("보유중인 티켓이 존재하지 않습니다.");
+            log.info("보유중인 티켓이 존재하지 않습니다.", exception);
         }
         return null;
     }
 
-//    @Override
+    @Override
+    public List<TicketResponseDto> lookupUserTickets(String targetUserLoginId, Cafe cafe) {
+        return ticketRepository.findAllTicketInfoByLoginIdAndCafe(targetUserLoginId, cafe);
+    }
+
+    //    @Override
 //    public Long saveTicket(TicketRequestDto dto, Long id) {
 //
 //        List<TicketSelectResponseDto> ticketCheck = ticketRepository.findAvailableTicketInfoById(id);

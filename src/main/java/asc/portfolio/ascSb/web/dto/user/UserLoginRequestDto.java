@@ -16,7 +16,7 @@ public class UserLoginRequestDto {
   private String loginId;
 
   @NotBlank
-  @Length(min = 8, max = 16)
+  @Length(min = 8)
   private String password;
 
   @Builder
