@@ -45,7 +45,6 @@ public class SeatReservationInfo extends BaseTimeEntity {
     @Column(name = "S_T")
     private LocalDateTime startTime;
 
-    @Column(name = "T_IU")
     private Long timeInUse; // 실제 사용한 시간 ( 이용종료시 )
 
     @Builder

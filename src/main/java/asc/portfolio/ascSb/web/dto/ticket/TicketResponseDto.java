@@ -1,19 +1,14 @@
 package asc.portfolio.ascSb.web.dto.ticket;
 
 import asc.portfolio.ascSb.domain.ticket.TicketStateType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-public class TicketSelectResponseDto {
+public class TicketResponseDto {
 
     private TicketStateType isValidTicket;
     private LocalDateTime fixedTermTicket; // 기간제 티켓 날짜 => fixedTermTicket - createDate 시간으로 남은기간 계산
@@ -22,10 +17,10 @@ public class TicketSelectResponseDto {
 
     private long period;
 
-    public TicketSelectResponseDto(TicketSelectResponseDto entity) {
-        this.isValidTicket = entity.getIsValidTicket();
-        this.fixedTermTicket = entity.getFixedTermTicket();
-        this.partTimeTicket = entity.getPartTimeTicket();
-        this.remainingTime = entity.getRemainingTime();
-    }
+//    public TicketResponseDto(TicketResponseDto entity) {
+//        this.isValidTicket = entity.getIsValidTicket();
+//        this.fixedTermTicket = entity.getFixedTermTicket();
+//        this.partTimeTicket = entity.getPartTimeTicket();
+//        this.remainingTime = entity.getRemainingTime();
+//    }
 }
