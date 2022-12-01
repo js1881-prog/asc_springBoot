@@ -49,11 +49,12 @@ dependencies {
     implementation group: 'commons-io', name: 'commons-io', version: '2.7'
     implementation 'com.github.bootpay:backend-java:+'
 
-
     // querydsl 디펜던시 추가 11/09 by padonan
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
+    // swagger 의 스프링 라이브러리 springdoc 적용.
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.13'
 }
 
 tasks.named('test') {

@@ -2,6 +2,7 @@ package asc.portfolio.ascSb.web.dto.user;
 
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRoleType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,20 +15,23 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class UserSignupDto {
 
+  @Schema(description = "아이디", example = "testUserId")
   @NotBlank
   @Length(min = 8, max = 16)
   private String loginId;
 
   //TODO Password 암호화 저장
+  @Schema(description = "패스워드", example = "abcdef123456")
   @NotBlank
-  @Length(min = 8, max = 16)
+  @Length(min = 8)
   private String password;
 
+  @Schema(description = "이메일", example = "ascProject@gmail.com")
   @Email
   private String email;
 
+  @Schema(description = "이름", example = "testUserName")
   private String name;
-
 
   @Builder
   public UserSignupDto(String loginId, String password, String email, String name) {
