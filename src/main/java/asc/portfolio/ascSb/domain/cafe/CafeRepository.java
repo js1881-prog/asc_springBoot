@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CafeRepository extends JpaRepository<Cafe, Long>, CafeCustomRepository {
 
-  Optional<Cafe> findByCafeName(String cafeName);
+    Optional<Cafe> findByCafeName(String cafeName);
 
     Cafe findByCafeNameContains(String cafeName);
 }

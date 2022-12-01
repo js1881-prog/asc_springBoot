@@ -53,4 +53,8 @@ public class Ticket extends BaseTimeEntity {
         this.partTimeTicket = partTimeTicket;
         this.remainingTime = remainingTime;
     }
+
+    public void changeTicketStateToInvalid() {
+        this.isValidTicket = TicketStateType.INVALID;
+    }
 }

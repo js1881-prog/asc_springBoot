@@ -50,24 +50,30 @@ public class TestDataGeneration {
   @Autowired
   ProductRepository productRepository;
 
+  //Test Data
+  String[] cafeName = {"tCafe_A", "tCafe_B", "tCafe_C", "tCafe_D", "tCafe_E", "tCafe_F"};
+
+  String[] cafeArea = {
+          "서울특별시",
+          "부산광역시", "인천광역시", "대구광역시", "대전광역시", "광주광역시", "울산광역시",
+          "세종특별자치시",
+          "경기도", "강원도", "충청북도", "충청남도", "전라북도", "전라남도", "경상북도", "경상남도",
+          "제주특별자치도"};
+
+  String[] userName = {"tUser_A", "tUser_B", "tUser_C", "tUser_D", "tUser_E", "tUser_F"};
+
+
   @BeforeEach
   public void clearRepository() {
-    seatReservationInfoRepository.deleteAll();
-    ticketRepository.deleteAll();
-    seatRepository.deleteAll();
-    cafeRepository.deleteAll();
-    userRepository.deleteAll();
+    productRepository.deleteAllInBatch();
+    seatReservationInfoRepository.deleteAllInBatch();
+    ticketRepository.deleteAllInBatch();
+    seatRepository.deleteAllInBatch();
+    userRepository.deleteAllInBatch();
+    cafeRepository.deleteAllInBatch();
   }
 
   private void generateCafeSeatData() {
-
-    String[] cafeName = {"tCafe_A", "tCafe_B", "tCafe_C", "tCafe_D", "tCafe_E", "tCafe_F"};
-    String[] cafeArea = {
-            "서울특별시",
-            "부산광역시", "인천광역시", "대구광역시", "대전광역시", "광주광역시", "울산광역시",
-            "세종특별자치시",
-            "경기도", "강원도", "충청북도", "충청남도", "전라북도", "전라남도", "경상북도", "경상남도",
-            "제주특별자치도"};
 
     for (int i = 0; i < cafeName.length; i++) {
       Cafe cafe = Cafe.builder()
@@ -100,8 +106,6 @@ public class TestDataGeneration {
 
   private void generateUserData() {
 
-    String[] userName = {"tUser_A", "tUser_B", "tUser_C", "tUser_D", "tUser_E", "tUser_F"};
-
     for (int i = 0; i < userName.length; i++) {
       String userString = userName[i];
       User user = User.builder()
@@ -121,28 +125,53 @@ public class TestDataGeneration {
 
     User user = User.builder()
             .loginId(userName)
-            .password(userName + "password")
+            .password(userName + "_password")
             .email(userName + "@gmail.com")
             .name(userName)
             .role(UserRoleType.ADMIN)
             .build();
 
+    user.changeCafe(cafeRepository.findByCafeName("tCafe_A").orElse(null));
     userRepository.save(user);
   }
 
   private void generateTicketData() {
     LocalDateTime date = LocalDateTime.now();
 
-    Ticket ticket = Ticket.builder()
-            .cafe(cafeRepository.findByCafeNameContains("tCafe_A"))
-            .user(userRepository.findByNameContains("tUser_F"))
-            .isValidTicket(TicketStateType.VALID)
-            .ticketPrice(3000)
-            .fixedTermTicket(date)
-            .partTimeTicket(0)
-            .remainingTime(0)
-            .build();
-    ticketRepository.save(ticket);
+    //Valid Ticket
+    for (int i = 0; i < Math.min(cafeName.length, userName.length); i++) {
+      Ticket ticket = Ticket.builder()
+              .cafe(cafeRepository.findByCafeNameContains(cafeName[i]))
+              .user(userRepository.findByNameContains(userName[i]))
+              .isValidTicket(TicketStateType.VALID)
+              .ticketPrice(3000)
+              .fixedTermTicket(date)
+              .partTimeTicket(0)
+              .remainingTime(0)
+              .build();
+
+      ticketRepository.save(ticket);
+    }
+
+    //Invalid Ticket
+    for (int i = 0; i < Math.min(cafeName.length, userName.length); i++) {
+
+      for (long j = 1; j < 6; j++) {
+        Ticket ticket = Ticket.builder()
+                .cafe(cafeRepository.findByCafeNameContains(cafeName[i]))
+                .user(userRepository.findByNameContains(userName[i]))
+                .isValidTicket(TicketStateType.INVALID)
+                .ticketPrice(3000)
+                .fixedTermTicket(date.plusHours(j))
+                .partTimeTicket(0)
+                .remainingTime(0)
+                .build();
+
+        ticketRepository.save(ticket);
+      }
+
+    }
+
   }
 
   private void generateProductData() {
