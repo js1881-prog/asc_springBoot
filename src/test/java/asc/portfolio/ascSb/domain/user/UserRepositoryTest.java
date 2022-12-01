@@ -1,14 +1,11 @@
 package asc.portfolio.ascSb.domain.user;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,10 +36,10 @@ class UserRepositoryTest {
             .build();
 
     userRepository.save(user);
-    List<User> userList = userRepository.findAll();
 
     //then
-    User findUser = userList.get(0);
+    User findUser = userRepository.findByLoginId(loginId).orElse(null);
+
     assertThat(findUser.getPassword()).isEqualTo(password);
     assertThat(findUser.getEmail()).isEqualTo(email);
     assertThat(findUser.getName()).isEqualTo(name);

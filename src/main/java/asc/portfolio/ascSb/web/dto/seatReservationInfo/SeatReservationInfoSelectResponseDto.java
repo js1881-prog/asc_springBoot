@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class SeatReservationInfoSelectResponseDto {
     private Integer seatNumber;
     private Integer startTime;
-    private Integer timeInUse;
+    private Long timeInUse;
 
     private LocalDateTime createDate;
 

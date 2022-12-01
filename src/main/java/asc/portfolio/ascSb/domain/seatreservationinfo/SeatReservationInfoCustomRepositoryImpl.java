@@ -47,8 +47,11 @@ public class SeatReservationInfoCustomRepositoryImpl implements SeatReservationI
   @Override
   public SeatReservationInfoSelectResponseDto findSeatInfoByUserIdAndCafeName(String loginId, String cafeName) {
       return query
-              .select(Projections.bean(SeatReservationInfoSelectResponseDto.class, seatReservationInfo.seatNumber,
-                      seatReservationInfo.startTime, seatReservationInfo.timeInUse, seatReservationInfo.createDate))
+              .select(Projections.bean(SeatReservationInfoSelectResponseDto.class,
+                      seatReservationInfo.seatNumber,
+                      seatReservationInfo.startTime,
+                      seatReservationInfo.timeInUse,
+                      seatReservationInfo.createDate))
               .from(seatReservationInfo)
               .where(seatReservationInfo.userLoginId.eq(loginId),
                       seatReservationInfo.ticket.isValidTicket.eq(TicketStateType.VALID))

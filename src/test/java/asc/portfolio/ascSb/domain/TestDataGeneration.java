@@ -52,6 +52,7 @@ public class TestDataGeneration {
 
   @BeforeEach
   public void clearRepository() {
+    seatReservationInfoRepository.deleteAll();
     ticketRepository.deleteAll();
     seatRepository.deleteAll();
     cafeRepository.deleteAll();
