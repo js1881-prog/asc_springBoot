@@ -1,25 +1,37 @@
 package asc.portfolio.ascSb.domain.ticket;
 
-
+import asc.portfolio.ascSb.config.querydslconfig.TestQueryDslConfig;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.cafe.CafeRepository;
+import asc.portfolio.ascSb.domain.cafe.QCafe;
+import asc.portfolio.ascSb.domain.ticket.QTicket;
+import asc.portfolio.ascSb.domain.user.QUser;
 import asc.portfolio.ascSb.domain.user.User;
+import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.user.UserRepository;
 import asc.portfolio.ascSb.domain.user.UserRoleType;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
+import com.querydsl.core.Tuple;
+import com.querydsl.jpa.impl.JPAQuery;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDateTime;
+import javax.persistence.EntityManager;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@Transactional
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import(TestQueryDslConfig.class)
 public class TicketRepositoryTest {
 
     @Autowired
@@ -31,10 +43,13 @@ public class TicketRepositoryTest {
     @Autowired
     CafeRepository cafeRepository;
 
+    @Autowired
+    TestEntityManager testEntityManager;
+
     User user;
     Cafe cafe;
 
-    @BeforeEach
+    //@BeforeEach
     public void insert_TestData() {
         String loginId = "insetTest1234";
         String password = "insetTest1234";
@@ -59,27 +74,26 @@ public class TicketRepositoryTest {
         cafeRepository.save(cafe);
     }
 
-//    @Test
-//    public void ticket_생성기() {
-//        //given
-//        LocalDateTime date = LocalDateTime.now();
-//
-//        Ticket ticket = Ticket.builder()
-//                .cafe(cafeRepository.getReferenceById(1L))
-//                .user(userRepository.getReferenceById(8L))
-//                .isValidTicket(TicketStateType.VALID)
-//                .ticketPrice(3000)
-//                .fixedTermTicket(LocalDateTime.now())
-//                .partTimeTicket(0)
-//                .remainingTime(0)
-//                .build();
-//
-//        Ticket ticketResult = ticketRepository.save(ticket);
-//    }
+    @DisplayName("특정 user의 특정cafe 의 ticket을 조회")
+    @Test
+    void queryDsl_findTicketByUserIdAndCafeId() {
+        EntityManager entityManager = testEntityManager.getEntityManager();
 
-//    @Test
-//    public void ticket_갱신테스트() {
-//
-//        ticketRepository.findAvailableTicketInfoById(1L);
-//    }
+        JPAQuery<Ticket> query = new JPAQuery<>(entityManager);
+        QTicket qTickets = new QTicket("t");
+        QUser qUser = new QUser("u");
+        QCafe qCafe = new QCafe("q");
+
+        List<Ticket> tickets = query
+                .select(qTickets)
+                .from(qTickets)
+                .rightJoin(qTickets.user, qUser)
+                .on(qTickets.user.id.eq(qUser.id))
+                .where(qTickets.cafe.id.eq(1L))
+                .fetch();
+
+        System.out.println(tickets);
+
+        assertThat(tickets).hasSize(1);
+    }
 }

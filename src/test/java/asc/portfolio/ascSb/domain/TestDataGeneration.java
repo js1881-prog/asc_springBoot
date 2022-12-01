@@ -188,7 +188,7 @@ public class TestDataGeneration {
       }
       Product product = Product.builder()
               .cafe(cafeRepository.findByCafeNameContains("tCafe_A"))
-              .productType(productName)
+              .productNameType(productName)
               .user(userRepository.findByNameContains("tUser_F"))
               .productState(productState)
               .description("테스트 product")

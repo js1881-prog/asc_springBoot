@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 
@@ -46,19 +47,20 @@ public class Product extends BaseTimeEntity {
     @Column(name = "P_P")
     private Integer productPrice;
 
+    @Column(unique = true)
     private String productLabel;
 
     @Builder
-    public Product(Cafe cafe, User user, ProductStateType productState, ProductNameType productType,
-                   String description, Integer productPrice, String orderId)
+    public Product(Cafe cafe, User user, ProductStateType productState, ProductNameType productNameType,
+                   String description, Integer productPrice, String productLabel)
     {
         this.cafe = cafe;
         this.user = user;
         this.productState = productState;
-        this.productNameType = productType;
+        this.productNameType = productNameType;
         this.description = description;
         this.productPrice = productPrice;
-        this.productLabel = orderId;
+        this.productLabel = productLabel;
     }
 
     public void completeOrder() {

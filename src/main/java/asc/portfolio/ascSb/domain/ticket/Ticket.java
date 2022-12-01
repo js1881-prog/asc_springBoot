@@ -41,7 +41,8 @@ public class Ticket extends BaseTimeEntity {
     @Column(name = "R_T") // 시간제 티켓 남은시간
     private Integer remainingTime;
 
-    private String orderId;
+    @Column(unique = true)
+    private String productLabel;
 
     @Builder
     public Ticket(Cafe cafe, User user, TicketStateType isValidTicket, Integer ticketPrice, LocalDateTime fixedTermTicket, Integer partTimeTicket, Integer remainingTime) {

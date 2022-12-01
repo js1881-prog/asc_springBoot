@@ -1,7 +1,7 @@
 package asc.portfolio.ascSb.domain.ticket;
 
-import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.web.dto.ticket.TicketResponseDto;
+import asc.portfolio.ascSb.domain.cafe.Cafe;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
     }
 
     @Override
-    public Long verifyTicket() {
+    public Long verifyTicket(Long userId, Long cafeId) {
         LocalDateTime date = LocalDateTime.now();
 
         return query

@@ -18,6 +18,7 @@ public class BootPayOrderDto {
         private String receipt_id;
         private String order_id;
         private String name;
+        private String order_name;
         private int price;
     }
 }

@@ -32,9 +32,10 @@ public class Orders extends BaseTimeEntity {
     @Column(name = "O_P")
     private Long orderPrice;
 
+    @Column(unique = true)
     private String receiptOrderId; // PG사의 검증을 위한 영수증 id (휘발성)
 
-    @Column(name = "P_R")
+    @Column(name = "P_R", unique = true)
     private String productLabel; // 상품 고유번호
 
     @Builder
@@ -59,6 +60,6 @@ public class Orders extends BaseTimeEntity {
      * 주문 실패
      */
     public void failOrder() {
-        this.orderStateType = OrderStateType.ERROR;
+        this.orderStateType = OrderStateType.CANCEL;
     }
 }
