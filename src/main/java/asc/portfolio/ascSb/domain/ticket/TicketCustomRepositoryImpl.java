@@ -47,7 +47,7 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
                         ticket.isValidTicket, ticket.fixedTermTicket, ticket.partTimeTicket, ticket.remainingTime))
                 .from(ticket)
                 .where(ticket.cafe.eq(cafe), ticket.user.loginId.eq(loginId))
-                .orderBy(ticket.isValidTicket.asc(), ticket.createDate.desc())
+                .orderBy(ticket.isValidTicket.desc(), ticket.createDate.asc())
                 .fetch();
     }
 }
