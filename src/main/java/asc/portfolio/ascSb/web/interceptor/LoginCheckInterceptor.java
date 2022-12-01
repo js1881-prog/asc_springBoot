@@ -2,7 +2,6 @@ package asc.portfolio.ascSb.web.interceptor;
 
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.jwt.AuthenticationContext;
-import asc.portfolio.ascSb.jwt.JwtTokenProvider;
 import asc.portfolio.ascSb.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class LoginCheckInterceptor implements HandlerInterceptor {
 
-  private final JwtTokenProvider jwtTokenProvider;
   private final AuthenticationContext authenticationContext;
   private final UserService userService;
 
@@ -29,7 +27,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
     User findUser = userService.checkJsonWebToken(jwt);
     if (findUser == null) {
-      log.info("Unauthorized access");
+      log.info("Unauthorized access = {}", request.getRequestURL());
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return false; // Controller 진행 중지
     }

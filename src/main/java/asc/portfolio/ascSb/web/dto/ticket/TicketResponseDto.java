@@ -6,14 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class TicketSelectResponseDto {
+public class TicketResponseDto {
 
     private TicketStateType isValidTicket;
     private LocalDateTime fixedTermTicket; // 기간제 티켓 날짜 => fixedTermTicket - createDate 시간으로 남은기간 계산
@@ -22,7 +21,7 @@ public class TicketSelectResponseDto {
 
     private long period;
 
-    public TicketSelectResponseDto(TicketSelectResponseDto entity) {
+    public TicketResponseDto(TicketResponseDto entity) {
         this.isValidTicket = entity.getIsValidTicket();
         this.fixedTermTicket = entity.getFixedTermTicket();
         this.partTimeTicket = entity.getPartTimeTicket();

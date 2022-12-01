@@ -3,7 +3,7 @@ package asc.portfolio.ascSb.web.controller;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.jwt.LoginUser;
 import asc.portfolio.ascSb.service.ticket.TicketService;
-import asc.portfolio.ascSb.web.dto.ticket.TicketSelectResponseDto;
+import asc.portfolio.ascSb.web.dto.ticket.TicketResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +18,7 @@ public class TicketController {
     private final TicketService ticketService;
 
     @GetMapping("/api/v1/ticket/{cafeName}")
-    public TicketSelectResponseDto userTicket(@LoginUser User user, @PathVariable String cafeName) {
+    public TicketResponseDto userTicket(@LoginUser User user, @PathVariable String cafeName) {
         return ticketService.userTicket(user.getId(), cafeName);
     }
 }
