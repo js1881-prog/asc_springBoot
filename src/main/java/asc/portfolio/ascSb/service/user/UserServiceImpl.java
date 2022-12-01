@@ -44,11 +44,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User checkJsonWebToken(String jwt) {
-
     if ((jwt == null) || jwt.isBlank()) {
       return null;
     }
-
     try {
       String loginId = jwtTokenProvider.extractSubject(jwt);
       return userRepository.findByLoginId(loginId).orElse(null);

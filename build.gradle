@@ -22,6 +22,7 @@ configurations {
 }
 
 repositories {
+    maven { url 'https://jitpack.io' }
     mavenCentral()
 }
 
@@ -46,6 +47,7 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
     implementation 'com.google.code.gson:gson:2.10'
     implementation group: 'commons-io', name: 'commons-io', version: '2.7'
+    implementation 'com.github.bootpay:backend-java:+'
 
 
     // querydsl 디펜던시 추가 11/09 by padonan

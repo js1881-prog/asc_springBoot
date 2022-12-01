@@ -90,7 +90,6 @@ public class UserController {
     } else {
       log.info("user=null");
     }
-
     return new ResponseEntity<>("OK", HttpStatus.OK);
   }
 

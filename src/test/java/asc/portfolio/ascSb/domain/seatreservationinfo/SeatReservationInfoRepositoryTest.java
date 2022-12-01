@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
+@Commit
 public class SeatReservationInfoRepositoryTest {
 
     @Autowired
@@ -45,7 +46,7 @@ public class SeatReservationInfoRepositoryTest {
         userRepository.save(user);
 
         Cafe cafe = Cafe.builder()
-                .cafeName("tCafe_A")
+                .cafeName("tCafe_0")
                 .build();
         cafeRepository.save(cafe);
 
@@ -71,6 +72,6 @@ public class SeatReservationInfoRepositoryTest {
     public void findSeatInfoByUserIdAndCafeName_테스트() {
         insertSeatReservationInfoData();
 
-        seatReservationInfoRepository.findSeatInfoByUserIdAndCafeName("ascasc123", "tCafe_A");
+        seatReservationInfoRepository.findSeatInfoByUserIdAndCafeName("ascasc123", "tCafe_0");
     }
 }

@@ -3,7 +3,7 @@ package asc.portfolio.ascSb.domain.product;
 
 import asc.portfolio.ascSb.domain.BaseTimeEntity;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
-import asc.portfolio.ascSb.domain.commonenum.ProductNameType;
+import asc.portfolio.ascSb.commonenum.product.ProductNameType;
 import asc.portfolio.ascSb.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
@@ -38,7 +38,7 @@ public class Product extends BaseTimeEntity {
     private ProductStateType productState;
 
     @Enumerated(EnumType.STRING)
-    private ProductNameType productName;
+    private ProductNameType productNameType;
 
     @Column(name = "DE")
     private String description;
@@ -46,16 +46,19 @@ public class Product extends BaseTimeEntity {
     @Column(name = "P_P")
     private Integer productPrice;
 
+    private String productLabel;
+
     @Builder
-    public Product(Cafe cafe, User user, ProductStateType productState, ProductNameType productName,
-                   String description, Integer productPrice)
+    public Product(Cafe cafe, User user, ProductStateType productState, ProductNameType productType,
+                   String description, Integer productPrice, String orderId)
     {
         this.cafe = cafe;
         this.user = user;
         this.productState = productState;
-        this.productName = productName;
+        this.productNameType = productType;
         this.description = description;
         this.productPrice = productPrice;
+        this.productLabel = orderId;
     }
 
     public void completeOrder() {

@@ -1,12 +1,13 @@
 package asc.portfolio.ascSb.service.order;
 
-import asc.portfolio.ascSb.domain.order.Order;
+import asc.portfolio.ascSb.domain.order.Orders;
+import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.web.dto.order.OrderDto;
 
 public interface OrderService {
 
-    Long saveOrder(OrderDto orderDto);
+    Long saveOrder(User user, OrderDto orderDto);
 
-    Order findReceiptOrderId(Long id);
+    Orders findReceiptOrderId(String receiptId);
 
 }

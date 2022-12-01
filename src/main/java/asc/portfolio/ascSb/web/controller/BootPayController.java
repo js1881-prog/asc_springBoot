@@ -1,32 +1,37 @@
 package asc.portfolio.ascSb.web.controller;
 
-import asc.portfolio.ascSb.domain.order.Order;
+import asc.portfolio.ascSb.domain.order.Orders;
+import asc.portfolio.ascSb.domain.user.User;
+import asc.portfolio.ascSb.jwt.LoginUser;
 import asc.portfolio.ascSb.service.order.OrderService;
-import asc.portfolio.ascSb.web.bootpay.Bootpay;
+import asc.portfolio.ascSb.bootpay.Bootpay;
 import asc.portfolio.ascSb.web.dto.bootpay.BootPayOrderDto;
-import asc.portfolio.ascSb.web.dto.bootpay.request.Cancel;
 import asc.portfolio.ascSb.web.dto.order.OrderDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.co.bootpay.model.request.Cancel;
+import kr.co.bootpay.model.response.ResDefault;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Objects;
 
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*")
 public class BootPayController {
 
     private final OrderService orderService;
 
     @PostMapping("/api/v1/pay")
-    public ResponseEntity<String> pay(@RequestBody OrderDto dto) {
+    public ResponseEntity<String> pay(@LoginUser User user, @RequestBody OrderDto dto) {
         try {
-            Long receiptOrderId = orderService.saveOrder(dto);
+            Long receiptOrderId = orderService.saveOrder(user, dto);
             log.info("주문번호={}", receiptOrderId);
         } catch (Exception e) {
             return new ResponseEntity<>("유효하지 않은 주문입니다.", HttpStatus.BAD_REQUEST);
@@ -36,43 +41,36 @@ public class BootPayController {
 
     @GetMapping("/api/v1/pay/confirm")
     public ResponseEntity confirmPay(
-            @RequestParam("receipt_id") String receipt_id) throws Exception {
+            @RequestParam("receipt-id") String receipt_id) throws Exception {
 
         String getDataJson = "";
         BootPayOrderDto dto = null;
-        String rest_application_id = "발급 받은 id";
-        String private_key = "발급 받은 인증키";
+        String rest_application_id = "";
+        String private_key = "";
 
         Bootpay api = new Bootpay(
                 rest_application_id,
                 private_key
         );
-        api.getAccessToken();
-        try {
-            HttpResponse res = api.verify(receipt_id);
-            getDataJson = IOUtils.toString(res.getEntity().getContent(), "UTF-8");
-            System.out.println(getDataJson);
 
+        try {
+            ResDefault<HashMap<String, Object>> token = api.getAccessToken();
+            System.out.println(token.toJson());
+            ResDefault<HashMap<String, Object>> check = api.verify(receipt_id);
+            getDataJson = check.toJson();
             ObjectMapper objectMapper = new ObjectMapper();
             dto = objectMapper.readValue(getDataJson, BootPayOrderDto.class);
-            System.out.println(dto);
-
+            log.info("결제 토큰 검증{}", check.data);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        String orderReceiptId = dto.getData().getReceipt_id();
+        Orders orders = orderService.findReceiptOrderId(orderReceiptId);
+        int price = Math.toIntExact(orders.getOrderPrice());
 
-        long orderId = Long.parseLong(dto.getData().getOrder_id());
-        Order order = orderService.findReceiptOrderId(orderId);
-        int price = Math.toIntExact(order.getOrderPrice());
-
-        if (dto.getStatus() == 200) {
-
-            //status가 1이고
-            if (dto.getData().getPrice() == price && dto.getData().getStatus() == 1) {
-                //결제 완료
-
-                return ResponseEntity.ok("결제완료");
-            }
+        if (dto.getStatus() == 200 && dto.getData().getPrice() == price && dto.getData().getStatus() == 1
+        && Objects.equals(orders.getReceiptOrderId(), dto.getData().getReceipt_id())) {
+            return ResponseEntity.ok("결제완료");
         }
 
         //서버 검증 오류시
@@ -85,13 +83,12 @@ public class BootPayController {
         //orderService.failOrder(orderId);
         String cancelDataJson = "";
         try {
-            HttpResponse res = api.receiptCancel(cancel);
-            cancelDataJson = IOUtils.toString(res.getEntity().getContent(), "UTF-8");
-            System.out.println(cancelDataJson);
+            ResDefault<HashMap<String, Object>> cancelRes = api.receiptCancel(cancel);
+            cancelDataJson = cancelRes.toJson();
+            log.info("결제실패 {}", cancelDataJson);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ResponseEntity.badRequest().body("결제실패");
+        return ResponseEntity.badRequest().body("결제실패"); // 환불 조치
     }
-
 }

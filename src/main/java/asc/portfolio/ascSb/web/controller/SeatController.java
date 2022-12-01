@@ -35,7 +35,6 @@ public class SeatController {
         if (!isSuccess) {
             return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
         }
-
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 

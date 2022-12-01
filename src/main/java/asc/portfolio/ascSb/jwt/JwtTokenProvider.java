@@ -39,7 +39,6 @@ public class JwtTokenProvider {
   }
 
   public String extractSubject(String token) {
-
     try {
       return Jwts.parserBuilder()
               .setSigningKey(secretKey)

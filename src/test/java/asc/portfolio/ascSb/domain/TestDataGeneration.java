@@ -2,7 +2,7 @@ package asc.portfolio.ascSb.domain;
 
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.cafe.CafeRepository;
-import asc.portfolio.ascSb.domain.commonenum.ProductNameType;
+import asc.portfolio.ascSb.commonenum.product.ProductNameType;
 import asc.portfolio.ascSb.domain.product.Product;
 import asc.portfolio.ascSb.domain.product.ProductRepository;
 import asc.portfolio.ascSb.domain.product.ProductStateType;
@@ -158,7 +158,7 @@ public class TestDataGeneration {
       }
       Product product = Product.builder()
               .cafe(cafeRepository.findByCafeNameContains("tCafe_A"))
-              .productName(productName)
+              .productType(productName)
               .user(userRepository.findByNameContains("tUser_F"))
               .productState(productState)
               .description("테스트 product")

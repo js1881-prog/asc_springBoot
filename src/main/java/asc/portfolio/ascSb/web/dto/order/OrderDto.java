@@ -1,34 +1,41 @@
 package asc.portfolio.ascSb.web.dto.order;
 
-import asc.portfolio.ascSb.domain.order.Order;
+import asc.portfolio.ascSb.commonenum.product.ProductNameType;
+import asc.portfolio.ascSb.domain.order.Orders;
 import asc.portfolio.ascSb.domain.order.OrderStateType;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
-@Data
+@Getter
+@Setter
 public class OrderDto {
 
     private OrderStateType orderStateType;
-    private String username;
-    private String orderProductName;
+    private String userId;
+    private ProductNameType orderProduct;
     private Long orderPrice;
-    private Long receiptOrderId;
+    private String receiptOrderId;
+    private String productLabel;
 
     @Builder
-    public OrderDto(OrderStateType orderStateType, String username, String orderProductName, Long orderPrice, Long receiptOrderId) {
+    public OrderDto(OrderStateType orderStateType, String userId, ProductNameType orderProduct, Long orderPrice,
+                    String receiptOrderId, String productLabel) {
         this.orderStateType = orderStateType;
-        this.username = username;
-        this.orderProductName = orderProductName;
+        this.userId = userId;
+        this.orderProduct = orderProduct;
         this.orderPrice = orderPrice;
         this.receiptOrderId = receiptOrderId;
+        this.productLabel = productLabel;
     }
 
-    public Order toEntity() {
-        return Order.builder()
+    public Orders toEntity() {
+        return Orders.builder()
                 .orderStateType(orderStateType)
-                .username(username)
-                .orderProductName(orderProductName)
+                .userId(userId)
+                .productLabel(productLabel)
+                .orderProductName(orderProduct)
                 .orderPrice(orderPrice)
                 .receiptOrderId(receiptOrderId)
                 .build();

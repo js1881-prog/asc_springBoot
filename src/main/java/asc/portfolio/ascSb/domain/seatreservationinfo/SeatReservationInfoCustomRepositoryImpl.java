@@ -41,7 +41,6 @@ public class SeatReservationInfoCustomRepositoryImpl implements SeatReservationI
       // Valid 상태의 reservation info 는 한개여야 한다. 런타임 예외 필요.
       log.error("The user[{}]'s valid state information exceed one.", loginId);
     }
-
     return result;
   }
 
