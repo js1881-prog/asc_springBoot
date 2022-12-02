@@ -20,11 +20,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin(origins = "*")
+@RequestMapping("/api/v1/product")
 public class ProductController {
 
     private final ProductService productService;
 
-    @RequestMapping(value = "/api/v1/product/{cafeName}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{cafeName}", method = RequestMethod.GET)
     public ResponseEntity<List<Product>> productInfoWithConstTerm(@LoginUser User user, @PathVariable String cafeName,
                                                                    @RequestHeader(value = "dataString") String dateString) {
         if(user.getRole() != UserRoleType.ADMIN) {

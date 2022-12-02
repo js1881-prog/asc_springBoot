@@ -4,10 +4,11 @@ import asc.portfolio.ascSb.web.dto.ticket.TicketResponseDto;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TicketCustomRepository {
 
-    TicketResponseDto findAvailableTicketInfoById(Long id, String cafeName);
+    Optional<TicketResponseDto> findAvailableTicketInfoByIdAndCafeName(Long id, String cafeName);
 
     Long verifyTicket(Long userId, Long cafeId); // update가 진행된 isDeprecatedTicket 갯수를 return
 

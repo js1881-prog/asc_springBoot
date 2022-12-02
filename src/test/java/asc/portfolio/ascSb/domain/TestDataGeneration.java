@@ -23,8 +23,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 
 @SpringBootTest
 @Transactional
@@ -98,7 +100,9 @@ public class TestDataGeneration {
                 .seatNumber(i)
                 .cafe(cafe)
                 .build();
-
+        if ( i % 2 == 0 ) {
+          seat.setSeatStateTypeReserved();
+        }
         seatRepository.save(seat);
       }
     }
@@ -121,7 +125,7 @@ public class TestDataGeneration {
   }
 
   private void generateAdminUserData() {
-    String userName = "tUserAdmin";
+    String userName = "adminuser";
 
     User user = User.builder()
             .loginId(userName)
@@ -193,8 +197,10 @@ public class TestDataGeneration {
               .productState(productState)
               .description("테스트 product")
               .productPrice(1000 * i)
+              .productLabel(ProductNameType.HUNDRED_HOUR_PART_TIME_TICKET.getLabel() + LocalDateTime.now().getNano())
               .build();
       productRepository.save(product);
+      System.out.println(ProductNameType.TODAY_FIXED_TERM_TICKET);
     }
   }
 

@@ -52,4 +52,12 @@ public class Seat {
         this.user = null;
         this.seatState = SeatStateType.UNRESERVED;
     }
+
+    public void setSeatStateTypeReserved() {
+        this.seatState = SeatStateType.RESERVED;
+    }
+
+    public void setSeatStateTypeUnReserved() {
+        this.seatState = SeatStateType.UNRESERVED;
+    }
 }

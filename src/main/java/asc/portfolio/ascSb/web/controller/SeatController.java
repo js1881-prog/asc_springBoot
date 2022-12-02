@@ -14,16 +14,17 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin(origins = "*")
+@RequestMapping("/api/v1/seat")
 public class SeatController {
 
     private final SeatService seatService;
 
-    @GetMapping("/api/v1/seat/{cafeName}")
+    @GetMapping("/{cafeName}")
     public List<SeatSelectResponseDto> seatState(@PathVariable String cafeName) {
         return seatService.showCurrentSeatState(cafeName);
     }
 
-    @GetMapping("/api/v1/seat/reservation/{seatNumber}")
+    @GetMapping("/reservation/{seatNumber}")
     public ResponseEntity<String> reserveSeat(@LoginUser User user, @PathVariable int seatNumber) {
 
         //선택 된 카페가 없음.
@@ -38,7 +39,7 @@ public class SeatController {
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
-    @GetMapping("/api/v1/seat/exit")
+    @GetMapping("/exit")
     public ResponseEntity<String> exitSeat(@LoginUser User user) {
 
         Boolean isSuccess = seatService.exitSeat(user);

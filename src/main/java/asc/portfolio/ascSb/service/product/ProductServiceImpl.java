@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
                 .cafe(user.getCafe())
                 .user(user)
                 .productState(ProductStateType.SALE)
-                .productNameType(ProductNameType.valueOf(dto.getData().getOrder_name()))
+                .productNameType(orders.getOrderProductName())
                 .productPrice(Math.toIntExact(orders.getOrderPrice()))
                 .productLabel(orders.getProductLabel())
                 .build()

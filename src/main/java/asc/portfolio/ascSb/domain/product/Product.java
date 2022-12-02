@@ -38,7 +38,8 @@ public class Product extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ProductStateType productState;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "O_PN")
     private ProductNameType productNameType;
 
     @Column(name = "DE")

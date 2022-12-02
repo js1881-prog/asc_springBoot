@@ -45,7 +45,8 @@ public class Ticket extends BaseTimeEntity {
     private String productLabel;
 
     @Builder
-    public Ticket(Cafe cafe, User user, TicketStateType isValidTicket, Integer ticketPrice, LocalDateTime fixedTermTicket, Integer partTimeTicket, Integer remainingTime) {
+    public Ticket(Cafe cafe, User user, TicketStateType isValidTicket, Integer ticketPrice, LocalDateTime fixedTermTicket,
+                  Integer partTimeTicket, Integer remainingTime, String productLabel) {
         this.cafe = cafe;
         this.user = user;
         this.isValidTicket = isValidTicket;
@@ -53,6 +54,7 @@ public class Ticket extends BaseTimeEntity {
         this.fixedTermTicket = fixedTermTicket;
         this.partTimeTicket = partTimeTicket;
         this.remainingTime = remainingTime;
+        this.productLabel = productLabel;
     }
 
     public void changeTicketStateToInvalid() {

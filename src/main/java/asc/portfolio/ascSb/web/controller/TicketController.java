@@ -24,7 +24,7 @@ public class TicketController {
 
     @GetMapping("/{cafeName}")
     public TicketResponseDto userTicket(@LoginUser User user, @PathVariable String cafeName) {
-        return ticketService.userTicket(user.getId(), cafeName);
+        return ticketService.userValidTicket(user.getId(), cafeName);
     }
 
     @GetMapping("/lookup")

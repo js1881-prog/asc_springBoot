@@ -21,7 +21,7 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/api/v1/user")
 @CrossOrigin(origins = "*") //  flutter 에서 rest 접근을 위한 어노테이션 .
 public class UserController {
 
@@ -93,7 +93,7 @@ public class UserController {
     return new ResponseEntity<>("OK", HttpStatus.OK);
   }
 
-  @GetMapping("/api/v1/Info")
+  @GetMapping("/qr-name")
   public ResponseEntity<UserQrAndNameResponseDto> findQrAndNameById(@LoginUser User user) {
 
     if (user == null) {

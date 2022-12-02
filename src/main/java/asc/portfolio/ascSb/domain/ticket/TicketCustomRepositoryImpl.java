@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static asc.portfolio.ascSb.domain.ticket.QTicket.ticket;
 
@@ -19,20 +20,18 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
     private final JPAQueryFactory query;
 
     @Override
-    public TicketResponseDto findAvailableTicketInfoById(Long id, String cafeName) {
-
-        return query
+    public Optional<TicketResponseDto> findAvailableTicketInfoByIdAndCafeName(Long id, String cafeName) {
+        return Optional.ofNullable(query
                 .select(Projections.bean(TicketResponseDto.class,
-                ticket.isValidTicket, ticket.fixedTermTicket, ticket.partTimeTicket, ticket.remainingTime))
+                        ticket.isValidTicket, ticket.fixedTermTicket, ticket.partTimeTicket, ticket.remainingTime))
                 .from(ticket)
                 .where(ticket.cafe.cafeName.eq(cafeName), ticket.user.id.eq(id), ticket.isValidTicket.eq(TicketStateType.VALID))
-                .fetchOne();
+                .fetchOne());
     }
 
     @Override
     public Long verifyTicket(Long userId, Long cafeId) {
         LocalDateTime date = LocalDateTime.now();
-
         return query
                 .update(ticket)
                 .set(ticket.isValidTicket, TicketStateType.INVALID)
