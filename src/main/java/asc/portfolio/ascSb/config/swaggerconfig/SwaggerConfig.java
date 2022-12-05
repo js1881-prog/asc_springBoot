@@ -38,70 +38,11 @@ public class SwaggerConfig {
                 .name(HttpHeaders.AUTHORIZATION)
                 .type(SecurityScheme.Type.HTTP)
                 .in(SecurityScheme.In.HEADER)
-//                .bearerFormat("JWT")
+                .bearerFormat("JWT")
                 .scheme("bearer");
 
         return openApi -> openApi
                 .addSecurityItem(new SecurityRequirement().addList("jwt token"))
                 .getComponents().addSecuritySchemes("jwt token", securityScheme);
     }
-
-//    @Bean
-//    public GroupedOpenApi publicUserApi() {
-//        return GroupedOpenApi.builder()
-//                .pathsToMatch("/**")
-//                .packagesToScan()
-//    }
-
-//    @Bean
-//    public OpenApiCustomiser customGlobalOpenApiHeader() {
-//        Parameter jwt = new Parameter()
-//                .name("jwToken")
-//                .in("header")
-//                .required(true)
-//                .description("header description")
-//                .schema(new StringSchema());
-//
-//        return openApi -> openApi.getPaths().values().forEach(
-//                operation -> operation
-//                        .addParametersItem(jwt)
-//        );
-//    }
-
-//    @Bean
-//    public OpenAPI openAPI() {
-////        SecurityScheme jwtAuth = new SecurityScheme()
-////                .type(SecurityScheme.Type.HTTP)
-////                .scheme("bearer")   //bearer: JWT 타입, basic: id, password
-////                .bearerFormat("JWT")
-////                .in(SecurityScheme.In.HEADER)
-////                .name(HttpHeaders.AUTHORIZATION);
-//
-////        return new OpenAPI()
-////                .components(new Components().addSecuritySchemes("JWT", jwtAuth));
-//
-//        return new OpenAPI()
-//                .components(new Components()
-//                        .addHeaders("Authorization", new Header()
-//                                .description("Auth header")
-//                                .schema(new Schema<>().format("base64"))
-//                        ));
-//    }
-//
-//    @Bean
-//    public OpenAPI customOpenAPI() {
-//        return new OpenAPI()
-//                .components(new Components()
-//                        .addSecuritySchemes("basicScheme", new SecurityScheme()
-//                                .type(SecurityScheme.Type.HTTP)
-//                                .scheme("basic"))
-//                        .addParameters("myHeader1", new Parameter().in("header")
-//                                .schema(new StringSchema())
-//                                .name("myHeader1")).addHeaders("myHeader2", new Header().description("myHeader2 header").schema(new StringSchema())))
-//                .info(new Info()
-//                        .title("Petstore API")
-//                        .description("This is a sample server Petstore server. You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/). For this sample, you can use the api key `special-key` to test the authorization filters.")
-//                        .termsOfService("http://swagger.io/terms/")
-//                        .license(new License().name("Apache 2.0").url("http://springdoc.org")));
-//    }
 }

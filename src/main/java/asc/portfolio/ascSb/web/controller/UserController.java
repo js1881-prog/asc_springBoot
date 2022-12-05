@@ -71,7 +71,6 @@ public class UserController {
     return new ResponseEntity<>(loginRespDto, HttpStatus.OK);
   }
 
-  @Parameter(name = "user", hidden = true)
   @GetMapping("/login-check") //Test
   public ResponseEntity<String> loginCheck(@LoginUser User user) {
 
@@ -82,7 +81,6 @@ public class UserController {
     return new ResponseEntity<>("OK", HttpStatus.OK);
   }
 
-  @Parameter(name = "user", hidden = true)
   @GetMapping("/login-test") //Test
   public ResponseEntity<String> loginCheckWithoutInterceptor(@LoginUser User user) {
     // LoginCheckInterceptor 를 통과하지 않은 Controller
