@@ -8,6 +8,8 @@ import asc.portfolio.ascSb.web.dto.user.UserLoginRequestDto;
 import asc.portfolio.ascSb.web.dto.user.UserLoginResponseDto;
 import asc.portfolio.ascSb.web.dto.user.UserQrAndNameResponseDto;
 import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -69,7 +71,7 @@ public class UserController {
     return new ResponseEntity<>(loginRespDto, HttpStatus.OK);
   }
 
-  @RequestMapping("/login-check") //Test
+  @GetMapping("/login-check") //Test
   public ResponseEntity<String> loginCheck(@LoginUser User user) {
 
     log.info("user.getId()={}", user.getId());
@@ -79,7 +81,7 @@ public class UserController {
     return new ResponseEntity<>("OK", HttpStatus.OK);
   }
 
-  @RequestMapping("/login-test") //Test
+  @GetMapping("/login-test") //Test
   public ResponseEntity<String> loginCheckWithoutInterceptor(@LoginUser User user) {
     // LoginCheckInterceptor 를 통과하지 않은 Controller
 

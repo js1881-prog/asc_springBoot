@@ -47,7 +47,14 @@ public class UserServiceImpl implements UserService {
     if ((jwt == null) || jwt.isBlank()) {
       return null;
     }
+
+    String[] jwtSplit = jwt.split(" ");
+    if ((jwtSplit.length == 2) && (jwtSplit[0].equals("Bearer")) ) {
+      jwt = jwtSplit[1];
+    }
+
     try {
+      log.info("jwt = {}", jwt);
       String loginId = jwtTokenProvider.extractSubject(jwt);
       return userRepository.findByLoginId(loginId).orElse(null);
     } catch (IllegalStateException e) {

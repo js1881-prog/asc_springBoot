@@ -25,6 +25,11 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
     String jwt = request.getHeader(HttpHeaders.AUTHORIZATION);
 
+    if (jwt == null) {
+      log.info("jwt = null");
+      return false;
+    }
+
     User findUser = userService.checkJsonWebToken(jwt);
     if (findUser == null) {
       log.info("Unauthorized access = {}", request.getRequestURL());
