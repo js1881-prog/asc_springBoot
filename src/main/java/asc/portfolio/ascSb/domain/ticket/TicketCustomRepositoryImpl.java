@@ -30,7 +30,31 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
     }
 
     @Override
-    public Long verifyTicket(Long userId, Long cafeId) {
+    public Optional<Ticket> findAvailableTicketByIdAndCafe(Long id, String cafeName) {
+        Optional<Ticket> ticketOpt = Optional.ofNullable(query
+                .selectFrom(ticket)
+                .where(ticket.cafe.cafeName.eq(cafeName), ticket.user.id.eq(id), ticket.isValidTicket.eq(TicketStateType.VALID))
+                .fetchOne());
+
+        if (ticketOpt.isPresent()) {
+            Ticket findTicket = ticketOpt.get();
+
+            if (findTicket.isFixedTermTicket()) {
+                if (!findTicket.isValidFixedTermTicket()) {
+                    return Optional.empty();
+                }
+            } else {
+                if (!findTicket.isValidPartTimeTicket()) {
+                    return Optional.empty();
+                }
+            }
+        }
+
+        return ticketOpt;
+    }
+
+    @Override
+    public Long verifyTicket() {
         LocalDateTime date = LocalDateTime.now();
         return query
                 .update(ticket)

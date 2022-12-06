@@ -3,10 +3,13 @@ import asc.portfolio.ascSb.domain.BaseTimeEntity;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.user.User;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
+@Slf4j
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -58,6 +61,42 @@ public class Ticket extends BaseTimeEntity {
     }
 
     public void changeTicketStateToInvalid() {
-        this.isValidTicket = TicketStateType.INVALID;
+        isValidTicket = TicketStateType.INVALID;
+    }
+
+    public boolean isFixedTermTicket() {
+        if ((fixedTermTicket != null) && (partTimeTicket == null) && (remainingTime == null)) {
+            return true;
+        } else if ((partTimeTicket != null) && (remainingTime != null)) {
+            return false;
+        } else {
+            log.error("알 수 없는 Ticket 상태입니다.");
+            throw new IllegalStateException("알 수 없는 Ticket 상태입니다.");
+        }
+    }
+
+    public boolean isValidFixedTermTicket() {
+        if (fixedTermTicket != null) {
+            boolean isValid = LocalDateTime.now().isBefore(fixedTermTicket);
+            if (!isValid) {
+                this.changeTicketStateToInvalid();
+            }
+            return isValid;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isValidPartTimeTicket() {
+        if ((partTimeTicket != null) && (remainingTime != null)) {
+            if (remainingTime > 0) {
+                return true;
+            } else {
+                this.changeTicketStateToInvalid();
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }
