@@ -64,6 +64,26 @@ public class Ticket extends BaseTimeEntity {
         isValidTicket = TicketStateType.INVALID;
     }
 
+    public void exitUsingTicket(Integer time) {
+        if (this.isFixedTermTicket()) {
+            this.isValidFixedTermTicket();
+        } else {
+            //partTime Ticket 일 때만 time 파라미터 사용
+            remainingTime -= time;//startTime?
+
+            if (remainingTime <= 0) {
+                changeTicketStateToInvalid();
+            }
+
+            if (remainingTime < 0) {
+                log.error("Ticket.remainingTime is under 0");
+            }
+        }
+    }
+
+    /**
+     * @return true : FixedTerm Ticket, false : PartTime Ticket
+     */
     public boolean isFixedTermTicket() {
         if ((fixedTermTicket != null) && (partTimeTicket == null) && (remainingTime == null)) {
             return true;

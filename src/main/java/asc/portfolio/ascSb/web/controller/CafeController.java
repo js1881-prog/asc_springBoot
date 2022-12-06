@@ -5,6 +5,7 @@ import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.jwt.LoginUser;
 import asc.portfolio.ascSb.service.cafe.CafeService;
 import asc.portfolio.ascSb.web.dto.cafe.CafeResponseDto;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class CafeController {
     return cafeService.showAllCafeList();
   }
 
+  @Parameter(name = "cafeName", example = "tCafe_A")
   @GetMapping("/change/{cafeName}")
   public ResponseEntity<String> changeReservedUserCafe(@LoginUser User user, @PathVariable String cafeName) {
     Optional<Cafe> optionalResult = cafeService.changeReservedUserCafe(user, cafeName);

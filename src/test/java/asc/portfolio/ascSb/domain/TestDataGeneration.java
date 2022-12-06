@@ -149,9 +149,9 @@ public class TestDataGeneration {
               .user(userRepository.findByNameContains(userName[i]))
               .isValidTicket(TicketStateType.VALID)
               .ticketPrice(3000)
-              .fixedTermTicket(date)
-              .partTimeTicket(0)
-              .remainingTime(0)
+              .fixedTermTicket(date.plusMonths(1))
+              .partTimeTicket(null)
+              .remainingTime(null)
               .build();
 
       ticketRepository.save(ticket);

@@ -38,46 +38,65 @@ public class SeatServiceImpl implements SeatService {
                 .collect(Collectors.toList());
     }
 
-    //TODO reserveSeat, exitSeat 중 SeatReservationInfo 처리
     @Override
     public Boolean exitSeat(User user) {
         log.info("Exit Seat. user = {}", user.getLoginId());
-        Optional<Seat> findSeatOpt = seatRepository.findByUser(user);
-
-        if (findSeatOpt.isEmpty()) {
-            log.error("No seat where the user sat");
-            return false;
-        }
-
-        findSeatOpt.ifPresent(s -> s.exitSeat());
-        // seat Table 의 User_ID Unique 를 유지하기 위해, 먼저 반영
-        seatRepository.flush();
 
         //ReservationInfo 수정
         List<SeatReservationInfo> userRezInfo = reservationInfoRepository.findValidSeatRezInfoByLoginId(user.getLoginId());
         if (userRezInfo != null) {
-            for (int i = 0; i < userRezInfo.size(); i++) {
-                userRezInfo.get(i).endUsingSeat();
+            if (userRezInfo.size() > 1) {
+                log.error("Valid SeatReservationInfo is Over One");
+            }
+
+            for (SeatReservationInfo info : userRezInfo) {
+                //Reservation Info Exit
+                info.endUsingSeat();
+
+                //Seat Exit
+                Seat findSeat = seatRepository.findByCafeNameAndSeatNumber(info.getCafeName(), info.getSeatNumber());
+                findSeat.exitSeat();
+
+                //Ticket Exit
+                Ticket ticket = info.getTicket();
+                if (ticket.isFixedTermTicket()) {
+                    ticket.exitUsingTicket(null);
+                } else {
+                    Long timeInUse = info.getTimeInUse();
+                    //TODO remain Time 계산 어떻게??
+                    ticket.exitUsingTicket(info.getStartTime()); // 사용한 시간 startTime or timeInUse
+                }
             }
         }
+
+        // seat Table 의 User_ID Unique 를 유지하기 위해, 먼저 DB에 반영
+        reservationInfoRepository.flush();
+        seatRepository.flush();
+        ticketRepository.flush();
 
         return true;
     }
 
     @Override
     public Boolean reserveSeat(User user, Cafe cafe, int seatNumber) {
+        if (cafe == null) {
+            log.error("선택 된 카페가 없는 유저 입니다.");
+            return false;
+        }
 
         Seat findSeat = seatRepository.findByCafeAndSeatNumber(cafe, seatNumber);
         if (findSeat == null) {
+            log.error("없는 좌석입니다.");
             return false;
         } else if (findSeat.getSeatState() == SeatStateType.RESERVED) {
+            log.error("이미 예약 된 좌석입니다.");
             return false;
         }
 
         //사용가능한 Ticket 검색 (유효성 확인도 진행)
         Optional<Ticket> ticketOpt = ticketRepository.findAvailableTicketByIdAndCafe(user.getId(), cafe.getCafeName());
         if (ticketOpt.isEmpty()) {
-            log.info("No Available Ticket");
+            log.error("사용 가능한 티켓이 없습니다.");
             return false;
         }
 
@@ -96,6 +115,7 @@ public class SeatServiceImpl implements SeatService {
                 .build();
         reservationInfoRepository.save(reservationInfo);
 
+        log.info("좌석 예약 성공");
         return true;
     }
 }

@@ -53,9 +53,9 @@ public class SeatReservationInfo extends BaseTimeEntity {
         this.cafeName = cafe.getCafeName();
         this.seatNumber = seat.getSeatNumber();
         this.ticket = ticket;
+        this.startTime = startTime;
         //자동 값 입력
         this.isValid = SeatReservationInfoStateType.VALID;
-        this.startTime = startTime;
     }
 
     public void endUsingSeat() {

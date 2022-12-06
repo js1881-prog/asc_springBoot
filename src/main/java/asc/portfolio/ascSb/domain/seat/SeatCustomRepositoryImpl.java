@@ -36,4 +36,14 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
                 .where(cafe.eq(cafeObject), seat.seatNumber.eq(seatNumber))
                 .fetchOne();
     }
+
+    @Override
+    public Seat findByCafeNameAndSeatNumber(String cafeName, int seatNumber) {
+        return query
+                .select(seat)
+                .from(seat)
+                .join(seat.cafe, cafe)
+                .where(cafe.cafeName.eq(cafeName), seat.seatNumber.eq(seatNumber))
+                .fetchOne();
+    }
 }
