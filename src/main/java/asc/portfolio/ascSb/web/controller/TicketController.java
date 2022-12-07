@@ -4,7 +4,8 @@ import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRoleType;
 import asc.portfolio.ascSb.jwt.LoginUser;
 import asc.portfolio.ascSb.service.ticket.TicketService;
-import asc.portfolio.ascSb.web.dto.ticket.TicketResponseDto;
+import asc.portfolio.ascSb.web.dto.ticket.TicketForAdminResponseDto;
+import asc.portfolio.ascSb.web.dto.ticket.TicketForUserResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,17 +24,17 @@ public class TicketController {
     private final TicketService ticketService;
 
     @GetMapping("/{cafeName}")
-    public TicketResponseDto userTicket(@LoginUser User user, @PathVariable String cafeName) {
+    public TicketForUserResponseDto userTicket(@LoginUser User user, @PathVariable String cafeName) {
         return ticketService.userValidTicket(user.getId(), cafeName);
     }
 
     @GetMapping("/lookup")
-    public ResponseEntity<List<TicketResponseDto>> lookupUserTickets(@LoginUser User admin, @RequestParam("user") String targetUserLoginId) {
+    public ResponseEntity<List<TicketForUserResponseDto>> lookupUserTickets(@LoginUser User admin, @RequestParam("user") String targetUserLoginId) {
         if (admin.getRole() == UserRoleType.ADMIN) {
             if (admin.getCafe() != null) {
                 log.info("lookup tickets. user = {}", targetUserLoginId);
-                List<TicketResponseDto> ticketResponseDtos = ticketService.lookupUserTickets(targetUserLoginId, admin.getCafe());
-                return new ResponseEntity<>(ticketResponseDtos, HttpStatus.OK);
+                List<TicketForUserResponseDto> ticketForUserResponseDtos = ticketService.lookupUserTickets(targetUserLoginId, admin.getCafe());
+                return new ResponseEntity<>(ticketForUserResponseDtos, HttpStatus.OK);
             } else {
                 log.error("Set up a cafe field first");
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -42,6 +43,20 @@ public class TicketController {
         } else {
             log.info("Unauthorized User");
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping("/admin/lookup")
+    public ResponseEntity<TicketForAdminResponseDto> adminLookUpUserValidTicket(@LoginUser User user, @RequestParam String userLoginId) {
+        if(user.getRole() != UserRoleType.ADMIN) {
+            log.error("관리자 계정이 아닙니다.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (userLoginId != null) {
+            return new ResponseEntity<>(ticketService.adminLookUpUserValidTicket(userLoginId, user.getCafe().getCafeName()), HttpStatus.OK);
+        } else {
+            log.error("유효한 티켓이 없습니다.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

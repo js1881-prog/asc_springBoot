@@ -5,5 +5,8 @@ import java.util.List;
 
 public interface ProductCustomRepository {
 
-    List<Product> findProductListByUserIdAndCafeNameAndStartTime(Long id, String cafeName, LocalDateTime startTime);
+    List<Product> findProductListByUserIdAndCafeNameAndStartTime(String cafeName, LocalDateTime startTime);
+
+    List<Product> findProductListByUserIdAndCafeName(Long userId, String cafeName);
+
 }

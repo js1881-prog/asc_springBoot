@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 
 @RestController
@@ -79,36 +78,35 @@ public class BootPayController {
         int price = Math.toIntExact(orders.getOrderPrice());
         System.out.println(price);
 
-        if (dto.getStatus() == 200 && dto.getData().getPrice() == price && dto.getData().getStatus() == 1
-        && Objects.equals(orders.getReceiptOrderId(), dto.getData().getReceipt_id())) {
+        if (dto.getStatus() == 200 && dto.getData().getPrice() == price && dto.getData().getStatus() == 2) {
             log.info("검증완료");
-            // orders 상태 Done(완료), Product에 제품추가, Ticket에 이용권추가
+            /* 검증 완료시 orders 상태 Done(완료) 변경, Product에 제품추가, Ticket에 이용권추가 */
             orders.completeOrder();
             productService.saveProduct(user, dto, orders);
             Long ticketSaveResult = ticketService.saveProductToTicket(user, dto, orders);
             if(ticketSaveResult == 0L) {
                 return ResponseEntity.badRequest().body("보유중인 티켓이 존재합니다.");
             }
-            return ResponseEntity.ok("결제완료");
+            return ResponseEntity.ok("OK");
         }
 
         //서버 검증 오류시
-//        Cancel cancel = new Cancel();
-//        cancel.receiptId = receipt_id;
-//        cancel.name = "관리자";
-//        cancel.reason = "서버 검증 오류";
-//        orders.failOrder();
-//
-//        //결제 오류 로그
-//        //orderService.failOrder(orderId);
-//        String cancelDataJson = "";
-//        try {
-//            ResDefault<HashMap<String, Object>> cancelRes = api.receiptCancel(cancel);
-//            cancelDataJson = cancelRes.toJson();
-//            log.info("결제실패 {}", cancelDataJson);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        return ResponseEntity.badRequest().body("결제실패"); // 환불
+        Cancel cancel = new Cancel();
+        cancel.receiptId = receipt_id;
+        cancel.name = "관리자";
+        cancel.reason = "서버 검증 오류";
+        orders.failOrder();
+
+        //결제 오류 로그
+        //orderService.failOrder(orderId);
+        String cancelDataJson = "";
+        try {
+            ResDefault<HashMap<String, Object>> cancelRes = api.receiptCancel(cancel);
+            cancelDataJson = cancelRes.toJson();
+            log.info("결제실패 {}", cancelDataJson);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.badRequest().body("FAIL"); // 환불
     }
 }

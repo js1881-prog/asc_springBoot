@@ -6,6 +6,7 @@ import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRoleType;
 import asc.portfolio.ascSb.jwt.LoginUser;
 import asc.portfolio.ascSb.service.product.ProductService;
+import asc.portfolio.ascSb.web.dto.product.ProductListResponseDto;
 import asc.portfolio.ascSb.web.dto.seatReservationInfo.SeatReservationInfoSelectResponseDto;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +26,22 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @RequestMapping(value = "/{cafeName}", method = RequestMethod.GET)
-    public ResponseEntity<List<Product>> productInfoWithConstTerm(@LoginUser User user, @PathVariable String cafeName,
-                                                                   @RequestHeader(value = "dataString") String dateString) {
+    @RequestMapping(value = "/admin/management", method = RequestMethod.GET)
+    public ResponseEntity<List<ProductListResponseDto>> productInfoOneUser(@LoginUser User user, @RequestParam String userLoginId) {
         if(user.getRole() != UserRoleType.ADMIN) {
             log.error("관리자 계정이 아닙니다.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(productService.adminSalesManagementWithStartDate(user.getId(), cafeName, dateString), HttpStatus.OK);
+        return new ResponseEntity<>(productService.adminSalesManagementOneUser(userLoginId, user.getCafe().getCafeName()), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin/management/start-time/{cafeName}", method = RequestMethod.GET)
+    public ResponseEntity<List<Product>> productInfoWithConstTerm(@LoginUser User user, @PathVariable String cafeName,
+                                                                   @RequestHeader(value = "dateString") String dateString) {
+        if(user.getRole() != UserRoleType.ADMIN) {
+            log.error("관리자 계정이 아닙니다.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(productService.adminSalesManagementWithStartDate(cafeName, dateString), HttpStatus.OK);
     }
 }

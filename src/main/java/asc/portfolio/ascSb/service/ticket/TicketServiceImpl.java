@@ -1,6 +1,5 @@
 package asc.portfolio.ascSb.service.ticket;
 
-import asc.portfolio.ascSb.bootpay.BootpayObject;
 import asc.portfolio.ascSb.commonenum.product.ProductNameType;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.order.Orders;
@@ -8,9 +7,11 @@ import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.ticket.TicketRepository;
 import asc.portfolio.ascSb.domain.ticket.TicketStateType;
 import asc.portfolio.ascSb.domain.user.User;
+import asc.portfolio.ascSb.domain.user.UserRepository;
 import asc.portfolio.ascSb.web.dto.bootpay.BootPayOrderDto;
+import asc.portfolio.ascSb.web.dto.ticket.TicketForAdminResponseDto;
 import asc.portfolio.ascSb.web.dto.ticket.TicketRequestDto;
-import asc.portfolio.ascSb.web.dto.ticket.TicketResponseDto;
+import asc.portfolio.ascSb.web.dto.ticket.TicketForUserResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -30,14 +30,18 @@ public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
 
+    private final UserRepository userRepository;
+
     @Override
-    public TicketResponseDto userValidTicket(Long id, String cafeName) {
+    public TicketForUserResponseDto userValidTicket(Long id, String cafeName) {
         LocalDateTime dateTime = LocalDateTime.now();
-            Optional<TicketResponseDto> optionalDto = ticketRepository.findAvailableTicketInfoByIdAndCafeName(id, cafeName);
+            Optional<TicketForUserResponseDto> optionalDto = ticketRepository.findAvailableTicketInfoByIdAndCafeName(id, cafeName);
             if(optionalDto.isPresent()) {
-                TicketResponseDto dto = optionalDto.get();
-                long termData = Duration.between(dateTime, dto.getFixedTermTicket()).toMinutes();
-                dto.setPeriod(termData);
+                TicketForUserResponseDto dto = optionalDto.get();
+                if(dto.getFixedTermTicket() != null) {
+                    long termData = Duration.between(dateTime, dto.getFixedTermTicket()).toMinutes();
+                    dto.setPeriod(termData);
+                }
                 return dto;
             } else {
                 log.info("보유중인 티켓이 존재하지 않습니다.");
@@ -47,11 +51,12 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public Long saveProductToTicket(User user, BootPayOrderDto bootPayOrderDto, Orders orders) {
-//        Optional<TicketResponseDto> findUserValidTicket = ticketRepository.findAvailableTicketInfoByIdAndCafeName(user.getId(), user.getCafe().getCafeName());
-//        if (findUserValidTicket.isPresent()) {
-//            log.info("이미 사용중인 티켓이 존재합니다."); // TODO 결제 취소 여부 고민
-//            return 0L;
-//        }
+        Optional<TicketForUserResponseDto> findUserValidTicket =
+                ticketRepository.findAvailableTicketInfoByIdAndCafeName(user.getId(), user.getCafe().getCafeName());
+        if (findUserValidTicket.isPresent()) {
+            log.info("이미 사용중인 티켓이 존재합니다."); // TODO 사용중인 티켓에 시간(기간)추가 or 결제 취소 시킬지 여부
+            return 0L;
+        }
         TicketRequestDto ticketDto = TicketRequestDto.builder()
                 .user(user)
                 .cafe(user.getCafe())
@@ -71,8 +76,21 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public List<TicketResponseDto> lookupUserTickets(String targetUserLoginId, Cafe cafe) {
+    public List<TicketForUserResponseDto> lookupUserTickets(String targetUserLoginId, Cafe cafe) {
         return ticketRepository.findAllTicketInfoByLoginIdAndCafe(targetUserLoginId, cafe);
+    }
+
+    @Override
+    public TicketForAdminResponseDto adminLookUpUserValidTicket(String userLoginId, String cafeName) {
+        Optional<User> user = userRepository.findByLoginId(userLoginId);
+        if(user.isPresent()) {
+            User userDto = user.get();
+            Long id = userDto.getId();
+            Ticket ticket = ticketRepository.findValidTicketInfoForAdminByUserIdAndCafeName(id, cafeName);
+            System.out.println("ticket="+ticket);
+            return new TicketForAdminResponseDto(ticket);
+        }
+        return null;
     }
 
     private LocalDateTime distinguishFixedTermTicket(ProductNameType orderName) {
@@ -94,15 +112,15 @@ public class TicketServiceImpl implements TicketService {
     private Integer distinguishPartTimeTicket(ProductNameType orderName) {
         switch (orderName) {
             case HUNDRED_HOUR_PART_TIME_TICKET:
-                return 100;
+                return 6000;
             case FIFTY_HOUR_PART_TIME_TICKET:
-                return 50;
+                return 3000;
             case TEN_HOUR_PART_TIME_TICKET:
-                return 10;
+                return 600;
             case FOUR_HOUR_PART_TIME_TICKET:
-                return 4;
+                return 240;
             case ONE_HOUR_PART_TIME_TICKET:
-                return 1;
+                return 60;
             default: return 0;
         }
     }

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketResponseDto {
+public class TicketForUserResponseDto {
 
     private TicketStateType isValidTicket;
     private LocalDateTime fixedTermTicket; // 기간제 티켓 날짜 => fixedTermTicket - createDate 시간으로 남은기간 계산
@@ -17,10 +17,4 @@ public class TicketResponseDto {
 
     private long period;
 
-//    public TicketResponseDto(TicketResponseDto entity) {
-//        this.isValidTicket = entity.getIsValidTicket();
-//        this.fixedTermTicket = entity.getFixedTermTicket();
-//        this.partTimeTicket = entity.getPartTimeTicket();
-//        this.remainingTime = entity.getRemainingTime();
-//    }
 }

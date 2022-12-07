@@ -74,7 +74,7 @@ public class TicketRepositoryTest {
         cafeRepository.save(cafe);
     }
 
-    @DisplayName("특정 user의 특정cafe 의 ticket을 조회")
+    @DisplayName("특정user의 특정cafe의 ticket을 조회")
     @Test
     void queryDsl_findTicketByUserIdAndCafeId() {
         EntityManager entityManager = testEntityManager.getEntityManager();

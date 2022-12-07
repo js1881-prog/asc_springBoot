@@ -4,6 +4,7 @@ import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
 import asc.portfolio.ascSb.jwt.AuthenticationContext;
 import asc.portfolio.ascSb.jwt.JwtTokenProvider;
+import asc.portfolio.ascSb.web.dto.user.UserForAdminResponseDto;
 import asc.portfolio.ascSb.web.dto.user.UserQrAndNameResponseDto;
 import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
 import lombok.RequiredArgsConstructor;
@@ -66,5 +67,19 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserQrAndNameResponseDto userQrAndName(Long id) {
     return userRepository.findQrAndUserNameById(id);
+  }
+
+  @Override
+  public UserForAdminResponseDto AdminCheckUserInfo(String userLoginId) {
+    Optional<User> user = userRepository.findByLoginId(userLoginId);
+    try {
+      if (user.isPresent()) {
+        User userInfo = user.get();
+        return new UserForAdminResponseDto(userInfo);
+      }
+    } catch (Exception e) {
+      log.error("해당하는 유저가 없습니다");
+    }
+    return null;
   }
 }

@@ -10,4 +10,6 @@ public interface UserRepository extends JpaRepository<User, Long>, UserCustomRep
   Optional<User> findByLoginId(String loginId);
 
   User findByNameContains(String name);
+
+
 }

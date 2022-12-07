@@ -1,13 +1,11 @@
 package asc.portfolio.ascSb.web.controller;
 
 import asc.portfolio.ascSb.domain.user.User;
+import asc.portfolio.ascSb.domain.user.UserRoleType;
 import asc.portfolio.ascSb.jwt.LoginUser;
 import asc.portfolio.ascSb.service.jwt.JwtService;
 import asc.portfolio.ascSb.service.user.UserService;
-import asc.portfolio.ascSb.web.dto.user.UserLoginRequestDto;
-import asc.portfolio.ascSb.web.dto.user.UserLoginResponseDto;
-import asc.portfolio.ascSb.web.dto.user.UserQrAndNameResponseDto;
-import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
+import asc.portfolio.ascSb.web.dto.user.*;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import lombok.RequiredArgsConstructor;
@@ -96,7 +94,7 @@ public class UserController {
   }
 
   @GetMapping("/qr-name")
-  public ResponseEntity<UserQrAndNameResponseDto> findQrAndNameById(@LoginUser User user) {
+  public ResponseEntity<UserQrAndNameResponseDto> userQrAndNameInfo(@LoginUser User user) {
 
     if (user == null) {
       log.error("유효하지 않은 로그인 입니다.");
@@ -104,5 +102,20 @@ public class UserController {
     }
 
     return new ResponseEntity<>(userService.userQrAndName(user.getId()), HttpStatus.OK);
+  }
+
+  @GetMapping("/admin/check")
+  public ResponseEntity<UserForAdminResponseDto> adminCheckUserInfo(@LoginUser User user, @RequestParam String userLoginId) {
+
+    if(user.getRole() != UserRoleType.ADMIN) {
+      log.error("관리자 계정이 아닙니다.");
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    if (userLoginId != null) {
+      return new ResponseEntity<>(userService.AdminCheckUserInfo(userLoginId), HttpStatus.OK);
+    } else {
+      log.error("검색하고자 하는 id를 찾을수 없습니다.");
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
   }
 }

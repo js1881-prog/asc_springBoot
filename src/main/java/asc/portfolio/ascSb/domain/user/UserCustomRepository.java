@@ -9,4 +9,5 @@ public interface UserCustomRepository {
     // TODO findAllById 구현.
     UserQrAndNameResponseDto findQrAndUserNameById(Long id);
 
+
 }

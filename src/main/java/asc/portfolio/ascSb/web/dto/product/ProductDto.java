@@ -20,6 +20,8 @@ public class ProductDto {
     private User user;
     private ProductStateType productState;
     private ProductNameType productNameType;
+
+    private String productNameTypeString;
     private String description;
     private Integer productPrice;
     private String productLabel;
@@ -35,6 +37,7 @@ public class ProductDto {
         this.description = description;
         this.productPrice = productPrice;
         this.productLabel = productLabel;
+        this.productNameTypeString = productNameType.name();
     }
 
     public Product toEntity() {

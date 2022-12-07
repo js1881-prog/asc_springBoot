@@ -17,14 +17,23 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
     private final JPAQueryFactory query;
 
     @Override
-    public List<Product> findProductListByUserIdAndCafeNameAndStartTime(Long userId, String cafeName, LocalDateTime startTime) {
+    public List<Product> findProductListByUserIdAndCafeNameAndStartTime(String cafeName, LocalDateTime startTime) {
         LocalDateTime now = LocalDateTime.now();
-
         return query
                 .select(product)
                 .from(product)
                 .where(product.cafe.cafeName.eq(cafeName),
                         product.createDate.between(startTime, now))
+                .fetch();
+    }
+
+    @Override
+    public List<Product> findProductListByUserIdAndCafeName(Long userId, String cafeName) {
+        QProduct qProduct = new QProduct("subQ");
+
+        return query.select(qProduct)
+                .from(qProduct)
+                .where(qProduct.user.id.eq(userId), qProduct.cafe.cafeName.eq(cafeName))
                 .fetch();
     }
 }
