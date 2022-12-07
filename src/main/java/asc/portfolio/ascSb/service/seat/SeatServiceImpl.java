@@ -78,6 +78,13 @@ public class SeatServiceImpl implements SeatService {
     }
 
     @Override
+    public Boolean exitSeatBySeatNumber(Cafe cafe, int seatNumber) {
+        Seat findSeat = seatRepository.findByCafeAndSeatNumber(cafe, seatNumber);
+        exitSeat(findSeat.getUser());
+        return null;
+    }
+
+    @Override
     public Boolean reserveSeat(User user, Cafe cafe, int seatNumber) {
         if (cafe == null) {
             log.error("선택 된 카페가 없는 유저 입니다.");
