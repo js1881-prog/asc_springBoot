@@ -26,16 +26,16 @@ public class CafeServiceImpl implements CafeService {
   }
 
   @Override
-  public Optional<Cafe> changeReservedUserCafe(User user, String cafeName) {
+  public String changeReservedUserCafe(User user, String cafeName) {
 
     Optional<Cafe> findCafeOpt = cafeRepository.findByCafeName(cafeName);
 
     if (findCafeOpt.isEmpty()) {
       log.error("Unknown Cafe Name = {}", cafeName);
-      return Optional.empty();
+      return null;
     } else {
       findCafeOpt.ifPresent(c -> user.changeCafe(c));
-      return findCafeOpt;
+      return findCafeOpt.get().getCafeName();
     }
   }
 }

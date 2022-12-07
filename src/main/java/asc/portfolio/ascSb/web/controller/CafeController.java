@@ -1,19 +1,20 @@
 package asc.portfolio.ascSb.web.controller;
 
-import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.user.User;
+import asc.portfolio.ascSb.domain.user.UserRoleType;
 import asc.portfolio.ascSb.jwt.LoginUser;
 import asc.portfolio.ascSb.service.cafe.CafeService;
 import asc.portfolio.ascSb.web.dto.cafe.CafeResponseDto;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/cafe")
@@ -31,8 +32,16 @@ public class CafeController {
   @Parameter(name = "cafeName", example = "tCafe_A")
   @GetMapping("/change/{cafeName}")
   public ResponseEntity<String> changeReservedUserCafe(@LoginUser User user, @PathVariable String cafeName) {
-    Optional<Cafe> optionalResult = cafeService.changeReservedUserCafe(user, cafeName);
-    return optionalResult.map(cafe -> new ResponseEntity<>(cafe.getCafeName(),
-            HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    if (user.getRole() == UserRoleType.USER) {
+      String resultName = cafeService.changeReservedUserCafe(user, cafeName);
+      if (resultName != null) {
+        return new ResponseEntity<>(resultName, HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      }
+    } else {
+      log.info("Admin 유저의 카페 변경은 비활성화 되어 있습니다.");
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
   }
 }
