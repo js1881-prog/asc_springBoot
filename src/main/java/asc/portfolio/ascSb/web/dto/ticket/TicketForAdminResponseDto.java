@@ -1,6 +1,8 @@
 package asc.portfolio.ascSb.web.dto.ticket;
 
 
+import asc.portfolio.ascSb.commonenum.product.ProductNameType;
+import asc.portfolio.ascSb.domain.product.Product;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.ticket.TicketStateType;
 import lombok.*;
@@ -21,9 +23,11 @@ public class TicketForAdminResponseDto {
     private LocalDateTime createDate;
     private LocalDateTime modifiedDate;
 
+    private String productNameType;
+
     private long period;
 
-    public TicketForAdminResponseDto(Ticket ticket) {
+    public TicketForAdminResponseDto(Ticket ticket, String productLabel) {
         this.isValidTicket = ticket.getIsValidTicket();
         this.fixedTermTicket = ticket.getFixedTermTicket();
         this.partTimeTicket = ticket.getPartTimeTicket();
@@ -32,5 +36,6 @@ public class TicketForAdminResponseDto {
         this.ticketPrice = ticket.getTicketPrice();
         this.createDate = ticket.getCreateDate();
         this.modifiedDate = ticket.getModifiedDate();
+        this.productNameType = productLabel;
     }
 }

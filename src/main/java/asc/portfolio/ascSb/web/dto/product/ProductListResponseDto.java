@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
@@ -21,12 +23,15 @@ public class ProductListResponseDto {
     private Integer productPrice;
     private String productLabel;
 
+    private LocalDateTime createDate;
+
     public ProductListResponseDto(Product product) {
         this.productState = product.getProductState();
         this.productNameType = product.getProductNameType();
         this.description = product.getDescription();
         this.productPrice = product.getProductPrice();
         this.productLabel = product.getProductLabel();
-        this.productNameTypeString = product.getProductNameType().name();
+        this.productNameTypeString = product.getProductNameType().getValue();
+        this.createDate = product.getCreateDate();
     }
 }

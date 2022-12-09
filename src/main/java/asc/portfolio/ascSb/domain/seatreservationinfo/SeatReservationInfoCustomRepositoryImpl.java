@@ -1,6 +1,5 @@
 package asc.portfolio.ascSb.domain.seatreservationinfo;
 
-import asc.portfolio.ascSb.domain.user.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

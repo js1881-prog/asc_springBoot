@@ -65,4 +65,11 @@ public class ProductServiceImpl implements ProductService {
 
         return productRepository.save(productDto);
     }
+
+    @Override
+    public void cancelProduct(String productLabel) {
+        Product cancelProductInfo = productRepository.findByProductLabelContains(productLabel);
+        cancelProductInfo.cancelProduct();
+        productRepository.save(cancelProductInfo);
+    }
 }

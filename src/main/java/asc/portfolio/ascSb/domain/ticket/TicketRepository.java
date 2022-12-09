@@ -9,4 +9,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long>, TicketCus
 
     List<Ticket> findByIsValidTicketContains(TicketStateType ticketStateType);
 
+    Ticket findByProductLabelContains(String productLabel);
+
 }

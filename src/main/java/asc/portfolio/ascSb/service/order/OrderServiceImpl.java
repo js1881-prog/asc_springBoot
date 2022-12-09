@@ -32,4 +32,9 @@ public class OrderServiceImpl implements OrderService {
     public Orders findReceiptOrderId(String receiptId) {
         return orderRepository.findByReceiptOrderIdContains(receiptId);
     }
+
+    @Override
+    public Orders findReceiptIdToProductLabel(String productLabel) {
+        return orderRepository.findByProductLabelContains(productLabel);
+    }
 }

@@ -1,6 +1,5 @@
 package asc.portfolio.ascSb.web.dto.user;
 
-import asc.portfolio.ascSb.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

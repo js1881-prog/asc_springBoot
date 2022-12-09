@@ -6,4 +6,6 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 
     Orders findByReceiptOrderIdContains(String receiptId);
 
+    Orders findByProductLabelContains(String productLabel);
+
 }

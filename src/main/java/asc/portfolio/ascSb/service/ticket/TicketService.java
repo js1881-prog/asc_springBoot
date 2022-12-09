@@ -20,4 +20,6 @@ public interface TicketService {
 //    Long saveTicket(TicketRequestDto dto, Long id);
 
     TicketForAdminResponseDto adminLookUpUserValidTicket(String userLoginID, String cafeName);
+
+    void deleteTicket(String productLabel);
 }

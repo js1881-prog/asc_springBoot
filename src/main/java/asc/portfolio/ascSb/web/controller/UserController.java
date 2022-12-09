@@ -6,8 +6,6 @@ import asc.portfolio.ascSb.jwt.LoginUser;
 import asc.portfolio.ascSb.service.jwt.JwtService;
 import asc.portfolio.ascSb.service.user.UserService;
 import asc.portfolio.ascSb.web.dto.user.*;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;

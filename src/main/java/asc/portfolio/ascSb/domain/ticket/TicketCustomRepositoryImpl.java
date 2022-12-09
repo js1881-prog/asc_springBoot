@@ -5,8 +5,11 @@ import asc.portfolio.ascSb.domain.cafe.Cafe;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
+import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +18,7 @@ import static asc.portfolio.ascSb.domain.ticket.QTicket.ticket;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class TicketCustomRepositoryImpl implements TicketCustomRepository {
 
     private final JPAQueryFactory query;
@@ -30,15 +34,39 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
     }
 
     @Override
-    public Ticket findValidTicketInfoForAdminByUserIdAndCafeName(Long id, String cafeName) {
+    public Ticket findValidTicketInfoForAdminByUserIdAndCafeName(Long id, String cafeName) throws NullPointerException {
         LocalDateTime now = LocalDateTime.now();
-        QTicket qTicket = new QTicket("subT");
-        return query.select(qTicket)
-                .from(qTicket)
-                .where(qTicket.user.id.eq(id), qTicket.cafe.cafeName.eq(cafeName),
-                        qTicket.remainingTime.gt(0), qTicket.fixedTermTicket.gt(now)
-                )
-                .fetchOne();
+        QTicket qTicket = new QTicket("qT");
+        QTicket qTicketTwo = new QTicket("qF");
+
+        try {
+            Optional<Ticket> checkRemainTimeIsNotNull = Optional.ofNullable(query.select(qTicket)
+                    .from(qTicket)
+                    .where(qTicket.user.id.eq(id), qTicket.cafe.cafeName.eq(cafeName),
+                            qTicket.remainingTime.isNotNull(),
+                            qTicket.remainingTime.gt(0)
+                    )
+                    .fetchOne());
+            Optional<Ticket> checkFixedTermIsNotNull = Optional.ofNullable(query.select(qTicketTwo)
+                    .from(qTicketTwo)
+                    .where(qTicketTwo.user.id.eq(id), qTicketTwo.cafe.cafeName.eq(cafeName),
+                            qTicketTwo.fixedTermTicket.isNotNull(),
+                            qTicketTwo.fixedTermTicket.gt(now)
+                    )
+                    .fetchOne());
+            if(checkRemainTimeIsNotNull.isPresent()) {
+                return checkRemainTimeIsNotNull.get();
+            } else if (checkFixedTermIsNotNull.isPresent()) {
+                return checkFixedTermIsNotNull.get();
+            } else {
+                log.info("Valid 티켓이 존재하지 않습니다.");
+                return null;
+            }
+        } catch(NullPointerException exception) {
+            log.info("Valid 티켓이 존재하지 않습니다.");
+            exception.printStackTrace();
+        }
+        return null;
     }
 
     @Override

@@ -2,7 +2,6 @@ package asc.portfolio.ascSb.service.user;
 
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
-import asc.portfolio.ascSb.jwt.AuthenticationContext;
 import asc.portfolio.ascSb.jwt.JwtTokenProvider;
 import asc.portfolio.ascSb.web.dto.user.UserForAdminResponseDto;
 import asc.portfolio.ascSb.web.dto.user.UserQrAndNameResponseDto;
@@ -12,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service

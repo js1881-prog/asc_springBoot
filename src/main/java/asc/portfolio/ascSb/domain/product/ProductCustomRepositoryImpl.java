@@ -23,7 +23,9 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
                 .select(product)
                 .from(product)
                 .where(product.cafe.cafeName.eq(cafeName),
-                        product.createDate.between(startTime, now))
+                        product.createDate.between(startTime, now),
+                        product.productState.eq(ProductStateType.SALE)
+                )
                 .fetch();
     }
 

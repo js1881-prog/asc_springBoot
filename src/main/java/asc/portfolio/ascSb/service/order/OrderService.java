@@ -10,4 +10,6 @@ public interface OrderService {
 
     Orders findReceiptOrderId(String receiptId);
 
+    Orders findReceiptIdToProductLabel(String productLabel);
+
 }

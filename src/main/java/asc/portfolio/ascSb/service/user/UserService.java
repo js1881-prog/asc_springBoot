@@ -5,8 +5,6 @@ import asc.portfolio.ascSb.web.dto.user.UserForAdminResponseDto;
 import asc.portfolio.ascSb.web.dto.user.UserQrAndNameResponseDto;
 import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
 
-import java.util.List;
-
 public interface UserService {
 
   Long signUp(UserSignupDto signUpDto);

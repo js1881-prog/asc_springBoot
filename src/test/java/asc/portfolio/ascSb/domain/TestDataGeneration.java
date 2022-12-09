@@ -214,6 +214,5 @@ public class TestDataGeneration {
     generateUserData();
     generateAdminUserData();
     generateTicketData();
-    generateProductData();
   }
 }

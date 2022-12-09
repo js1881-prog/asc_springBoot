@@ -64,11 +64,11 @@ public class Product extends BaseTimeEntity {
         this.productLabel = productLabel;
     }
 
-    public void completeOrder() {
+    public void saleProduct() {
         this.productState = ProductStateType.SALE;
     }
 
-    public void failOrder() {
+    public void cancelProduct() {
         this.productState = ProductStateType.CANCEL;
     }
 }

@@ -2,15 +2,17 @@ package asc.portfolio.ascSb.web.controller;
 
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.jwt.LoginUser;
-import asc.portfolio.ascSb.service.seat.SeatService;
 import asc.portfolio.ascSb.web.dto.seat.SeatSelectResponseDto;
+import asc.portfolio.ascSb.service.seat.SeatService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin(origins = "*")
@@ -20,8 +22,12 @@ public class SeatController {
     private final SeatService seatService;
 
     @GetMapping("/{cafeName}")
-    public List<SeatSelectResponseDto> seatState(@PathVariable String cafeName) {
-        return seatService.showCurrentSeatState(cafeName);
+    public ResponseEntity<List<SeatSelectResponseDto>> seatState(@PathVariable String cafeName) {
+        if(cafeName.isEmpty()) {
+            log.info("cafeName이 비어 있습니다.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(seatService.showCurrentSeatState(cafeName), HttpStatus.OK);
     }
 
     @GetMapping("/reservation/{seatNumber}")

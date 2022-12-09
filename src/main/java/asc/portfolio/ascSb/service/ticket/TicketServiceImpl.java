@@ -3,6 +3,8 @@ package asc.portfolio.ascSb.service.ticket;
 import asc.portfolio.ascSb.commonenum.product.ProductNameType;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.order.Orders;
+import asc.portfolio.ascSb.domain.product.Product;
+import asc.portfolio.ascSb.domain.product.ProductRepository;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.ticket.TicketRepository;
 import asc.portfolio.ascSb.domain.ticket.TicketStateType;
@@ -31,6 +33,8 @@ public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
 
     private final UserRepository userRepository;
+
+    private final ProductRepository productRepository;
 
     @Override
     public TicketForUserResponseDto userValidTicket(Long id, String cafeName) {
@@ -87,10 +91,16 @@ public class TicketServiceImpl implements TicketService {
             User userDto = user.get();
             Long id = userDto.getId();
             Ticket ticket = ticketRepository.findValidTicketInfoForAdminByUserIdAndCafeName(id, cafeName);
-            System.out.println("ticket="+ticket);
-            return new TicketForAdminResponseDto(ticket);
+            String productNameType = productRepository.findByProductLabelContains(ticket.getProductLabel()).getProductNameType().getValue();
+            return new TicketForAdminResponseDto(ticket, productNameType);
         }
         return null;
+    }
+
+    @Override
+    public void deleteTicket(String productLabel) {
+        Ticket deleteTicket = ticketRepository.findByProductLabelContains(productLabel);
+        ticketRepository.delete(deleteTicket);
     }
 
     private LocalDateTime distinguishFixedTermTicket(ProductNameType orderName) {

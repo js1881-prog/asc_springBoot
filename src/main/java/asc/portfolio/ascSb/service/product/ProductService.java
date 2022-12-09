@@ -16,4 +16,6 @@ public interface ProductService {
 
     Product saveProduct(User user, BootPayOrderDto dto, Orders orders);
 
+    void cancelProduct(String productLabel);
+
 }
