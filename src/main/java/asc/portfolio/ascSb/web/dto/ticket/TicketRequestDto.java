@@ -19,14 +19,14 @@ public class TicketRequestDto {
     private TicketStateType isValidTicket;
     private Integer ticketPrice;
     private LocalDateTime fixedTermTicket;
-    private Integer partTimeTicket;
-    private Integer remainingTime;
+    private Long partTimeTicket;
+    private Long remainingTime;
     @NotNull
     private String productLabel;
 
     @Builder
     public TicketRequestDto(Cafe cafe, User user, TicketStateType isValidTicket, Integer ticketPrice, LocalDateTime fixedTermTicket,
-                            Integer partTimeTicket, Integer remainingTime, String productLabel)
+                            Long partTimeTicket, Long remainingTime, String productLabel)
     {
         this.cafe = cafe;
         this.user = user;

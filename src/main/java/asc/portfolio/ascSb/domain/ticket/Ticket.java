@@ -38,18 +38,18 @@ public class Ticket extends BaseTimeEntity {
     @Column(name = "FT_T")
     private LocalDateTime fixedTermTicket; // 기간제 티켓 날짜 => fixedTermTicket - createDate 시간으로 남은기간 계산
 
-    @Column(name = "PT_T") // 결제한 시간제 티켓시간
-    private Integer partTimeTicket; // 50시간, 100시간
+    @Column(name = "PT_T") // 결제한 시간제 티켓시간 (분단위)
+    private Long partTimeTicket; // 50시간, 100시간
 
-    @Column(name = "R_T") // 시간제 티켓 남은시간
-    private Integer remainingTime;
+    @Column(name = "R_T") // 시간제 티켓 남은시간 (분단위)
+    private Long remainingTime;
 
     @Column(unique = true)
     private String productLabel;
 
     @Builder
     public Ticket(Cafe cafe, User user, TicketStateType isValidTicket, Integer ticketPrice, LocalDateTime fixedTermTicket,
-                  Integer partTimeTicket, Integer remainingTime, String productLabel) {
+                  Long partTimeTicket, Long remainingTime, String productLabel) {
         this.cafe = cafe;
         this.user = user;
         this.isValidTicket = isValidTicket;
@@ -64,12 +64,12 @@ public class Ticket extends BaseTimeEntity {
         isValidTicket = TicketStateType.INVALID;
     }
 
-    public void exitUsingTicket(Integer time) {
+    public void exitUsingTicket(Long time) {
         if (this.isFixedTermTicket()) {
             this.isValidFixedTermTicket();
         } else {
             //partTime Ticket 일 때만 time 파라미터 사용
-            remainingTime -= time;//startTime?
+            remainingTime -= time;
 
             if (remainingTime <= 0) {
                 changeTicketStateToInvalid();

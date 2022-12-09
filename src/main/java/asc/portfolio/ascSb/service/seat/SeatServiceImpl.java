@@ -51,7 +51,7 @@ public class SeatServiceImpl implements SeatService {
 
             for (SeatReservationInfo info : userRezInfo) {
                 //Reservation Info Exit
-                info.endUsingSeat();
+                Long timeInUse = info.endUsingSeat();
 
                 //Seat Exit
                 Seat findSeat = seatRepository.findByCafeNameAndSeatNumber(info.getCafeName(), info.getSeatNumber());
@@ -62,9 +62,7 @@ public class SeatServiceImpl implements SeatService {
                 if (ticket.isFixedTermTicket()) {
                     ticket.exitUsingTicket(null);
                 } else {
-                    Long timeInUse = info.getTimeInUse();
-                    //TODO remain Time 계산 어떻게??
-                    ticket.exitUsingTicket(info.getStartTime()); // 사용한 시간 startTime or timeInUse
+                    ticket.exitUsingTicket(timeInUse); // 사용한 시간 startTime or timeInUse
                 }
             }
         }

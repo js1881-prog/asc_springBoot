@@ -167,8 +167,8 @@ public class TestDataGeneration {
                 .isValidTicket(TicketStateType.INVALID)
                 .ticketPrice(3000)
                 .fixedTermTicket(date.plusHours(j))
-                .partTimeTicket(0)
-                .remainingTime(0)
+                .partTimeTicket(null)
+                .remainingTime(null)
                 .build();
 
         ticketRepository.save(ticket);

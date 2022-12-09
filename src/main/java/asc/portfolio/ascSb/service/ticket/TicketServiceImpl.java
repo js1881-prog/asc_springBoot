@@ -1,6 +1,5 @@
 package asc.portfolio.ascSb.service.ticket;
 
-import asc.portfolio.ascSb.bootpay.BootpayObject;
 import asc.portfolio.ascSb.commonenum.product.ProductNameType;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.order.Orders;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -77,7 +75,7 @@ public class TicketServiceImpl implements TicketService {
 
     private LocalDateTime distinguishFixedTermTicket(ProductNameType orderName) {
         switch (orderName) {
-            case FIFTY_HOUR_PART_TIME_TICKET:
+            case FOUR_WEEK_FIXED_TERM_TICKET:
                 return LocalDateTime.now().plusDays(28);
             case THREE_WEEK_FIXED_TERM_TICKET:
                 return LocalDateTime.now().plusDays(21);
@@ -91,19 +89,20 @@ public class TicketServiceImpl implements TicketService {
         }
     }
 
-    private Integer distinguishPartTimeTicket(ProductNameType orderName) {
+    private Long distinguishPartTimeTicket(ProductNameType orderName) {
+        final long multiply = 60L; //시단위 -> 분단위
         switch (orderName) {
             case HUNDRED_HOUR_PART_TIME_TICKET:
-                return 100;
+                return 100 * multiply;
             case FIFTY_HOUR_PART_TIME_TICKET:
-                return 50;
+                return 50 * multiply;
             case TEN_HOUR_PART_TIME_TICKET:
-                return 10;
+                return 10 * multiply;
             case FOUR_HOUR_PART_TIME_TICKET:
-                return 4;
+                return 4 * multiply;
             case ONE_HOUR_PART_TIME_TICKET:
-                return 1;
-            default: return 0;
+                return 1 * multiply;
+            default: return 0L;
         }
     }
 }
