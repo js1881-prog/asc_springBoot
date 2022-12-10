@@ -5,6 +5,7 @@ import asc.portfolio.ascSb.domain.cafe.Cafe;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 import static asc.portfolio.ascSb.domain.ticket.QTicket.ticket;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class TicketCustomRepositoryImpl implements TicketCustomRepository {
@@ -21,12 +23,21 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
 
     @Override
     public Optional<TicketResponseDto> findAvailableTicketInfoByIdAndCafeName(Long id, String cafeName) {
-        return Optional.ofNullable(query
-                .select(Projections.bean(TicketResponseDto.class,
-                        ticket.isValidTicket, ticket.fixedTermTicket, ticket.partTimeTicket, ticket.remainingTime))
-                .from(ticket)
+        Ticket findTicket = query
+                .selectFrom(ticket)
                 .where(ticket.cafe.cafeName.eq(cafeName), ticket.user.id.eq(id), ticket.isValidTicket.eq(TicketStateType.VALID))
-                .fetchOne());
+                .fetchOne();
+
+        if (findTicket == null) {
+            return Optional.empty();
+        }
+
+        if (findTicket.isValidFixedTermTicket() || findTicket.isValidPartTimeTicket()) {
+            return findTicket.toTicketResponseDto();
+        } else {
+            log.error("Throw IllegalStateException. Ticket={}", findTicket);
+            throw new IllegalStateException();
+        }
     }
 
     @Override

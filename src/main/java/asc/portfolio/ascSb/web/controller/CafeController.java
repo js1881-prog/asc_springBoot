@@ -30,7 +30,7 @@ public class CafeController {
   }
 
   @Parameter(name = "cafeName", example = "tCafe_A")
-  @GetMapping("/change/{cafeName}")
+  @PostMapping("/change/{cafeName}")
   public ResponseEntity<String> changeReservedUserCafe(@LoginUser User user, @PathVariable String cafeName) {
     if (user.getRole() == UserRoleType.USER) {
       String resultName = cafeService.changeReservedUserCafe(user, cafeName);

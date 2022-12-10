@@ -2,15 +2,18 @@ package asc.portfolio.ascSb.domain.ticket;
 import asc.portfolio.ascSb.domain.BaseTimeEntity;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.user.User;
+import asc.portfolio.ascSb.web.dto.ticket.TicketResponseDto;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Slf4j
 @Getter
+@ToString(exclude = {"cafe", "user"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "TICKET")
@@ -118,5 +121,13 @@ public class Ticket extends BaseTimeEntity {
         } else {
             return false;
         }
+    }
+
+    //TO DTO
+    public Optional<TicketResponseDto> toTicketResponseDto() {
+        TicketResponseDto dto = new TicketResponseDto();
+        dto.setTicketToTicketResponseDto(this);
+
+        return Optional.of(dto);
     }
 }

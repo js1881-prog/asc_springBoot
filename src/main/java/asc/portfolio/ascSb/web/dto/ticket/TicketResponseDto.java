@@ -1,9 +1,11 @@
 package asc.portfolio.ascSb.web.dto.ticket;
 
+import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.ticket.TicketStateType;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Data
 @NoArgsConstructor
@@ -16,4 +18,11 @@ public class TicketResponseDto {
     private Long remainingTime; // 시간제 티켓 남은시간
 
     private long period;
+
+    public void setTicketToTicketResponseDto(Ticket ticket) {
+        isValidTicket = ticket.getIsValidTicket();
+        fixedTermTicket = ticket.getFixedTermTicket();
+        partTimeTicket = ticket.getPartTimeTicket();
+        remainingTime = ticket.getRemainingTime();
+    }
 }
