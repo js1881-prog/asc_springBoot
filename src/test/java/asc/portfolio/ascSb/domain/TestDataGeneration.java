@@ -100,9 +100,6 @@ public class TestDataGeneration {
                 .seatNumber(i)
                 .cafe(cafe)
                 .build();
-        if ( i % 2 == 0 ) {
-          seat.setSeatStateTypeReserved();
-        }
         seatRepository.save(seat);
       }
     }

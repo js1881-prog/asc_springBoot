@@ -9,7 +9,6 @@ import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.ticket.TicketRepository;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.web.dto.seat.SeatSelectResponseDto;
-import asc.portfolio.ascSb.web.dto.ticket.TicketResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -76,10 +75,9 @@ public class SeatServiceImpl implements SeatService {
     }
 
     @Override
-    public Boolean exitSeatBySeatNumber(Cafe cafe, int seatNumber) {
+    public void exitSeatBySeatNumber(Cafe cafe, int seatNumber) {
         Seat findSeat = seatRepository.findByCafeAndSeatNumber(cafe, seatNumber);
         exitSeat(findSeat.getUser());
-        return null;
     }
 
     @Override
@@ -108,8 +106,8 @@ public class SeatServiceImpl implements SeatService {
         //기존에 차지하고 있던 자리가 있으면 exit
         exitSeat(user);
 
-        //seat 에 User 를 할당
-        findSeat.reserveSeat(user);
+        //seat 에 User, ticket 을 할당
+        findSeat.reserveSeat(user, ticketOpt.get());
 
         //ReservationInfo 저장
         SeatReservationInfo reservationInfo = SeatReservationInfo.builder()

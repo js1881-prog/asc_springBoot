@@ -123,6 +123,14 @@ public class Ticket extends BaseTimeEntity {
         }
     }
 
+    public boolean isValidTicket() {
+        if (this.isValidFixedTermTicket()) {
+            return true;
+        } else {
+            return this.isValidPartTimeTicket();
+        }
+    }
+
     //TO DTO
     public Optional<TicketResponseDto> toTicketResponseDto() {
         TicketResponseDto dto = new TicketResponseDto();
