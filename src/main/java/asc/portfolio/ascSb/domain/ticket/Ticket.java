@@ -67,12 +67,12 @@ public class Ticket extends BaseTimeEntity {
         isValidTicket = TicketStateType.INVALID;
     }
 
-    public void exitUsingTicket(Long time) {
+    public void exitUsingTicket(Long useTime) {
         if (this.isFixedTermTicket()) {
             this.isValidFixedTermTicket();
         } else {
             //partTime Ticket 일 때만 time 파라미터 사용
-            remainingTime -= time;
+            remainingTime -= useTime;
 
             if (remainingTime <= 0) {
                 changeTicketStateToInvalid();
