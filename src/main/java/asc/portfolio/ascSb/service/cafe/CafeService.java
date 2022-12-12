@@ -11,5 +11,5 @@ public interface CafeService {
 
   public List<CafeResponseDto> showAllCafeList();
 
-  public Optional<Cafe> changeReservedUserCafe(User user, String cafeName);
+  public String changeReservedUserCafe(User user, String cafeName);
 }

@@ -1,14 +1,19 @@
 package asc.portfolio.ascSb.domain.seat;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.cafe.CafeRepository;
+import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.ticket.TicketRepository;
+import asc.portfolio.ascSb.domain.ticket.TicketStateType;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
 import asc.portfolio.ascSb.domain.user.UserRoleType;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @SpringBootTest
 @Transactional
@@ -53,7 +58,18 @@ public class SeatRepositoryTest {
                 .cafe(cafe)
                 .build();
 
-        seat.reserveSeat(user);
+        LocalDateTime date = LocalDateTime.now();
+        Ticket ticket = Ticket.builder()
+                .cafe(cafe)
+                .user(user)
+                .isValidTicket(TicketStateType.VALID)
+                .ticketPrice(3000)
+                .fixedTermTicket(date.plusSeconds(5))
+                .partTimeTicket(null)
+                .remainingTime(null)
+                .build();
+
+        seat.reserveSeat(user, ticket);
 
         seatRepository.save(seat);
     }

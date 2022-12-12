@@ -100,9 +100,6 @@ public class TestDataGeneration {
                 .seatNumber(i)
                 .cafe(cafe)
                 .build();
-        if ( i % 2 == 0 ) {
-          seat.setSeatStateTypeReserved();
-        }
         seatRepository.save(seat);
       }
     }
@@ -149,9 +146,9 @@ public class TestDataGeneration {
               .user(userRepository.findByNameContains(userName[i]))
               .isValidTicket(TicketStateType.VALID)
               .ticketPrice(3000)
-              .fixedTermTicket(date)
-              .partTimeTicket(0)
-              .remainingTime(0)
+              .fixedTermTicket(date.plusMonths(1))
+              .partTimeTicket(null)
+              .remainingTime(null)
               .build();
 
       ticketRepository.save(ticket);
@@ -167,8 +164,8 @@ public class TestDataGeneration {
                 .isValidTicket(TicketStateType.INVALID)
                 .ticketPrice(3000)
                 .fixedTermTicket(date.plusHours(j))
-                .partTimeTicket(0)
-                .remainingTime(0)
+                .partTimeTicket(null)
+                .remainingTime(null)
                 .build();
 
         ticketRepository.save(ticket);

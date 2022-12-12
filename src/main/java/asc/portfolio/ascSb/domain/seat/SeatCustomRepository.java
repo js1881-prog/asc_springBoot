@@ -10,4 +10,5 @@ public interface SeatCustomRepository {
 
     Seat findByCafeAndSeatNumber(Cafe cafeObject, int seatNumber);
 
+    Seat findByCafeNameAndSeatNumber(String cafeName, int seatNumber);
 }

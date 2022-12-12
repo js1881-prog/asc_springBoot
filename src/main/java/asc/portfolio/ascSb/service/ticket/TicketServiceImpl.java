@@ -105,7 +105,7 @@ public class TicketServiceImpl implements TicketService {
 
     private LocalDateTime distinguishFixedTermTicket(ProductNameType orderName) {
         switch (orderName) {
-            case FIFTY_HOUR_PART_TIME_TICKET:
+            case FOUR_WEEK_FIXED_TERM_TICKET:
                 return LocalDateTime.now().plusDays(28);
             case THREE_WEEK_FIXED_TERM_TICKET:
                 return LocalDateTime.now().plusDays(21);
@@ -119,19 +119,20 @@ public class TicketServiceImpl implements TicketService {
         }
     }
 
-    private Integer distinguishPartTimeTicket(ProductNameType orderName) {
+    private Long distinguishPartTimeTicket(ProductNameType orderName) {
+        final long multiply = 60L; //시단위 -> 분단위
         switch (orderName) {
             case HUNDRED_HOUR_PART_TIME_TICKET:
-                return 6000;
+                return 100 * multiply;
             case FIFTY_HOUR_PART_TIME_TICKET:
-                return 3000;
+                return 50 * multiply;
             case TEN_HOUR_PART_TIME_TICKET:
-                return 600;
+                return 10 * multiply;
             case FOUR_HOUR_PART_TIME_TICKET:
-                return 240;
+                return 4 * multiply;
             case ONE_HOUR_PART_TIME_TICKET:
-                return 60;
-            default: return 0;
+                return 1 * multiply;
+            default: return 0L;
         }
     }
 }

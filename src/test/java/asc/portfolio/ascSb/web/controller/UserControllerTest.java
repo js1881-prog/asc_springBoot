@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 import java.util.Map;
 
@@ -25,6 +22,10 @@ import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserControllerTest {
+
+  String signupUrl = "/api/v1/user/signup";
+  String loginUrl = "/api/v1/user/login";
+  String loginCheckUrl = "/api/v1/user/login-check";
 
   @LocalServerPort
   public int port;
@@ -62,7 +63,7 @@ class UserControllerTest {
             .email(email)
             .build();
 
-    String url = "http://localhost:" + port + "/user/signup";
+    String url = "http://localhost:" + port + signupUrl;
 
     //when
     ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestDto, String.class);
@@ -90,7 +91,7 @@ class UserControllerTest {
             .email(email)
             .build();
 
-    String url = "http://localhost:" + port + "/user/signup";
+    String url = "http://localhost:" + port + signupUrl;
 
     //when
     ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestDto, String.class);
@@ -114,7 +115,7 @@ class UserControllerTest {
             .email(email)
             .build();
 
-    String url = "http://localhost:" + port + "/user/signup";
+    String url = "http://localhost:" + port + signupUrl;
 
     //when
     ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestDto, String.class);
@@ -140,7 +141,7 @@ class UserControllerTest {
             .email(email)
             .build();
 
-    String url = "http://localhost:" + port + "/user/signup";
+    String url = "http://localhost:" + port + signupUrl;
 
     //when
     ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestDto, String.class);
@@ -171,9 +172,9 @@ class UserControllerTest {
             .password(password)
             .build();
 
-    String urlSignup = "http://localhost:" + port + "/user/signup";
-    String urlLogin = "http://localhost:" + port + "/user/login";
-    String urlLoginCheck = "http://localhost:" + port + "/user/login-check";
+    String urlSignup = "http://localhost:" + port + signupUrl;
+    String urlLogin = "http://localhost:" + port + loginUrl;
+    String urlLoginCheck = "http://localhost:" + port + loginCheckUrl;
 
     //when
     //선 회원가입
@@ -193,7 +194,11 @@ class UserControllerTest {
     HttpHeaders headers = new HttpHeaders();
 
     headers.add("Authorization", accessToken);
-    ResponseEntity<String> respLoginCheck = restTemplate.postForEntity(urlLoginCheck, new HttpEntity<>(headers), String.class);
+    ResponseEntity<String> respLoginCheck = restTemplate.exchange(
+            urlLoginCheck,
+            HttpMethod.GET,
+            new HttpEntity<>(headers),
+            String.class);
 
     //then
     //Http Status 확인

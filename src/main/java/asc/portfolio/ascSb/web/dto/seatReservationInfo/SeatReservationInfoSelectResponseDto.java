@@ -13,18 +13,10 @@ import java.time.LocalDateTime;
 @Setter
 public class SeatReservationInfoSelectResponseDto {
     private Integer seatNumber;
-    private Integer startTime;
+    private Long startTime;
     private Long timeInUse;
 
     private LocalDateTime createDate;
 
     private String period;
-
-    public SeatReservationInfoSelectResponseDto(SeatReservationInfoSelectResponseDto entity) {
-        this.seatNumber = entity.getSeatNumber();
-        this.startTime = entity.getStartTime();
-        this.timeInUse = entity.getTimeInUse();
-        this.createDate = entity.getCreateDate();
-        this.period = entity.getPeriod();
-    }
 }

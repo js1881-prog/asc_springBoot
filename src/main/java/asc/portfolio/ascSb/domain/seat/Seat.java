@@ -43,8 +43,9 @@ public class Seat {
         this.seatState = SeatStateType.UNRESERVED;
     }
 
-    public void reserveSeat(User user) {
+    public void reserveSeat(User user, Ticket ticket) {
         this.user = user;
+        this.ticket = ticket;
         this.seatState = SeatStateType.RESERVED;
     }
 

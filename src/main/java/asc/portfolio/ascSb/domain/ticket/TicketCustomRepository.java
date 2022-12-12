@@ -13,7 +13,9 @@ public interface TicketCustomRepository {
 
     Ticket findValidTicketInfoForAdminByUserIdAndCafeName(Long id, String cafeName);
 
-    Long verifyTicket(Long userId, Long cafeId); // update가 진행된 isDeprecatedTicket 갯수를 return
+    public Optional<Ticket> findAvailableTicketByIdAndCafe(Long id, String cafeName);
+
+    Long verifyTicket(); // update가 진행된 isDeprecatedTicket 갯수를 return
 
     List<TicketForUserResponseDto> findAllTicketInfoByLoginIdAndCafe(String loginId, Cafe cafe);
 }

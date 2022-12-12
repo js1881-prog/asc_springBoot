@@ -25,12 +25,46 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
 
     @Override
     public Optional<TicketForUserResponseDto> findAvailableTicketInfoByIdAndCafeName(Long id, String cafeName) {
-        return Optional.ofNullable(query
-                .select(Projections.bean(TicketForUserResponseDto.class,
-                        ticket.isValidTicket, ticket.fixedTermTicket, ticket.partTimeTicket, ticket.remainingTime))
-                .from(ticket)
+        Ticket findTicket = query
+                .selectFrom(ticket)
+                .where(ticket.cafe.cafeName.eq(cafeName), ticket.user.id.eq(id), ticket.isValidTicket.eq(TicketStateType.VALID))
+                .fetchOne();
+
+        if (findTicket == null) {
+            return Optional.empty();
+        }
+
+        if (findTicket.isValidFixedTermTicket() || findTicket.isValidPartTimeTicket()) {
+            return findTicket.toTicketResponseDto();
+        } else {
+            log.error("Throw IllegalStateException. Ticket={}", findTicket);
+            throw new IllegalStateException();
+        }
+    }
+
+    @Override
+    public Optional<Ticket> findAvailableTicketByIdAndCafe(Long id, String cafeName) {
+        Optional<Ticket> ticketOpt = Optional.ofNullable(query
+                .selectFrom(ticket)
+
                 .where(ticket.cafe.cafeName.eq(cafeName), ticket.user.id.eq(id), ticket.isValidTicket.eq(TicketStateType.VALID))
                 .fetchOne());
+
+        if (ticketOpt.isPresent()) {
+            Ticket findTicket = ticketOpt.get();
+
+            if (findTicket.isFixedTermTicket()) {
+                if (!findTicket.isValidFixedTermTicket()) {
+                    return Optional.empty();
+                }
+            } else {
+                if (!findTicket.isValidPartTimeTicket()) {
+                    return Optional.empty();
+                }
+            }
+        }
+
+        return ticketOpt;
     }
 
     @Override
@@ -69,8 +103,7 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
         return null;
     }
 
-    @Override
-    public Long verifyTicket(Long userId, Long cafeId) {
+    public Long verifyTicket() {
         LocalDateTime date = LocalDateTime.now();
         return query
                 .update(ticket)

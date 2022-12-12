@@ -34,7 +34,7 @@ public class SeatReservationInfoCustomRepositoryImpl implements SeatReservationI
     int listSize = result.size();
     if (listSize == 0) {
       // 정보 없음
-      log.error("No valid reservation. user = {}", loginId);
+      log.debug("No valid reservation. user = {}", loginId);
       return null;
     } else if (listSize > 1) {
       // Valid 상태의 reservation info 는 한개여야 한다. 런타임 예외 필요.
