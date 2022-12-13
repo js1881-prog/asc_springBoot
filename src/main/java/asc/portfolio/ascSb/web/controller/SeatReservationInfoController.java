@@ -15,20 +15,17 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/seatReservationInfo")
-@CrossOrigin(origins = "*")
 public class SeatReservationInfoController {
 
     private final SeatReservationInfoService seatReservationInfoService;
 
-    @GetMapping("/{cafeName}")
-    public ResponseEntity<SeatReservationInfoSelectResponseDto> userSeatReservationInfo(@LoginUser User user, @PathVariable String cafeName) {
+    @GetMapping("/")
+    public ResponseEntity<SeatReservationInfoSelectResponseDto> userSeatReservationInfo(@LoginUser User user) {
         if(user == null) {
             log.error("유효하지 않은 사용자입니다. 다시 로그인 해주세요");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else if (cafeName == null) {
-            log.error("Incorrect cafeName");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(seatReservationInfoService.showUserSeatReservationInfo(user.getLoginId(), cafeName), HttpStatus.OK);
+        return new ResponseEntity<>(seatReservationInfoService.showUserSeatReservationInfo(
+                user.getLoginId(), user.getCafe().getCafeName()), HttpStatus.OK);
     }
 }

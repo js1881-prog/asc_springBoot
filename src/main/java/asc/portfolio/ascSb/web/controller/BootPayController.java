@@ -20,11 +20,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
-
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/pay")
 public class BootPayController {
 
@@ -71,23 +69,21 @@ public class BootPayController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         String orderReceiptId = dto.getData().getReceipt_id();
         Orders orders = orderService.findReceiptOrderId(orderReceiptId);
         log.info("findOrders완료");
-        System.out.println(orders.getReceiptOrderId());
         int price = Math.toIntExact(orders.getOrderPrice());
-        System.out.println(price);
 
         if (dto.getStatus() == 200 && dto.getData().getPrice() == price && dto.getData().getStatus() == 2) {
-            log.info("검증완료");
-            /* 검증 완료시 orders 상태 Done(완료) 변경, Product에 제품추가, Ticket에 이용권추가 */
+            log.info("BootPay 서버 <-> 제품 검증 완료");
+            /* 검증 완료시 orders 상태 Done(완료)으로 변경, Product에 제품추가, Ticket에 이용권추가 */
             orders.completeOrder();
             productService.saveProduct(user, dto, orders);
             Long ticketSaveResult = ticketService.saveProductToTicket(user, dto, orders);
-            if(ticketSaveResult == 0L) {
-                return ResponseEntity.badRequest().body("보유중인 티켓이 존재합니다.");
+            if(ticketSaveResult != null) {
+                return ResponseEntity.ok("OK");
             }
-            return ResponseEntity.ok("OK");
         }
 
         //서버 검증 오류시
@@ -98,12 +94,11 @@ public class BootPayController {
         orders.failOrder();
 
         //결제 오류 로그
-        //orderService.failOrder(orderId);
         String cancelDataJson = "";
         try {
             ResDefault<HashMap<String, Object>> cancelRes = api.receiptCancel(cancel);
             cancelDataJson = cancelRes.toJson();
-            log.info("결제실패 {}", cancelDataJson);
+            log.info("결제실패 Log {}", cancelDataJson);
         } catch (Exception e) {
             e.printStackTrace();
         }

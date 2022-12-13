@@ -18,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/cafe")
-@CrossOrigin(origins = "*")
 public class CafeController {
 
   private final CafeService cafeService;

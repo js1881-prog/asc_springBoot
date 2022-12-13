@@ -22,7 +22,6 @@ public class ProductListResponseDto {
     private String description;
     private Integer productPrice;
     private String productLabel;
-
     private LocalDateTime createDate;
 
     public ProductListResponseDto(Product product) {

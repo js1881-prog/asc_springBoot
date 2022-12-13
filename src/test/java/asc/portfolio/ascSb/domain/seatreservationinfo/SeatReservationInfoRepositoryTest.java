@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
+@Commit
 public class SeatReservationInfoRepositoryTest {
 
     @Autowired
@@ -36,41 +37,4 @@ public class SeatReservationInfoRepositoryTest {
     @Autowired
     SeatRepository seatRepository;
 
-    private void insertSeatReservationInfoData() {
-        User user = User.builder()
-                .loginId("ascasc123")
-                .password("asdasd123")
-                .role(UserRoleType.USER)
-                .build();
-        userRepository.save(user);
-
-        Cafe cafe = Cafe.builder()
-                .cafeName("tCafe_0")
-                .build();
-        cafeRepository.save(cafe);
-
-        Seat seat = Seat.builder()
-                .cafe(cafe)
-                .seatNumber(1)
-                .build();
-        seatRepository.save(seat);
-
-        Ticket ticket = Ticket.builder().build();
-        ticketRepository.save(ticket);
-
-        SeatReservationInfo seatReservationInfo = SeatReservationInfo.builder()
-                .cafe(cafe)
-                .user(user)
-                .ticket(ticket)
-                .seat(seat)
-                .build();
-        seatReservationInfoRepository.save(seatReservationInfo); // 지우셔도 됩니다 단순 Data Insert용 by padonan
-    }
-
-    @Test
-    public void findSeatInfoByUserIdAndCafeName_테스트() {
-        insertSeatReservationInfoData();
-
-        seatReservationInfoRepository.findSeatInfoByUserIdAndCafeName("ascasc123", "tCafe_0");
-    }
 }

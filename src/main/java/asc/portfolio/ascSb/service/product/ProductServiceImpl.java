@@ -30,6 +30,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final UserRepository userRepository;
 
+
     @Override
     public List<ProductListResponseDto> adminSalesManagementOneUser(String userLoginId, String cafeName) {
         Optional<User> user = userRepository.findByLoginId(userLoginId);
@@ -44,11 +45,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> adminSalesManagementWithStartDate(String cafeName, String dateString) {
+    public List<ProductListResponseDto> adminSalesManagementWithStartDate(String cafeName, String dateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         LocalDateTime parse = LocalDateTime.parse(dateString, formatter);
-        List<Product> dto = productRepository.findProductListByUserIdAndCafeNameAndStartTime(cafeName, parse);
-        return dto;
+        return productRepository.findProductListByUserIdAndCafeNameAndStartTime(cafeName,parse).stream()
+                .map(ProductListResponseDto::new)
+                .collect(Collectors.toList());
+
+//        List<Product> dto = productRepository.findProductListByUserIdAndCafeNameAndStartTime(cafeName, parse);
+//        return dto;
     }
 
     @Override

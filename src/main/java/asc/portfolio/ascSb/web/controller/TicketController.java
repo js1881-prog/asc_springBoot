@@ -18,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/ticket")
-@CrossOrigin(origins = "*")
 public class TicketController {
 
     private final TicketService ticketService;

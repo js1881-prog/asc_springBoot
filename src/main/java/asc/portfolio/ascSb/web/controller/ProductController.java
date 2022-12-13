@@ -27,7 +27,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/product")
 public class ProductController {
 
@@ -47,7 +46,7 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/admin/management/start-time/{cafeName}", method = RequestMethod.GET)
-    public ResponseEntity<List<Product>> productInfoWithConstTerm(@LoginUser User user, @PathVariable String cafeName,
+    public ResponseEntity<List<ProductListResponseDto>> productInfoWithConstTerm(@LoginUser User user, @PathVariable String cafeName,
                                                                    @RequestHeader(value = "dateString") String dateString) {
         if(user.getRole() != UserRoleType.ADMIN) {
             log.error("관리자 계정이 아닙니다.");
@@ -83,8 +82,10 @@ public class ProductController {
 
             ResDefault<HashMap<String, Object>> res = api.receiptCancel(cancel);
             log.info(res.message);
-            productService.cancelProduct(orderService.findReceiptIdToProductLabel(receiptId).getProductLabel()); // 취소한 product productState Enum을 Cancel로 처리
-            ticketService.deleteTicket(orderService.findReceiptIdToProductLabel(receiptId).getProductLabel()); // 환불한 티켓을 삭제
+            // 환불한 product productState Enum을 Cancel로 처리
+            productService.cancelProduct(productLabel.substring(11));
+            // 환불한 티켓을 Invalid 처리
+            ticketService.setInvalidTicket(productLabel.substring(11));
 
             return new ResponseEntity<>("환불완료", HttpStatus.OK);
 

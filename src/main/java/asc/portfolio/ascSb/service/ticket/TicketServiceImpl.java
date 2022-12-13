@@ -3,7 +3,6 @@ package asc.portfolio.ascSb.service.ticket;
 import asc.portfolio.ascSb.commonenum.product.ProductNameType;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.order.Orders;
-import asc.portfolio.ascSb.domain.product.Product;
 import asc.portfolio.ascSb.domain.product.ProductRepository;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.ticket.TicketRepository;
@@ -42,6 +41,7 @@ public class TicketServiceImpl implements TicketService {
             Optional<TicketForUserResponseDto> optionalDto = ticketRepository.findAvailableTicketInfoByIdAndCafeName(id, cafeName);
             if(optionalDto.isPresent()) {
                 TicketForUserResponseDto dto = optionalDto.get();
+
                 if(dto.getFixedTermTicket() != null) {
                     long termData = Duration.between(dateTime, dto.getFixedTermTicket()).toMinutes();
                     dto.setPeriod(termData);
@@ -57,9 +57,27 @@ public class TicketServiceImpl implements TicketService {
     public Long saveProductToTicket(User user, BootPayOrderDto bootPayOrderDto, Orders orders) {
         Optional<TicketForUserResponseDto> findUserValidTicket =
                 ticketRepository.findAvailableTicketInfoByIdAndCafeName(user.getId(), user.getCafe().getCafeName());
+
         if (findUserValidTicket.isPresent()) {
-            log.info("이미 사용중인 티켓이 존재합니다."); // TODO 사용중인 티켓에 시간(기간)추가 or 결제 취소 시킬지 여부
-            return 0L;
+            log.info("이미 사용중인 티켓이 존재합니다"); // 사용중인 티켓에 시간(기간)추가
+            String productLabel = findUserValidTicket.get().getProductLabel();
+            Ticket ticket = ticketRepository.findByProductLabelContains(productLabel);
+
+            if(bootPayOrderDto.getData().getName().contains("시간")) {
+                if(ticket.getRemainingTime() == null) {
+                    ticket.updateTicketRemainingTime(0L);
+                }
+                ticket.updateTicketRemainingTime(ticket.getRemainingTime() + distinguishPartTimeTicket(orders.getOrderProductName()));
+            } else if (bootPayOrderDto.getData().getName().contains("일")) {
+                if(ticket.getFixedTermTicket() == null) {
+                    ticket.updateTicketFixedTermTicket(LocalDateTime.now());
+                }
+                ticket.updateTicketFixedTermTicket(distinguishUpdatedFixedTermTicket(orders.getOrderProductName(), ticket.getFixedTermTicket()));
+            }
+
+            Ticket saveData = ticketRepository.save(ticket);
+            log.info("사용 중인 티켓 변경");
+            return saveData.getId();
         }
         TicketRequestDto ticketDto = TicketRequestDto.builder()
                 .user(user)
@@ -98,9 +116,10 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void deleteTicket(String productLabel) {
+    public void setInvalidTicket(String productLabel) {
         Ticket deleteTicket = ticketRepository.findByProductLabelContains(productLabel);
-        ticketRepository.delete(deleteTicket);
+        deleteTicket.changeTicketStateToInvalid();
+        ticketRepository.save(deleteTicket);
     }
 
     private LocalDateTime distinguishFixedTermTicket(ProductNameType orderName) {
@@ -116,6 +135,22 @@ public class TicketServiceImpl implements TicketService {
             case TODAY_FIXED_TERM_TICKET:
                 return LocalDateTime.now().plusDays(1);
             default: return LocalDateTime.now();
+        }
+    }
+
+    private LocalDateTime distinguishUpdatedFixedTermTicket(ProductNameType orderName, LocalDateTime fixedTermTicket) {
+        switch (orderName) {
+            case FOUR_WEEK_FIXED_TERM_TICKET:
+                return fixedTermTicket.plusDays(28);
+            case THREE_WEEK_FIXED_TERM_TICKET:
+                return fixedTermTicket.plusDays(21);
+            case TWO_WEEK_FIXED_TERM_TICKET:
+                return fixedTermTicket.plusDays(14);
+            case WEEK_FIXED_TERM_TICKET:
+                return fixedTermTicket.plusDays(7);
+            case TODAY_FIXED_TERM_TICKET:
+                return fixedTermTicket.plusDays(1);
+            default: return fixedTermTicket;
         }
     }
 

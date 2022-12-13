@@ -96,7 +96,6 @@ class SeatServiceTest {
         ticketRepository.flush();
 
         Boolean isReserved = seatService.reserveSeat(user, cafe, 5);
-        log.info("isReserved={}", isReserved);
 
         //when
         List<SeatSelectResponseDto> listA = seatService.showCurrentSeatState(cafe.getCafeName());
@@ -113,14 +112,12 @@ class SeatServiceTest {
         int countA = 0;
         int countB = 0;
 
-        log.info("sizeof listA={}", listA.size());
         for (SeatSelectResponseDto dto : listA) {
             if (dto.getSeatState() == SeatStateType.RESERVED) {
                 countA++;
             }
         }
 
-        log.info("sizeof listB={}", listB.size());
         for (SeatSelectResponseDto dto : listB) {
             if (dto.getSeatState() == SeatStateType.RESERVED) {
                 countB++;

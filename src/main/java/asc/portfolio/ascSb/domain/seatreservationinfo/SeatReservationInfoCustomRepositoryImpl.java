@@ -10,6 +10,7 @@ import com.querydsl.core.types.Projections;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static asc.portfolio.ascSb.domain.seatreservationinfo.QSeatReservationInfo.*;
 
@@ -45,6 +46,8 @@ public class SeatReservationInfoCustomRepositoryImpl implements SeatReservationI
 
   @Override
   public SeatReservationInfoSelectResponseDto findSeatInfoByUserIdAndCafeName(String loginId, String cafeName) {
+    System.out.println(loginId);
+    System.out.println(cafeName);
       return query
               .select(Projections.bean(SeatReservationInfoSelectResponseDto.class,
                       seatReservationInfo.seatNumber,
@@ -53,7 +56,9 @@ public class SeatReservationInfoCustomRepositoryImpl implements SeatReservationI
                       seatReservationInfo.createDate))
               .from(seatReservationInfo)
               .where(seatReservationInfo.userLoginId.eq(loginId),
-                      seatReservationInfo.ticket.isValidTicket.eq(TicketStateType.VALID))
+                      seatReservationInfo.cafeName.eq(cafeName),
+              seatReservationInfo.isValid.eq(SeatReservationInfoStateType.VALID))
               .fetchOne();
+
   }
 }

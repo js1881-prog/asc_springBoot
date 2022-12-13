@@ -41,6 +41,7 @@ public class TicketRequestDto {
     public Ticket toEntity() {
         return Ticket.builder()
                 .user(user)
+                .cafe(cafe)
                 .isValidTicket(isValidTicket)
                 .ticketPrice(ticketPrice)
                 .fixedTermTicket(fixedTermTicket)

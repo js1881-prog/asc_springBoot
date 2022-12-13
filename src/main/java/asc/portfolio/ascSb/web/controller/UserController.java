@@ -20,7 +20,6 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user")
-@CrossOrigin(origins = "*") //  flutter 에서 rest 접근을 위한 어노테이션 .
 public class UserController {
 
   private final UserService userService;

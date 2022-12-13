@@ -12,7 +12,7 @@ public interface ProductService {
 
     List<ProductListResponseDto> adminSalesManagementOneUser(String userLoginId, String cafeName);
 
-    List<Product> adminSalesManagementWithStartDate(String cafeName, String dateString);
+    List<ProductListResponseDto> adminSalesManagementWithStartDate(String cafeName, String dateString);
 
     Product saveProduct(User user, BootPayOrderDto dto, Orders orders);
 

@@ -21,5 +21,5 @@ public interface TicketService {
 
     TicketForAdminResponseDto adminLookUpUserValidTicket(String userLoginID, String cafeName);
 
-    void deleteTicket(String productLabel);
+    void setInvalidTicket(String productLabel);
 }

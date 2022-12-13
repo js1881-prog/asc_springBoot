@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
-import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -97,7 +95,6 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
                 return null;
             }
         } catch(NullPointerException exception) {
-            log.info("Valid 티켓이 존재하지 않습니다.");
             exception.printStackTrace();
         }
         return null;
@@ -116,10 +113,12 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
     public List<TicketForUserResponseDto> findAllTicketInfoByLoginIdAndCafe(String loginId, Cafe cafe) {
         return query
                 .select(Projections.bean(TicketForUserResponseDto.class,
-                        ticket.isValidTicket, ticket.fixedTermTicket, ticket.partTimeTicket, ticket.remainingTime))
+                        ticket.isValidTicket, ticket.fixedTermTicket, ticket.partTimeTicket, ticket.remainingTime, ticket.productLabel))
                 .from(ticket)
                 .where(ticket.cafe.eq(cafe), ticket.user.loginId.eq(loginId))
                 .orderBy(ticket.isValidTicket.desc(), ticket.createDate.asc())
                 .fetch();
     }
 }
+
+

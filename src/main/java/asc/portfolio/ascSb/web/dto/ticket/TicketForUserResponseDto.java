@@ -17,6 +17,8 @@ public class TicketForUserResponseDto {
     private Long partTimeTicket; // 결제한 시간제 티켓시간 // 50시간, 100시간
     private Long remainingTime; // 시간제 티켓 남은시간
 
+    private String productLabel;
+
     private long period;
 
     public void setTicketToTicketResponseDto(Ticket ticket) {
@@ -24,5 +26,16 @@ public class TicketForUserResponseDto {
         fixedTermTicket = ticket.getFixedTermTicket();
         partTimeTicket = ticket.getPartTimeTicket();
         remainingTime = ticket.getRemainingTime();
+        productLabel = ticket.getProductLabel();
+    }
+
+    public Ticket toEntity() {
+        return Ticket.builder()
+                .isValidTicket(isValidTicket)
+                .fixedTermTicket(fixedTermTicket)
+                .partTimeTicket(partTimeTicket)
+                .remainingTime(remainingTime)
+                .productLabel(productLabel)
+                .build();
     }
 }

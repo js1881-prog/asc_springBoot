@@ -138,4 +138,8 @@ public class Ticket extends BaseTimeEntity {
 
         return Optional.of(dto);
     }
+
+    public void updateTicketFixedTermTicket(LocalDateTime fixedTermTicket) { this.fixedTermTicket = fixedTermTicket; }
+
+    public void updateTicketRemainingTime(Long remainingTime) { this.remainingTime = remainingTime; }
 }

@@ -16,7 +16,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/seat")
 public class SeatController {
 
@@ -53,7 +52,6 @@ public class SeatController {
         if (!isSuccess) {
             return new ResponseEntity<>("No seat where the user sat", HttpStatus.BAD_REQUEST);
         }
-
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
