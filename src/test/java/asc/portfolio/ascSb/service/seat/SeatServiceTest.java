@@ -95,7 +95,7 @@ class SeatServiceTest {
         ticketRepository.save(ticket);
         ticketRepository.flush();
 
-        Boolean isReserved = seatService.reserveSeat(user, cafe, 5);
+        Boolean isReserved = seatService.reserveSeat(user, 5, 10L);
         log.info("isReserved={}", isReserved);
 
         //when

@@ -11,7 +11,7 @@ public interface SeatService {
 
     public Boolean exitSeat(User user);
 
-    public Boolean reserveSeat(User user, Cafe cafe, int seatNumber);
+    public Boolean reserveSeat(User user, Integer seatNumber, Long startTime);
 
     public void exitSeatBySeatNumber(Cafe cafe, int seatNumber);
 }

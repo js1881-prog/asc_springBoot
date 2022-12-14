@@ -81,10 +81,15 @@ public class SeatServiceImpl implements SeatService {
     }
 
     @Override
-    public Boolean reserveSeat(User user, Cafe cafe, int seatNumber) {
+    public Boolean reserveSeat(User user, Integer seatNumber, Long startTime) {
+        Cafe cafe = user.getCafe();
         if (cafe == null) {
             log.error("선택 된 카페가 없는 유저 입니다.");
             return false;
+        }
+
+        if ((seatNumber == null) || (startTime == null)) {
+            throw new NullPointerException("NullPointerException : seatNumber, startTime");
         }
 
         Seat findSeat = seatRepository.findByCafeAndSeatNumber(cafe, seatNumber);
@@ -115,6 +120,7 @@ public class SeatServiceImpl implements SeatService {
                 .cafe(cafe)
                 .seat(findSeat)
                 .ticket(ticketOpt.get())
+                .startTime(startTime)
                 .build();
         reservationInfoRepository.save(reservationInfo);
 

@@ -22,20 +22,26 @@ public class SeatController {
 
     private final SeatService seatService;
 
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<String> nullPointExHandle(NullPointerException ex) {
+        log.info("ExceptionHandle ex", ex);
+        return new ResponseEntity<>("Bad Request", HttpStatus.BAD_REQUEST);
+    }
+
     @GetMapping("/{cafeName}")
     public List<SeatSelectResponseDto> seatState(@PathVariable String cafeName) {
         return seatService.showCurrentSeatState(cafeName);
     }
 
-    @PostMapping("/reservation/{seatNumber}")
-    public ResponseEntity<String> reserveSeat(@LoginUser User user, @PathVariable int seatNumber) {
+    @PostMapping("/reservation/")
+    public ResponseEntity<String> reserveSeat(@LoginUser User user, @RequestParam("seat") Integer seatNumber, @RequestParam("time") Long startTime) {
 
         //선택 된 카페가 없음.
         if (user.getCafe() == null) {
             return new ResponseEntity<>("Select a cafe first", HttpStatus.BAD_REQUEST);
         }
 
-        Boolean isSuccess = seatService.reserveSeat(user, user.getCafe(), seatNumber);
+        Boolean isSuccess = seatService.reserveSeat(user, seatNumber, startTime);
         if (!isSuccess) {
             return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
         }
