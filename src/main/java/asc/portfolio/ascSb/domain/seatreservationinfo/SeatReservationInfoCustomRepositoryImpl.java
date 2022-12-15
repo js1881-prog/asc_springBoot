@@ -61,4 +61,14 @@ public class SeatReservationInfoCustomRepositoryImpl implements SeatReservationI
               .fetchOne();
 
   }
+
+  @Override
+  public SeatReservationInfo findValidSeatRezInfoByCafeNameAndSeatNumber(String cafeName, Integer seatNumber) {
+    return query
+            .selectFrom(seatReservationInfo)
+            .where(seatReservationInfo.isValid.eq(SeatReservationInfoStateType.VALID),
+                    seatReservationInfo.cafeName.eq(cafeName),
+                    seatReservationInfo.seatNumber.eq(seatNumber))
+            .fetchOne();
+  }
 }

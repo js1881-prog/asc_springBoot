@@ -35,7 +35,7 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
         }
     }
 
-    public List<SeatSelectResponseDto> findSeatNumberAndSeatState(String cafeName) {
+    public List<SeatSelectResponseDto> findSeatNumberAndSeatStateList(String cafeName) {
         updateSeatState(cafeName);
 
         return query
@@ -47,7 +47,7 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
     }
 
     @Override
-    public Seat findByCafeAndSeatNumber(Cafe cafeObject, int seatNumber) {
+    public Seat findByCafeAndSeatNumber(Cafe cafeObject, Integer seatNumber) {
         return query
                 .select(seat)
                 .from(seat)

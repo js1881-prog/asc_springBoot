@@ -1,5 +1,6 @@
 package asc.portfolio.ascSb.service.seat;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
+import asc.portfolio.ascSb.domain.cafe.CafeRepository;
 import asc.portfolio.ascSb.domain.seat.Seat;
 import asc.portfolio.ascSb.domain.seat.SeatRepository;
 import asc.portfolio.ascSb.domain.seat.SeatStateType;
@@ -8,6 +9,7 @@ import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfoReposit
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.ticket.TicketRepository;
 import asc.portfolio.ascSb.domain.user.User;
+import asc.portfolio.ascSb.web.dto.seat.SeatResponseDto;
 import asc.portfolio.ascSb.web.dto.seat.SeatSelectResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SeatServiceImpl implements SeatService {
 
+    private final CafeRepository cafeRepository;
+
     private final SeatRepository seatRepository;
 
     private final SeatReservationInfoRepository reservationInfoRepository;
@@ -31,10 +35,48 @@ public class SeatServiceImpl implements SeatService {
     private final TicketRepository ticketRepository;
 
     @Override
-    public List<SeatSelectResponseDto> showCurrentSeatState(String cafeName) {
-        return seatRepository.findSeatNumberAndSeatState(cafeName).stream()
+    public List<SeatSelectResponseDto> showCurrentAllSeatState(String cafeName) {
+        return seatRepository.findSeatNumberAndSeatStateList(cafeName).stream()
                 .map(SeatSelectResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public SeatResponseDto showSeatStateOne(String cafeName, Integer seatNumber) {
+        if ((cafeName == null) || (seatNumber == null)) {
+            log.info("NullPointer Ex : cafeName, seatNumber");
+            throw new NullPointerException("NullPointer Ex : cafeName, seatNumber");
+        }
+
+        Optional<Cafe> cafeOpt = cafeRepository.findByCafeName(cafeName);
+        Cafe cafe = cafeOpt.orElseThrow(() -> new IllegalArgumentException("Unknown cafe name"));
+        Seat seat = seatRepository.findByCafeAndSeatNumber(cafe, seatNumber);
+        if (seat.getSeatState() == SeatStateType.UNRESERVED) {
+            return SeatResponseDto.setUnReservedSeat(seatNumber, seat.getSeatState());
+        }
+
+        Ticket ticket = seat.getTicket();
+        SeatReservationInfo rezInfo = reservationInfoRepository.findValidSeatRezInfoByCafeNameAndSeatNumber(cafe.getCafeName(), seat.getSeatNumber());
+
+        if (ticket.isValidFixedTermTicket()) {
+            return SeatResponseDto.setFixedTermSeat(
+                    seatNumber,
+                    seat.getSeatState(),
+                    rezInfo.getStartTime(),
+                    rezInfo.updateTimeInUse(),
+                    ticket.getFixedTermTicket());
+        } else if (ticket.isValidPartTimeTicket()) {
+            return SeatResponseDto.setPartTimeSeat(
+                    seatNumber,
+                    seat.getSeatState(),
+                    rezInfo.getStartTime(),
+                    rezInfo.updateTimeInUse(),
+                    ticket.getPartTimeTicket(),
+                    ticket.getRemainingTime());
+        } else {
+            log.error("IllegalState Ex. Ticket id ={}", ticket.getId());
+            throw new IllegalStateException("IllegalState Ex. Ticket id =" + ticket.getId());
+        }
     }
 
     @Override
@@ -81,10 +123,15 @@ public class SeatServiceImpl implements SeatService {
     }
 
     @Override
-    public Boolean reserveSeat(User user, Cafe cafe, int seatNumber) {
+    public Boolean reserveSeat(User user, Integer seatNumber, Long startTime) {
+        Cafe cafe = user.getCafe();
         if (cafe == null) {
             log.error("선택 된 카페가 없는 유저 입니다.");
             return false;
+        }
+
+        if ((seatNumber == null) || (startTime == null)) {
+            throw new NullPointerException("NullPointerException : seatNumber, startTime");
         }
 
         Seat findSeat = seatRepository.findByCafeAndSeatNumber(cafe, seatNumber);
@@ -115,6 +162,7 @@ public class SeatServiceImpl implements SeatService {
                 .cafe(cafe)
                 .seat(findSeat)
                 .ticket(ticketOpt.get())
+                .startTime(startTime)
                 .build();
         reservationInfoRepository.save(reservationInfo);
 

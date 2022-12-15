@@ -1,6 +1,10 @@
 package asc.portfolio.ascSb.web.controller;
 
+import asc.portfolio.ascSb.domain.cafe.CafeRepository;
+import asc.portfolio.ascSb.domain.product.ProductRepository;
 import asc.portfolio.ascSb.domain.seat.SeatRepository;
+import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfoRepository;
+import asc.portfolio.ascSb.domain.ticket.TicketRepository;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
 import asc.portfolio.ascSb.web.dto.user.UserLoginRequestDto;
@@ -31,10 +35,22 @@ class UserControllerTest {
   public int port;
 
   @Autowired
+  private ProductRepository productRepository;
+
+  @Autowired
+  private SeatReservationInfoRepository seatReservationInfoRepository;
+
+  @Autowired
+  private TicketRepository ticketRepository;
+
+  @Autowired
   private UserRepository userRepository;
 
   @Autowired
   private SeatRepository seatRepository;
+
+  @Autowired
+  private CafeRepository cafeRepository;
 
   @Autowired
   private TestRestTemplate restTemplate;
@@ -45,8 +61,12 @@ class UserControllerTest {
   @AfterEach
   public void clearRepository2() {
     //참조 무결설 제약 위반 Exception 해결을 위해 Seat DB도 초기화
-    seatRepository.deleteAll();
-    userRepository.deleteAll();
+    productRepository.deleteAllInBatch();
+    seatReservationInfoRepository.deleteAllInBatch();
+    ticketRepository.deleteAllInBatch();
+    seatRepository.deleteAllInBatch();
+    userRepository.deleteAllInBatch();
+    cafeRepository.deleteAllInBatch();
   }
 
   @Test
