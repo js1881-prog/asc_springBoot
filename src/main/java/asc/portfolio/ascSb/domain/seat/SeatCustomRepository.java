@@ -4,12 +4,11 @@ import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.web.dto.seat.SeatSelectResponseDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface SeatCustomRepository {
-    List<SeatSelectResponseDto> findSeatNumberAndSeatState(String cafeName);
+    List<SeatSelectResponseDto> findSeatNumberAndSeatStateList(String cafeName);
 
-    Seat findByCafeAndSeatNumber(Cafe cafeObject, int seatNumber);
+    Seat findByCafeAndSeatNumber(Cafe cafeObject, Integer seatNumber);
 
     Seat findByCafeNameAndSeatNumber(String cafeName, int seatNumber);
 }

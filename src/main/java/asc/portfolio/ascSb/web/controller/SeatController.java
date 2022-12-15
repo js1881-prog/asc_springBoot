@@ -3,8 +3,9 @@ package asc.portfolio.ascSb.web.controller;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRoleType;
 import asc.portfolio.ascSb.jwt.LoginUser;
-import asc.portfolio.ascSb.service.seat.SeatService;
+import asc.portfolio.ascSb.web.dto.seat.SeatResponseDto;
 import asc.portfolio.ascSb.web.dto.seat.SeatSelectResponseDto;
+import asc.portfolio.ascSb.service.seat.SeatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,13 +25,28 @@ public class SeatController {
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<String> nullPointExHandle(NullPointerException ex) {
-        log.info("ExceptionHandle ex", ex);
+        log.info("NullPointerException ex", ex);
+        return new ResponseEntity<>("Bad Request", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> illegalArgumentExHandle(IllegalArgumentException ex) {
+        log.info("IllegalArgumentException ex", ex);
         return new ResponseEntity<>("Bad Request", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/{cafeName}")
-    public List<SeatSelectResponseDto> seatState(@PathVariable String cafeName) {
-        return seatService.showCurrentSeatState(cafeName);
+    public ResponseEntity<List<SeatSelectResponseDto>> seatStateList(@PathVariable String cafeName) {
+        if(cafeName.isEmpty()) {
+            log.info("cafeName이 비어 있습니다.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(seatService.showCurrentAllSeatState(cafeName), HttpStatus.OK);
+    }
+
+    @GetMapping("/one")
+    public ResponseEntity<SeatResponseDto> seatStateOne(@RequestParam("cafe-name") String cafeName, @RequestParam("seat") Integer SeatNumber) {
+        return new ResponseEntity<>(seatService.showSeatStateOne(cafeName, SeatNumber), HttpStatus.OK);
     }
 
     @PostMapping("/reservation/")
