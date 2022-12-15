@@ -63,12 +63,14 @@ public class SeatServiceImpl implements SeatService {
                     seatNumber,
                     seat.getSeatState(),
                     rezInfo.getStartTime(),
+                    rezInfo.updateTimeInUse(),
                     ticket.getFixedTermTicket());
         } else if (ticket.isValidPartTimeTicket()) {
             return SeatResponseDto.setPartTimeSeat(
                     seatNumber,
                     seat.getSeatState(),
                     rezInfo.getStartTime(),
+                    rezInfo.updateTimeInUse(),
                     ticket.getPartTimeTicket(),
                     ticket.getRemainingTime());
         } else {

@@ -17,6 +17,7 @@ public class SeatResponseDto {
 
     //Form SeatReservationInfo
     private Long startTime;
+    private Long timeInUse;
 
     //From Ticket
     private LocalDateTime fixedTermTicket;
@@ -24,10 +25,11 @@ public class SeatResponseDto {
     private Long remainingTime;
 
     @Builder
-    private SeatResponseDto(Integer seatNumber, SeatStateType seatState, Long startTime, LocalDateTime fixedTermTicket, Long partTimeTicket, Long remainingTime) {
+    private SeatResponseDto(Integer seatNumber, SeatStateType seatState, Long startTime, Long timeInUse, LocalDateTime fixedTermTicket, Long partTimeTicket, Long remainingTime) {
         this.seatNumber = seatNumber;
         this.seatState = seatState;
         this.startTime = startTime;
+        this.timeInUse = timeInUse;
         this.fixedTermTicket = fixedTermTicket;
         this.partTimeTicket = partTimeTicket;
         this.remainingTime = remainingTime;
@@ -42,21 +44,23 @@ public class SeatResponseDto {
     }
 
     //정적 팩토리 메서드
-    public static SeatResponseDto setFixedTermSeat(Integer seatNumber, SeatStateType seatState, Long startTime, LocalDateTime fixedTermTicket) {
+    public static SeatResponseDto setFixedTermSeat(Integer seatNumber, SeatStateType seatState, Long startTime, Long timeInUse, LocalDateTime fixedTermTicket) {
         return SeatResponseDto.builder()
                 .seatNumber(seatNumber)
                 .seatState(seatState)
                 .startTime(startTime)
+                .timeInUse(timeInUse)
                 .fixedTermTicket(fixedTermTicket)
                 .build();
     }
 
     //정적 팩토리 메서드
-    public static SeatResponseDto setPartTimeSeat(Integer seatNumber, SeatStateType seatState, Long startTime, Long partTimeTicket, Long remainingTime) {
+    public static SeatResponseDto setPartTimeSeat(Integer seatNumber, SeatStateType seatState, Long startTime, Long timeInUse, Long partTimeTicket, Long remainingTime) {
         return SeatResponseDto.builder()
                 .seatNumber(seatNumber)
                 .seatState(seatState)
                 .startTime(startTime)
+                .timeInUse(timeInUse)
                 .partTimeTicket(partTimeTicket)
                 .remainingTime(remainingTime)
                 .build();
