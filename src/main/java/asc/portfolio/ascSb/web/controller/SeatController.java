@@ -1,8 +1,10 @@
 package asc.portfolio.ascSb.web.controller;
 
+import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfo;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRoleType;
 import asc.portfolio.ascSb.jwt.LoginUser;
+import asc.portfolio.ascSb.service.seatreservationinfo.SeatReservationInfoService;
 import asc.portfolio.ascSb.web.dto.seat.SeatResponseDto;
 import asc.portfolio.ascSb.web.dto.seat.SeatSelectResponseDto;
 import asc.portfolio.ascSb.service.seat.SeatService;
@@ -21,6 +23,8 @@ import java.util.List;
 public class SeatController {
 
     private final SeatService seatService;
+
+    private final SeatReservationInfoService seatReservationInfoService;
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<String> nullPointExHandle(NullPointerException ex) {
@@ -44,19 +48,31 @@ public class SeatController {
     }
 
     @GetMapping("/one")
-    public ResponseEntity<SeatResponseDto> seatStateOne(@RequestParam("cafe-name") String cafeName, @RequestParam("seat") Integer SeatNumber) {
-        return new ResponseEntity<>(seatService.showSeatStateOne(cafeName, SeatNumber), HttpStatus.OK);
+    public ResponseEntity<SeatResponseDto> seatStateOne(@LoginUser User user) {
+
+        // 유저가 사용중인 seatNumber
+        int seatNumber = seatReservationInfoService.validUserSeatReservationInfo(user).getSeatNumber();
+
+        return new ResponseEntity<>(seatService.showSeatStateOne(user.getCafe().getCafeName(), seatNumber), HttpStatus.OK);
     }
 
     @PostMapping("/reservation/")
     public ResponseEntity<String> reserveSeat(@LoginUser User user, @RequestParam("seat") Integer seatNumber, @RequestParam("time") Long startTime) {
+
+        Long checkTime = startTime;
 
         //선택 된 카페가 없음.
         if (user.getCafe() == null) {
             return new ResponseEntity<>("Select a cafe first", HttpStatus.BAD_REQUEST);
         }
 
-        Boolean isSuccess = seatService.reserveSeat(user, seatNumber, startTime);
+        // 프론트에서 보내는 startTime이 0이면 => 자리 교체 요청 => 사용중인 좌석을 찾아서 그 값을 startTime에 대입
+        if(startTime == 0) {
+             SeatReservationInfo validSeat = seatReservationInfoService.validUserSeatReservationInfo(user);
+             checkTime = validSeat.getStartTime() - validSeat.getTimeInUse();
+        }
+
+        Boolean isSuccess = seatService.reserveSeat(user, seatNumber, checkTime);
         if (!isSuccess) {
             return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
         }

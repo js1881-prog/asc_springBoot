@@ -11,7 +11,6 @@ public interface TicketCustomRepository {
 
     Optional<TicketForUserResponseDto> findAvailableTicketInfoByIdAndCafeName(Long id, String cafeName);
 
-
     Ticket findValidTicketInfoForAdminByUserIdAndCafeName(Long id, String cafeName);
 
     public Optional<Ticket> findAvailableTicketByIdAndCafe(Long id, String cafeName);

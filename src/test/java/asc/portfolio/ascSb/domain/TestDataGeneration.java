@@ -210,7 +210,7 @@ public class TestDataGeneration {
     generateCafeSeatData();
     generateUserData();
     generateAdminUserData();
-    generateTicketData();
+    //generateTicketData();
   }
 }
 

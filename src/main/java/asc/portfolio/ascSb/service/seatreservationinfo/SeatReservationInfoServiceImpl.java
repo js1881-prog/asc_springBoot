@@ -1,6 +1,9 @@
 package asc.portfolio.ascSb.service.seatreservationinfo;
 
+import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfo;
 import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfoRepository;
+import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfoStateType;
+import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.web.dto.seatReservationInfo.SeatReservationInfoSelectResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,5 +31,11 @@ public class SeatReservationInfoServiceImpl implements SeatReservationInfoServic
             log.error("존재하지 않는 SeatReservationInfo 입니다.");
         }
         return null;
+    }
+
+    @Override
+    public SeatReservationInfo validUserSeatReservationInfo(User user) {
+        return seatReservationInfoRepository.findByUserLoginIdAndIsValidAndCafeName(
+                user.getLoginId(), SeatReservationInfoStateType.VALID, user.getCafe().getCafeName());
     }
 }

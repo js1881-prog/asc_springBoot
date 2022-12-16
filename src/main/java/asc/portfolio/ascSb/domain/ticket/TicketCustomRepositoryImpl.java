@@ -44,13 +44,11 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
     public Optional<Ticket> findAvailableTicketByIdAndCafe(Long id, String cafeName) {
         Optional<Ticket> ticketOpt = Optional.ofNullable(query
                 .selectFrom(ticket)
-
                 .where(ticket.cafe.cafeName.eq(cafeName), ticket.user.id.eq(id), ticket.isValidTicket.eq(TicketStateType.VALID))
                 .fetchOne());
 
         if (ticketOpt.isPresent()) {
             Ticket findTicket = ticketOpt.get();
-
             if (findTicket.isFixedTermTicket()) {
                 if (!findTicket.isValidFixedTermTicket()) {
                     return Optional.empty();
@@ -61,7 +59,6 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
                 }
             }
         }
-
         return ticketOpt;
     }
 
@@ -78,18 +75,18 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
                             qTicket.remainingTime.isNotNull(),
                             qTicket.remainingTime.gt(0)
                     )
-                    .fetchOne());
+                    .fetchOne()); // 시간제 티켓이 있는지 확인
             Optional<Ticket> checkFixedTermIsNotNull = Optional.ofNullable(query.select(qTicketTwo)
                     .from(qTicketTwo)
                     .where(qTicketTwo.user.id.eq(id), qTicketTwo.cafe.cafeName.eq(cafeName),
                             qTicketTwo.fixedTermTicket.isNotNull(),
                             qTicketTwo.fixedTermTicket.gt(now)
                     )
-                    .fetchOne());
+                    .fetchOne()); // 기간제 티켓이 있는지 확인
             if(checkRemainTimeIsNotNull.isPresent()) {
-                return checkRemainTimeIsNotNull.get();
+                return checkRemainTimeIsNotNull.get(); // 시간제 티켓이 존재 => 시간제 티켓 return
             } else if (checkFixedTermIsNotNull.isPresent()) {
-                return checkFixedTermIsNotNull.get();
+                return checkFixedTermIsNotNull.get(); // 기간제 티켓이 존재 = > 기간제 티켓 return
             } else {
                 log.info("Valid 티켓이 존재하지 않습니다.");
                 return null;
@@ -105,7 +102,7 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
         return query
                 .update(ticket)
                 .set(ticket.isValidTicket, TicketStateType.INVALID)
-                .where(ticket.fixedTermTicket.lt(date))
+                .where(ticket.fixedTermTicket.lt(date), ticket.remainingTime.loe(0L))
                 .execute();
     }
 

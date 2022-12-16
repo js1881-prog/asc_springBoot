@@ -46,8 +46,6 @@ public class SeatReservationInfoCustomRepositoryImpl implements SeatReservationI
 
   @Override
   public SeatReservationInfoSelectResponseDto findSeatInfoByUserIdAndCafeName(String loginId, String cafeName) {
-    System.out.println(loginId);
-    System.out.println(cafeName);
       return query
               .select(Projections.bean(SeatReservationInfoSelectResponseDto.class,
                       seatReservationInfo.seatNumber,
