@@ -28,7 +28,8 @@ public class TicketController {
     }
 
     @GetMapping("/lookup")
-    public ResponseEntity<List<TicketForUserResponseDto>> lookupUserTickets(@LoginUser User admin, @RequestParam("user") String targetUserLoginId) {
+    public ResponseEntity<List<TicketForUserResponseDto>> lookupUserTickets(@LoginUser User admin,
+                                                                            @RequestParam("user") String targetUserLoginId) {
         if (admin.getRole() == UserRoleType.ADMIN) {
             if (admin.getCafe() != null) {
                 log.info("lookup tickets. user = {}", targetUserLoginId);

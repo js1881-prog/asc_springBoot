@@ -91,7 +91,7 @@ class SeatServiceTest {
         ticketRepository.save(ticket);
 
         Boolean isReserved = seatService.reserveSeat(user, 5, 10L);
-        log.info("isReserved={}", isReserved);
+        //log.info("isReserved={}", isReserved);
 
         //when
         List<SeatSelectResponseDto> listA = seatService.showCurrentAllSeatState(cafe.getCafeName());
@@ -168,7 +168,7 @@ class SeatServiceTest {
         ticketRepository.save(ticket);
 
         Boolean isReserved = seatService.reserveSeat(user, 5, 10L);
-        log.info("isReserved={}", isReserved);
+        //log.info("isReserved={}", isReserved);
 
         //when
         SeatResponseDto reservedSeat = seatService.showSeatStateOne(cafe.getCafeName(), 5);

@@ -19,4 +19,7 @@ public class BaseTimeEntity {
 
     @LastModifiedBy
     private LocalDateTime modifiedDate;
+
+    //For testing
+    public void setCreateDate(LocalDateTime time) { this.createDate = time; }
 }

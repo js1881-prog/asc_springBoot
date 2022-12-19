@@ -103,14 +103,19 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public TicketForAdminResponseDto adminLookUpUserValidTicket(String userLoginId, String cafeName) {
+    public TicketForAdminResponseDto adminLookUpUserValidTicket(String userLoginId, String cafeName) throws NullPointerException {
         Optional<User> user = userRepository.findByLoginId(userLoginId);
-        if(user.isPresent()) {
-            User userDto = user.get();
-            Long id = userDto.getId();
-            Ticket ticket = ticketRepository.findValidTicketInfoForAdminByUserIdAndCafeName(id, cafeName);
-            String productNameType = productRepository.findByProductLabelContains(ticket.getProductLabel()).getProductNameType().getValue();
-            return new TicketForAdminResponseDto(ticket, productNameType);
+        try {
+            if (user.isPresent()) {
+                User userDto = user.get();
+                Long id = userDto.getId();
+                Ticket ticket = ticketRepository.findValidTicketInfoForAdminByUserIdAndCafeName(id, cafeName);
+                String productNameType = productRepository.findByProductLabelContains(ticket.getProductLabel()).getProductNameType().getValue();
+                return new TicketForAdminResponseDto(ticket, productNameType);
+            }
+        } catch (NullPointerException exception) {
+            log.info("유저의 유효한 티켓이 존재하지 않습니다.");
+            exception.printStackTrace();
         }
         return null;
     }

@@ -12,7 +12,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static asc.portfolio.ascSb.domain.cafe.QCafe.cafe;
 import static asc.portfolio.ascSb.domain.ticket.QTicket.ticket;
+import static asc.portfolio.ascSb.domain.user.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
@@ -66,19 +68,23 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
     public Ticket findValidTicketInfoForAdminByUserIdAndCafeName(Long id, String cafeName) throws NullPointerException {
         LocalDateTime now = LocalDateTime.now();
         QTicket qTicket = new QTicket("qT");
-        QTicket qTicketTwo = new QTicket("qF");
+        QTicket qTicketTwo = new QTicket("qTW");
 
         try {
             Optional<Ticket> checkRemainTimeIsNotNull = Optional.ofNullable(query.select(qTicket)
                     .from(qTicket)
-                    .where(qTicket.user.id.eq(id), qTicket.cafe.cafeName.eq(cafeName),
+                    .leftJoin(qTicket.user, user)
+                    .leftJoin(qTicket.cafe, cafe)
+                    .where(user.id.eq(id), cafe.cafeName.eq(cafeName),
                             qTicket.remainingTime.isNotNull(),
                             qTicket.remainingTime.gt(0)
                     )
                     .fetchOne()); // 시간제 티켓이 있는지 확인
             Optional<Ticket> checkFixedTermIsNotNull = Optional.ofNullable(query.select(qTicketTwo)
                     .from(qTicketTwo)
-                    .where(qTicketTwo.user.id.eq(id), qTicketTwo.cafe.cafeName.eq(cafeName),
+                    .leftJoin(qTicketTwo.user, user)
+                    .leftJoin(qTicketTwo.cafe, cafe)
+                    .where(user.id.eq(id), cafe.cafeName.eq(cafeName),
                             qTicketTwo.fixedTermTicket.isNotNull(),
                             qTicketTwo.fixedTermTicket.gt(now)
                     )
@@ -87,12 +93,9 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
                 return checkRemainTimeIsNotNull.get(); // 시간제 티켓이 존재 => 시간제 티켓 return
             } else if (checkFixedTermIsNotNull.isPresent()) {
                 return checkFixedTermIsNotNull.get(); // 기간제 티켓이 존재 = > 기간제 티켓 return
-            } else {
-                log.info("Valid 티켓이 존재하지 않습니다.");
-                return null;
             }
-        } catch(NullPointerException exception) {
-            exception.printStackTrace();
+        } catch (NullPointerException exception) {
+            log.error("Valid 티켓이 존재하지 않습니다.");
         }
         return null;
     }

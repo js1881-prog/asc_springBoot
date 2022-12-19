@@ -8,10 +8,6 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import kr.co.bootpay.model.response.ResDefault;
-import kr.co.bootpay.model.response.data.BillingKeyData;
-import kr.co.bootpay.model.response.data.SubscribeBillingData;
-import kr.co.bootpay.model.response.data.SubscribeBillingReserveData;
-import kr.co.bootpay.model.response.data.TokenData;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -108,7 +104,7 @@ public class BillingService {
     }
 
 
-    static public ResDefault<HashMap<String, Object>>  reserveCancelSubscribe(BootpayObject bootpay, String reserve_id) throws Exception {
+    static public ResDefault<HashMap<String, Object>> reserveCancelSubscribe(BootpayObject bootpay, String reserve_id) throws Exception {
         if(bootpay.token == null || bootpay.token.isEmpty()) throw new Exception("token 값이 비어있습니다.");
         if(reserve_id == null || reserve_id.isEmpty()) throw new Exception("reserve_id 값이 비어있습니다.");
 

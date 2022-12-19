@@ -7,8 +7,6 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import kr.co.bootpay.model.response.ResDefault;
-import kr.co.bootpay.model.response.data.EasyUserTokenData;
-import kr.co.bootpay.model.response.data.TokenData;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;

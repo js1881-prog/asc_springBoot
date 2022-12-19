@@ -56,7 +56,8 @@ public class SeatServiceImpl implements SeatService {
         }
 
         Ticket ticket = seat.getTicket();
-        SeatReservationInfo rezInfo = reservationInfoRepository.findValidSeatRezInfoByCafeNameAndSeatNumber(cafe.getCafeName(), seat.getSeatNumber());
+        SeatReservationInfo rezInfo = reservationInfoRepository.findValidSeatRezInfoByCafeNameAndSeatNumber(cafe.getCafeName(),
+                seat.getSeatNumber());
 
         if (ticket.isValidFixedTermTicket()) {
             return SeatResponseDto.setFixedTermSeat(

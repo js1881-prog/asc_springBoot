@@ -16,6 +16,7 @@ import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
 import asc.portfolio.ascSb.domain.user.UserRoleType;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @SpringBootTest
@@ -53,7 +56,7 @@ public class TestDataGeneration {
   ProductRepository productRepository;
 
   //Test Data
-  String[] cafeName = {"tCafe_A", "tCafe_B", "tCafe_C", "tCafe_D", "tCafe_E", "tCafe_F"};
+  String[] cafeName = {"서울지점", "부산지점", "인천지점", "대전지점", "광주지점", "울산지점"};
 
   String[] cafeArea = {
           "서울특별시",
@@ -63,6 +66,9 @@ public class TestDataGeneration {
           "제주특별자치도"};
 
   String[] userName = {"tUser_A", "tUser_B", "tUser_C", "tUser_D", "tUser_E", "tUser_F"};
+
+  String[] productLabel = {"FIXED-TERM1", "FIXED-TERM2", "FIXED-TERM3", "FIXED-TERM", "FIXED-TERM",
+          "FIXED-TERM", "FIXED-TERM"};
 
 
   @BeforeEach
@@ -116,7 +122,7 @@ public class TestDataGeneration {
               .name(userString)
               .role(UserRoleType.USER)
               .build();
-
+      user.changeCafe(cafeRepository.findByCafeName("서울지점").orElse(null));
       userRepository.save(user);
     }
   }
@@ -132,7 +138,7 @@ public class TestDataGeneration {
             .role(UserRoleType.ADMIN)
             .build();
 
-    user.changeCafe(cafeRepository.findByCafeName("tCafe_A").orElse(null));
+    user.changeCafe(cafeRepository.findByCafeName("서울지점").orElse(null));
     userRepository.save(user);
   }
 
@@ -140,64 +146,39 @@ public class TestDataGeneration {
     LocalDateTime date = LocalDateTime.now();
 
     //Valid Ticket
-    for (int i = 0; i < Math.min(cafeName.length, userName.length); i++) {
       Ticket ticket = Ticket.builder()
-              .cafe(cafeRepository.findByCafeNameContains(cafeName[i]))
-              .user(userRepository.findByNameContains(userName[i]))
+              .cafe(cafeRepository.findByCafeNameContains(cafeName[0]))
+              .user(userRepository.findByNameContains(userName[1]))
               .isValidTicket(TicketStateType.VALID)
               .ticketPrice(3000)
-              .fixedTermTicket(date.plusMonths(1))
+              .productLabel("FIXED-TERM1")
+              .fixedTermTicket(date.plusDays(28))
               .partTimeTicket(null)
               .remainingTime(null)
               .build();
-
       ticketRepository.save(ticket);
-    }
-
-    //Invalid Ticket
-    for (int i = 0; i < Math.min(cafeName.length, userName.length); i++) {
-
-      for (long j = 1; j < 6; j++) {
-        Ticket ticket = Ticket.builder()
-                .cafe(cafeRepository.findByCafeNameContains(cafeName[i]))
-                .user(userRepository.findByNameContains(userName[i]))
-                .isValidTicket(TicketStateType.INVALID)
-                .ticketPrice(3000)
-                .fixedTermTicket(date.plusHours(j))
-                .partTimeTicket(null)
-                .remainingTime(null)
-                .build();
-
-        ticketRepository.save(ticket);
-      }
-
-    }
-
   }
 
   private void generateProductData() {
-    ProductStateType productState;
-    ProductNameType productName;
 
-    for(int i=0; i < 20; i ++) {
-      if (i % 2 == 0) {
-        productState = ProductStateType.SALE;
-        productName = ProductNameType.FOUR_WEEK_FIXED_TERM_TICKET;
-      } else {
-        productState = ProductStateType.CANCEL;
-        productName = ProductNameType.WEEK_FIXED_TERM_TICKET;
-      }
+    for(int i=0; i < 1000; i ++) {
       Product product = Product.builder()
-              .cafe(cafeRepository.findByCafeNameContains("tCafe_A"))
-              .productNameType(productName)
-              .user(userRepository.findByNameContains("tUser_F"))
-              .productState(productState)
+              .cafe(cafeRepository.findByCafeNameContains("서울지점"))
+              .productNameType(ProductNameType.FOUR_WEEK_FIXED_TERM_TICKET)
+              .user(userRepository.findByNameContains(userName[2]))
+              .productState(ProductStateType.SALE)
               .description("테스트 product")
-              .productPrice(1000 * i)
-              .productLabel(ProductNameType.HUNDRED_HOUR_PART_TIME_TICKET.getLabel() + LocalDateTime.now().getNano())
+              .productPrice(13100)
+              .productLabel("FIXED-TERM" + i)
               .build();
+      Random random = new Random(i);
       productRepository.save(product);
-      System.out.println(ProductNameType.TODAY_FIXED_TERM_TICKET);
+      Optional<Product> changeDays = productRepository.findById((long) i);
+      if(changeDays.isPresent()) {
+        Product get = changeDays.get();
+        get.setCreateDate(LocalDateTime.now().minusDays(random.nextInt(29)));
+        productRepository.save(get);
+      }
     }
   }
 
@@ -210,7 +191,13 @@ public class TestDataGeneration {
     generateCafeSeatData();
     generateUserData();
     generateAdminUserData();
-    //generateTicketData();
+  }
+
+  @AfterEach
+  @Test
+  public void setTestDataAfter() {
+    generateTicketData();
+    generateProductData();
   }
 }
 

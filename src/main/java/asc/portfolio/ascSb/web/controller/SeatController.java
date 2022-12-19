@@ -57,8 +57,8 @@ public class SeatController {
     }
 
     @PostMapping("/reservation/")
-    public ResponseEntity<String> reserveSeat(@LoginUser User user, @RequestParam("seat") Integer seatNumber, @RequestParam("time") Long startTime) {
-
+    public ResponseEntity<String> reserveSeat(@LoginUser User user, @RequestParam("seat") Integer seatNumber,
+                                              @RequestParam("time") Long startTime) {
         Long checkTime = startTime;
 
         //선택 된 카페가 없음.

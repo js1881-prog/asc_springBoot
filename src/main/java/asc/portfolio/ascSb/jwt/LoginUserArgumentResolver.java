@@ -38,8 +38,8 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
   }
 
   @Override
-  public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-
+  public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest,
+                                WebDataBinderFactory binderFactory) throws Exception {
     if (authenticationContext.isExist()) {
       // LoginCheckInterceptor 에서 이미 처리되어 있는 경우
       log.info("return exist principal");
