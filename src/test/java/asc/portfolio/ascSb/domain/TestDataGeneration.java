@@ -130,12 +130,13 @@ public class TestDataGeneration {
     }
   }
 
-  private void generateAdminUserData() {
+  private void generateAdminUserData() throws Exception {
     String userName = "adminuser";
+    String password = loginUtil.encryptPassword(userName, userName + "_password");
 
     User user = User.builder()
             .loginId(userName)
-            .password(userName + "_password")
+            .password(password)
             .email(userName + "@gmail.com")
             .name(userName)
             .role(UserRoleType.ADMIN)
