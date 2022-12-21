@@ -37,7 +37,7 @@ public class UserController {
 
     try {
       Long signUpUserID = userService.signUp(signUpDto);
-    } catch (DataIntegrityViolationException e) {
+    } catch (Exception e) {
       log.error("Signup Unique violation");
       return new ResponseEntity<>("BAD_REQUEST - Unique violation", HttpStatus.BAD_REQUEST);
     }
@@ -46,7 +46,7 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<UserLoginResponseDto> login(@RequestBody @Valid UserLoginRequestDto loginDto, BindingResult bindingResult) {
+  public ResponseEntity<UserLoginResponseDto> login(@RequestBody @Valid UserLoginRequestDto loginDto, BindingResult bindingResult) throws Exception {
 
     log.info("try login. LoginId={}", loginDto.getLoginId());
 

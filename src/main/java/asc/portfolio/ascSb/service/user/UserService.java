@@ -7,9 +7,9 @@ import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
 
 public interface UserService {
 
-  Long signUp(UserSignupDto signUpDto);
+  Long signUp(UserSignupDto signUpDto) throws Exception;
 
-  User checkPassword(String loginId, String password);
+  User checkPassword(String loginId, String password) throws Exception;
 
   User checkJsonWebToken(String jwt);
 

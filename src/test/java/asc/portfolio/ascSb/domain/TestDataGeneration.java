@@ -69,8 +69,7 @@ public class TestDataGeneration {
 
   String[] productLabel = {"FIXED-TERM1", "FIXED-TERM2", "FIXED-TERM3", "FIXED-TERM", "FIXED-TERM",
           "FIXED-TERM", "FIXED-TERM"};
-
-
+  
   @BeforeEach
   public void clearRepository() {
     productRepository.deleteAllInBatch();
@@ -160,7 +159,6 @@ public class TestDataGeneration {
   }
 
   private void generateProductData() {
-
     for(int i=0; i < 1000; i ++) {
       Product product = Product.builder()
               .cafe(cafeRepository.findByCafeNameContains("서울지점"))
