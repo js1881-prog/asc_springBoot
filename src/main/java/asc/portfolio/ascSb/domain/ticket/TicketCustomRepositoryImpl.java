@@ -27,7 +27,9 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
     public Optional<TicketForUserResponseDto> findAvailableTicketInfoByIdAndCafeName(Long id, String cafeName) {
         Ticket findTicket = query
                 .selectFrom(ticket)
-                .where(ticket.cafe.cafeName.eq(cafeName), ticket.user.id.eq(id), ticket.isValidTicket.eq(TicketStateType.VALID))
+                .join(ticket.cafe, cafe).on(ticket.cafe.cafeName.eq(cafeName))
+                .join(ticket.user, user).on(ticket.user.id.eq(id))
+                .where(ticket.isValidTicket.eq(TicketStateType.VALID))
                 .fetchOne();
 
         if (findTicket == null) {
