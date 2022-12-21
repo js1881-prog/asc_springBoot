@@ -71,13 +71,11 @@ public class Ticket extends BaseTimeEntity {
         if (this.isFixedTermTicket()) {
             this.isValidFixedTermTicket();
         } else {
-            //partTime Ticket 일 때만 time 파라미터 사용
+            // partTime Ticket 일 때만 time 파라미터 사용
             remainingTime -= useTime;
-
             if (remainingTime <= 0) {
                 changeTicketStateToInvalid();
             }
-
             if (remainingTime < 0) {
                 log.error("Ticket.remainingTime is under 0");
             }

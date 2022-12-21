@@ -3,6 +3,7 @@ package asc.portfolio.ascSb.service.user;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
 import asc.portfolio.ascSb.jwt.JwtTokenProvider;
+import asc.portfolio.ascSb.loginutil.LoginUtil;
 import asc.portfolio.ascSb.web.dto.user.UserForAdminResponseDto;
 import asc.portfolio.ascSb.web.dto.user.UserQrAndNameResponseDto;
 import asc.portfolio.ascSb.web.dto.user.UserSignupDto;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -21,9 +23,18 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final JwtTokenProvider jwtTokenProvider;
+  private final LoginUtil loginUtil;
 
   @Override
   public Long signUp(UserSignupDto signUpDto) {
+
+    try {
+      // id와 pw를 이용한 암호화
+      signUpDto.setPassword(loginUtil.encryptPassword(signUpDto.getLoginId(), signUpDto.getPassword()));
+    } catch (Exception e) {
+      log.error("비밀번호 암호화 실패");
+      e.printStackTrace();
+    }
 
     User user = signUpDto.toEntity();
 
@@ -33,10 +44,17 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User checkPassword(String loginId, String password) {
-    return userRepository.findByLoginId(loginId)
-            .filter(m -> m.getPassword().equals(password))
-            .orElse(null);
+  public User checkPassword(String loginId, String password) throws Exception {
+    Optional<User> invalidUser = userRepository.findByLoginId(loginId);
+    if (invalidUser.isPresent()) {
+      User validUser = invalidUser.get();
+      // id, pw를 통해 암호화된 pw를 확인
+      if (Objects.equals(validUser.getPassword(), loginUtil.encryptPassword(loginId, password))) {
+        return validUser;
+      }
+    }
+    log.error("비밀번호 혹은 아이디가 일치 하지 않습니다.");
+    return null;
   }
 
   @Override

@@ -19,7 +19,6 @@ public class WebConfig implements WebMvcConfigurer {
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-
     registry.addInterceptor(loginCheckInterceptor)
             .order(1)
             .addPathPatterns("/**")
@@ -27,6 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
                     "/api/v1/user/signup", "/api/v1/user/login", "/api/v1/user/login-test","/api/v1/seat/**",
                     "/error", "/favicon.ico", "/",
                     "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**");
+
   }
 
   @Override

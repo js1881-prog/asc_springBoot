@@ -14,7 +14,7 @@ public class JwtService {
   private final JwtTokenProvider jwtTokenProvider;
   private final UserService userService;
 
-  public UserLoginResponseDto createToken(String loginId, String password) {
+  public UserLoginResponseDto createToken(String loginId, String password) throws Exception {
     User user = userService.checkPassword(loginId, password);
 
     if (user == null) {

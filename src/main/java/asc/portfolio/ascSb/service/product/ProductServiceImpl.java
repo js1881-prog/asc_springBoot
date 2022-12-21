@@ -30,7 +30,6 @@ public class ProductServiceImpl implements ProductService {
 
     private final UserRepository userRepository;
 
-
     @Override
     public List<ProductListResponseDto> adminSalesManagementOneUser(String userLoginId, String cafeName) {
         Optional<User> user = userRepository.findByLoginId(userLoginId);

@@ -107,7 +107,7 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
         return query
                 .update(ticket)
                 .set(ticket.isValidTicket, TicketStateType.INVALID)
-                .where(ticket.fixedTermTicket.lt(date), ticket.remainingTime.loe(0L))
+                .where(ticket.fixedTermTicket.lt(date).or(ticket.remainingTime.loe(0L)))
                 .execute();
     }
 

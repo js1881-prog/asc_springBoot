@@ -15,6 +15,7 @@ import asc.portfolio.ascSb.domain.ticket.TicketStateType;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRepository;
 import asc.portfolio.ascSb.domain.user.UserRoleType;
+import asc.portfolio.ascSb.loginutil.LoginUtil;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,6 +56,9 @@ public class TestDataGeneration {
   @Autowired
   ProductRepository productRepository;
 
+  @Autowired
+  LoginUtil loginUtil;
+
   //Test Data
   String[] cafeName = {"서울지점", "부산지점", "인천지점", "대전지점", "광주지점", "울산지점"};
 
@@ -69,8 +73,7 @@ public class TestDataGeneration {
 
   String[] productLabel = {"FIXED-TERM1", "FIXED-TERM2", "FIXED-TERM3", "FIXED-TERM", "FIXED-TERM",
           "FIXED-TERM", "FIXED-TERM"};
-
-
+  
   @BeforeEach
   public void clearRepository() {
     productRepository.deleteAllInBatch();
@@ -111,13 +114,13 @@ public class TestDataGeneration {
     }
   }
 
-  private void generateUserData() {
+  private void generateUserData() throws Exception {
 
-    for (int i = 0; i < userName.length; i++) {
-      String userString = userName[i];
+    for (String userString : userName) {
+      String password = loginUtil.encryptPassword(userString + "_login", userString + "_password");
       User user = User.builder()
               .loginId(userString + "_login")
-              .password(userString + "_password")
+              .password(password)
               .email(userString + "@gmail.com")
               .name(userString)
               .role(UserRoleType.USER)
@@ -127,12 +130,13 @@ public class TestDataGeneration {
     }
   }
 
-  private void generateAdminUserData() {
+  private void generateAdminUserData() throws Exception {
     String userName = "adminuser";
+    String password = loginUtil.encryptPassword(userName, userName + "_password");
 
     User user = User.builder()
             .loginId(userName)
-            .password(userName + "_password")
+            .password(password)
             .email(userName + "@gmail.com")
             .name(userName)
             .role(UserRoleType.ADMIN)
@@ -160,7 +164,6 @@ public class TestDataGeneration {
   }
 
   private void generateProductData() {
-
     for(int i=0; i < 1000; i ++) {
       Product product = Product.builder()
               .cafe(cafeRepository.findByCafeNameContains("서울지점"))
@@ -183,7 +186,7 @@ public class TestDataGeneration {
   }
 
   @Test
-  public void setTestData() {
+  public void setTestData() throws Exception {
     Assertions.assertThat(cafeRepository.count()).isEqualTo(0);
     Assertions.assertThat(seatRepository.count()).isEqualTo(0);
     Assertions.assertThat(userRepository.count()).isEqualTo(0);
