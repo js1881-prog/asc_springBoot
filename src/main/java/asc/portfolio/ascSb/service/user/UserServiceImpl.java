@@ -48,12 +48,12 @@ public class UserServiceImpl implements UserService {
     Optional<User> invalidUser = userRepository.findByLoginId(loginId);
     if (invalidUser.isPresent()) {
       User validUser = invalidUser.get();
-      // id, password를 통해 암호화된 password를 확인
+      // id, pw를 통해 암호화된 pw를 확인
       if (Objects.equals(validUser.getPassword(), loginUtil.encryptPassword(loginId, password))) {
         return validUser;
       }
     }
-    log.error("비밀번호가 일치 하지 않습니다.");
+    log.error("비밀번호 혹은 아이디가 일치 하지 않습니다.");
     return null;
   }
 
