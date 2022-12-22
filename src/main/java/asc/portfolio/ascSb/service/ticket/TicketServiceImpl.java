@@ -177,7 +177,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void updateAllTicketState() {
-        ticketRepository.updateAllTicketState();
+    public Long updateAllTicketState() {
+        return ticketRepository.updateAllTicketState();
     }
 }

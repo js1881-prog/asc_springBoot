@@ -17,7 +17,6 @@ import asc.portfolio.ascSb.domain.user.UserRepository;
 import asc.portfolio.ascSb.domain.user.UserRoleType;
 import asc.portfolio.ascSb.loginutil.LoginUtil;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -70,6 +67,7 @@ public class TestDataGeneration {
           "제주특별자치도"};
 
   String[] userName = {"tUser_A", "tUser_B", "tUser_C", "tUser_D", "tUser_E", "tUser_F"};
+  private final int TEST_USER_COUNT_MAX = 1000;
 
   String[] productLabel = {"FIXED-TERM1", "FIXED-TERM2", "FIXED-TERM3", "FIXED-TERM", "FIXED-TERM",
           "FIXED-TERM", "FIXED-TERM"};
@@ -78,8 +76,8 @@ public class TestDataGeneration {
   public void clearRepository() {
     productRepository.deleteAllInBatch();
     seatReservationInfoRepository.deleteAllInBatch();
-    ticketRepository.deleteAllInBatch();
     seatRepository.deleteAllInBatch();
+    ticketRepository.deleteAllInBatch();
     userRepository.deleteAllInBatch();
     cafeRepository.deleteAllInBatch();
   }
@@ -128,6 +126,21 @@ public class TestDataGeneration {
       user.changeCafe(cafeRepository.findByCafeName("서울지점").orElse(null));
       userRepository.save(user);
     }
+
+    //User Data 추가
+    for (int i = 0; i < TEST_USER_COUNT_MAX; i++) {
+      String userString = "tUser_" + i;
+      String password = loginUtil.encryptPassword(userString + "_login", userString + "_password");
+      User user = User.builder()
+              .loginId(userString + "_login")
+              .password(password)
+              .email(userString + "@gmail.com")
+              .name(userString)
+              .role(UserRoleType.USER)
+              .build();
+      user.changeCafe(cafeRepository.findByCafeName(cafeName[i%cafeName.length]).orElse(null));
+      userRepository.save(user);
+    }
   }
 
   private void generateAdminUserData() throws Exception {
@@ -149,18 +162,34 @@ public class TestDataGeneration {
   private void generateTicketData() {
     LocalDateTime date = LocalDateTime.now();
 
-    //Valid Ticket
-      Ticket ticket = Ticket.builder()
+      Ticket ticket0 = Ticket.builder()
               .cafe(cafeRepository.findByCafeNameContains(cafeName[0]))
-              .user(userRepository.findByNameContains(userName[1]))
+              .user(userRepository.findByLoginId(userName[0] + "_login").orElseThrow())
               .isValidTicket(TicketStateType.VALID)
               .ticketPrice(3000)
-              .productLabel("FIXED-TERM1")
+              .productLabel("FIXED-TERM"+54321)
               .fixedTermTicket(date.plusDays(28))
               .partTimeTicket(null)
               .remainingTime(null)
               .build();
-      ticketRepository.save(ticket);
+      ticketRepository.save(ticket0);
+
+      //Valid Ticket
+      for (int i = 0; i < TEST_USER_COUNT_MAX; i++) {
+        String userString = "tUser_" + i;
+        Ticket ticket = Ticket.builder()
+                .cafe(cafeRepository.findByCafeNameContains(cafeName[i%cafeName.length]))
+                .user(userRepository.findByLoginId(userString + "_login").orElseThrow())
+                .isValidTicket(TicketStateType.VALID)
+                .ticketPrice(3000)
+                .productLabel("FIXED-TERM"+i)
+//                .fixedTermTicket(date.plusDays(28))
+                .fixedTermTicket(date.plusSeconds(30))
+                .partTimeTicket(null)
+                .remainingTime(null)
+                .build();
+        ticketRepository.save(ticket);
+      }
   }
 
   private void generateProductData() {
@@ -194,11 +223,6 @@ public class TestDataGeneration {
     generateCafeSeatData();
     generateUserData();
     generateAdminUserData();
-  }
-
-  @AfterEach
-  @Test
-  public void setTestDataAfter() {
     generateTicketData();
     generateProductData();
   }

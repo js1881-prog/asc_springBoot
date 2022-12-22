@@ -68,8 +68,8 @@ public class SeatController {
 
         // 프론트에서 보내는 startTime이 0이면 => 자리 교체 요청 => 사용중인 좌석을 찾아서 그 값을 startTime에 대입
         if(startTime == 0) {
-             SeatReservationInfo validSeat = seatReservationInfoService.validUserSeatReservationInfo(user);
-             checkTime = validSeat.getStartTime() - validSeat.getTimeInUse();
+             SeatReservationInfo validSeatRezInfo = seatReservationInfoService.validUserSeatReservationInfo(user);
+             checkTime = validSeatRezInfo.getStartTime() - validSeatRezInfo.updateTimeInUse();
         }
 
         Boolean isSuccess = seatService.reserveSeat(user, seatNumber, checkTime);

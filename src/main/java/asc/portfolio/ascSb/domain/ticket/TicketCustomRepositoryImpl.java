@@ -7,7 +7,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -125,13 +124,13 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
     }
 
     @Override
-    public void updateAllTicketState() {
-        long execute = query
+    public Long updateAllTicketState() {
+        return query
                 .update(ticket)
                 .set(ticket.isValidTicket, TicketStateType.INVALID)
                 .where(ticket.isValidTicket.eq(TicketStateType.VALID),
                         ticket.productLabel.contains("FIXED-TERM"),
-                        ticket.fixedTermTicket.after(LocalDateTime.now()))
+                        ticket.fixedTermTicket.before(LocalDateTime.now()))
                 .execute();
     }
 }

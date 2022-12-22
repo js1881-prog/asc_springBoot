@@ -162,9 +162,4 @@ public class TicketRepositoryTest {
         assertThat(isValid).isFalse();
         assertThat(ticket.getIsValidTicket()).isEqualTo(TicketStateType.INVALID);
     }
-
-    @Test
-    public void updateTicketStatue() {
-        ticketRepository.updateAllTicketState();
-    }
 }

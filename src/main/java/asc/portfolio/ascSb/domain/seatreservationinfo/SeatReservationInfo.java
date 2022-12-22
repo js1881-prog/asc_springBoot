@@ -59,6 +59,9 @@ public class SeatReservationInfo extends BaseTimeEntity {
         this.isValid = SeatReservationInfoStateType.VALID;
     }
 
+    private void getTimeInUse() {
+    }
+
     public Long updateTimeInUse() {
         this.timeInUse = Duration.between(getCreateDate(), LocalDateTime.now()).toMinutes();
         return timeInUse;

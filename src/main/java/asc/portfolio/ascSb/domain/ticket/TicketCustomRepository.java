@@ -3,7 +3,6 @@ package asc.portfolio.ascSb.domain.ticket;
 import asc.portfolio.ascSb.web.dto.ticket.TicketForUserResponseDto;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,5 +18,5 @@ public interface TicketCustomRepository {
 
     List<TicketForUserResponseDto> findAllTicketInfoByLoginIdAndCafe(String loginId, Cafe cafe);
 
-    public void updateAllTicketState();
+    public Long updateAllTicketState();
 }

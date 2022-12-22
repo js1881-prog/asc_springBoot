@@ -26,6 +26,7 @@ public class TableUpdateScheduler {
 
         log.debug("update All Ticket State");
         //Fixed Ticket 상태 업데이트를 진행한다.
-        ticketService.updateAllTicketState();
+        Long updateCount = ticketService.updateAllTicketState();
+        log.info("update Ticket. count={}", updateCount);
     }
 }
