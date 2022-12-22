@@ -45,7 +45,7 @@ public class SeatReservationInfo extends BaseTimeEntity {
     @Column(name = "S_T")
     private Long startTime;
 
-    private Long timeInUse; // 실제 사용한 시간, 분단위 ( 이용종료시 )
+    private Long timeInUse; // 실제 사용한 시간, 분단위
 
     @Builder
     public SeatReservationInfo(User user, Cafe cafe, Seat seat, Ticket ticket, Long startTime, Long timeInUse) {
