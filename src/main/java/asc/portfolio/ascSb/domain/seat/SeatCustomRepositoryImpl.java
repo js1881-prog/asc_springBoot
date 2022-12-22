@@ -27,6 +27,7 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
 
     private final SeatReservationInfoRepository seatReservationInfoRepository;
 
+    @Override
     public void updateAllSeatState() {
 
         // Fixed-Term Ticket Update
@@ -46,7 +47,7 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
 
             log.debug("Seat 사용 종료. cafeName={}, seatNumber={}", cafeName, seatOne.getSeatNumber());
             ticketOne.changeTicketStateToInvalid();
-            seatOne.setSeatStateTypeUnReserved();
+            seatOne.exitSeat();
             seatRezInfo.endUsingSeat();
         }
 
@@ -68,31 +69,31 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
             if (timeInUse >= ticketOne.getRemainingTime()) {
                 log.debug("Seat 사용 종료. cafeName={}, seatNumber={}", cafeName, seatOne.getSeatNumber());
                 ticketOne.changeTicketStateToInvalid();
-                seatOne.setSeatStateTypeUnReserved();
+                seatOne.exitSeat();
                 seatRezInfo.endUsingSeat();
             }
         }
     }
 
-    public void updateSeatState(String cafeName) {
-        List<Seat> seatList = query
-                .selectFrom(seat)
-                .where(seat.cafe.cafeName.eq(cafeName))
-                .orderBy(seat.seatNumber.asc())
-                .fetch();
-
-        for (Seat seat : seatList) {
-            if (seat.getSeatState() == SeatStateType.RESERVED) {
-                if (!seat.getTicket().isValidTicket()) {
-                    log.info("Update SeatState SeatNumber={}", seat.getSeatNumber());
-                    seat.setSeatStateTypeUnReserved();
-                }
-            }
-        }
-    }
+//    public void updateSeatState(String cafeName) {
+//        List<Seat> seatList = query
+//                .selectFrom(seat)
+//                .where(seat.cafe.cafeName.eq(cafeName))
+//                .orderBy(seat.seatNumber.asc())
+//                .fetch();
+//
+//        for (Seat seat : seatList) {
+//            if (seat.getSeatState() == SeatStateType.RESERVED) {
+//                if (!seat.getTicket().isValidTicket()) {
+//                    log.info("Update SeatState SeatNumber={}", seat.getSeatNumber());
+//                    seat.setSeatStateTypeUnReserved();
+//                }
+//            }
+//        }
+//    }
 
     public List<SeatSelectResponseDto> findSeatNumberAndSeatStateList(String cafeName) {
-        updateSeatState(cafeName);
+        //updateSeatState(cafeName);
 
         return query
                 .select(Projections.bean(SeatSelectResponseDto.class, seat.seatNumber, seat.seatState))

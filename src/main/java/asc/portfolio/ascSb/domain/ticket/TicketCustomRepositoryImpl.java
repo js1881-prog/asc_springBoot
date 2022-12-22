@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -112,14 +113,26 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
     }
 
     @Override
-    public List<TicketForUserResponseDto> findAllTicketInfoByLoginIdAndCafe(String loginId, Cafe cafe) {
+    public List<TicketForUserResponseDto> findAllTicketInfoByLoginIdAndCafe(String loginId, Cafe cafeObject) {
         return query
                 .select(Projections.bean(TicketForUserResponseDto.class,
                         ticket.isValidTicket, ticket.fixedTermTicket, ticket.partTimeTicket, ticket.remainingTime, ticket.productLabel))
                 .from(ticket)
-                .where(ticket.cafe.eq(cafe), ticket.user.loginId.eq(loginId))
+                .join(ticket.cafe, cafe).on(cafe.eq(cafeObject))
+                .join(ticket.user, user).on(user.loginId.eq(loginId))
                 .orderBy(ticket.isValidTicket.desc(), ticket.createDate.asc())
                 .fetch();
+    }
+
+    @Override
+    public void updateAllTicketState() {
+        long execute = query
+                .update(ticket)
+                .set(ticket.isValidTicket, TicketStateType.INVALID)
+                .where(ticket.isValidTicket.eq(TicketStateType.VALID),
+                        ticket.productLabel.contains("FIXED-TERM"),
+                        ticket.fixedTermTicket.after(LocalDateTime.now()))
+                .execute();
     }
 }
 

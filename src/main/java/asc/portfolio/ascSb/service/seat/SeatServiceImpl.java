@@ -100,7 +100,7 @@ public class SeatServiceImpl implements SeatService {
                 findSeat.exitSeat();
 
                 //Ticket Exit
-                Ticket ticket = info.getTicket();
+                Ticket ticket = findSeat.getTicket();
                 if (ticket.isFixedTermTicket()) {
                     ticket.exitUsingTicket(null);
                 } else {
@@ -169,5 +169,10 @@ public class SeatServiceImpl implements SeatService {
 
         log.info("좌석 예약 성공");
         return true;
+    }
+
+    @Override
+    public void updateAllSeatState() {
+        seatRepository.updateAllSeatState();
     }
 }

@@ -22,4 +22,6 @@ public interface TicketService {
     TicketForAdminResponseDto adminLookUpUserValidTicket(String userLoginID, String cafeName);
 
     void setInvalidTicket(String productLabel);
+
+    public void updateAllTicketState();
 }

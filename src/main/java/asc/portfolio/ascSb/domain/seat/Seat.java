@@ -51,14 +51,7 @@ public class Seat {
 
     public void exitSeat() {
         this.user = null;
-        this.seatState = SeatStateType.UNRESERVED;
-    }
-
-    public void setSeatStateTypeReserved() {
-        this.seatState = SeatStateType.RESERVED;
-    }
-
-    public void setSeatStateTypeUnReserved() {
+        this.ticket = null;
         this.seatState = SeatStateType.UNRESERVED;
     }
 }

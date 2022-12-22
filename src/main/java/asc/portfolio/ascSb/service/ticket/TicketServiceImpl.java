@@ -175,4 +175,9 @@ public class TicketServiceImpl implements TicketService {
             default: return 0L;
         }
     }
+
+    @Override
+    public void updateAllTicketState() {
+        ticketRepository.updateAllTicketState();
+    }
 }
