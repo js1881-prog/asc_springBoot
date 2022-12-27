@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@Profile("!test") // test 프로필이 아닌 경우에만 활성화
 @RequiredArgsConstructor
 public class TableUpdateScheduler {
 
