@@ -50,9 +50,6 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findProductListByUserIdAndCafeNameAndStartTime(cafeName,parse).stream()
                 .map(ProductListResponseDto::new)
                 .collect(Collectors.toList());
-
-//        List<Product> dto = productRepository.findProductListByUserIdAndCafeNameAndStartTime(cafeName, parse);
-//        return dto;
     }
 
     @Override

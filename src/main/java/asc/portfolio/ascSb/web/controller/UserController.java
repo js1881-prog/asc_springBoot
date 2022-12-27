@@ -46,7 +46,8 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<UserLoginResponseDto> login(@RequestBody @Valid UserLoginRequestDto loginDto, BindingResult bindingResult) throws Exception {
+  public ResponseEntity<UserLoginResponseDto> login(@RequestBody @Valid UserLoginRequestDto loginDto, BindingResult bindingResult)
+          throws Exception {
 
     log.info("try login. LoginId={}", loginDto.getLoginId());
 

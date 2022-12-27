@@ -2,6 +2,7 @@ package asc.portfolio.ascSb.service.ticket;
 
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.order.Orders;
+import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.web.dto.bootpay.BootPayOrderDto;
 import asc.portfolio.ascSb.web.dto.ticket.TicketForAdminResponseDto;
@@ -24,4 +25,8 @@ public interface TicketService {
     void setInvalidTicket(String productLabel);
 
     public Long updateAllValidTicketState();
+
+    List<Ticket> allInvalidTicketInfo();
+
+    void deleteInvalidTicket(List<Ticket> tickets);
 }

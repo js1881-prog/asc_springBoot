@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Calendar;
 import java.util.Date;
 
 @Component
@@ -17,7 +18,7 @@ public class JwtTokenProvider {
 
 //  private final String secretKey;
   private final Key secretKey;
-  private final long  expireTime;
+  private final long expireTime;
 
   public JwtTokenProvider(@Value("${jwt.secret}") String secretKey,
                           @Value("${jwt.expiration-in-seconds}") Long expireTime) {
@@ -26,13 +27,27 @@ public class JwtTokenProvider {
     this.expireTime = expireTime * 1000;
   }
 
-  public String createToken(String subject) {
+  public String createAccessToken(String subject) {
     Date now = new Date();
     Date expireDate = new Date(now.getTime() + expireTime);
 
     return Jwts.builder()
             .setSubject(subject)
             .setIssuedAt(now)
+            .setExpiration(expireDate)
+            .signWith(secretKey, SignatureAlgorithm.HS256)
+            .compact();
+  }
+
+  public String createRefreshToken(String subject) {
+    Calendar addDays = Calendar.getInstance();
+    addDays.setTime(new Date());
+    addDays.add(Calendar.DATE, 14);
+    Date expireDate = addDays.getTime();
+
+    return Jwts.builder()
+            .setSubject(subject)
+            .setIssuedAt(new Date())
             .setExpiration(expireDate)
             .signWith(secretKey, SignatureAlgorithm.HS256)
             .compact();

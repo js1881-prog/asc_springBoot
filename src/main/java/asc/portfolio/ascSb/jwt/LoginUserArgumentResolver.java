@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 @RequiredArgsConstructor
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
-  //
 
   private final AuthenticationContext authenticationContext;
   private final UserService userService;

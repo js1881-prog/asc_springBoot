@@ -31,20 +31,16 @@ public class UserServiceImpl implements UserService {
     try {
       // id와 pw를 이용한 암호화
       signUpDto.setPassword(loginUtil.encryptPassword(signUpDto.getLoginId(), signUpDto.getPassword()));
+      return userRepository.save(signUpDto.toEntity()).getId();
     } catch (Exception e) {
       log.error("비밀번호 암호화 실패");
       e.printStackTrace();
     }
-
-    User user = signUpDto.toEntity();
-
-    User saveUser = userRepository.save(user);
-
-    return saveUser.getId();
+    return null;
   }
 
   @Override
-  public User checkPassword(String loginId, String password) throws Exception {
+  public User checkPassword(String loginId, String password) {
     Optional<User> invalidUser = userRepository.findByLoginId(loginId);
     if (invalidUser.isPresent()) {
       User validUser = invalidUser.get();

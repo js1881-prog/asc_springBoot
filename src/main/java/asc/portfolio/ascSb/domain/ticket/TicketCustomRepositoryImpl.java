@@ -133,6 +133,15 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
                         ticket.fixedTermTicket.before(LocalDateTime.now()))
                 .execute();
     }
+
+    @Override
+    public List<Ticket> findAllByIsValidTicketContains(TicketStateType ticketStateType) {
+        return query
+                .select(ticket)
+                .from(ticket)
+                .where(ticket.isValidTicket.eq(ticketStateType))
+                .fetch();
+    }
 }
 
 

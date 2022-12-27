@@ -180,4 +180,14 @@ public class TicketServiceImpl implements TicketService {
     public Long updateAllValidTicketState() {
         return ticketRepository.updateAllValidTicketState();
     }
+
+    @Override
+    public List<Ticket> allInvalidTicketInfo() {
+        return ticketRepository.findAllByIsValidTicketContains(TicketStateType.INVALID);
+    }
+
+    @Override
+    public void deleteInvalidTicket(List<Ticket> tickets) {
+        ticketRepository.deleteAll(tickets);
+    }
 }

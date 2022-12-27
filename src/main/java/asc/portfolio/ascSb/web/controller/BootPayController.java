@@ -59,8 +59,7 @@ public class BootPayController {
         );
 
         try {
-            ResDefault<HashMap<String, Object>> token = api.getAccessToken(); // 서버 토큰 검증
-            System.out.println(token.toJson());
+            ResDefault<HashMap<String, Object>> token = api.getAccessToken(); // 부트페이 서버에서 토큰 검증
             ResDefault<HashMap<String, Object>> check = api.verify(receipt_id);
             getDataJson = check.toJson();
             ObjectMapper objectMapper = new ObjectMapper();

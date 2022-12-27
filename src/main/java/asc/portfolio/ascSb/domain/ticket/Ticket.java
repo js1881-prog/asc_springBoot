@@ -33,6 +33,8 @@ public class Ticket extends BaseTimeEntity {
     private User user;
 
     @Enumerated(EnumType.STRING)
+    @Basic(optional = false)
+    @Column(columnDefinition = "enum('VALID','INVALID')")
     private TicketStateType isValidTicket;
 
     @Column(name = "T_P")

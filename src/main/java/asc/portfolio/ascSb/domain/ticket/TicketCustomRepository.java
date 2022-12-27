@@ -19,4 +19,6 @@ public interface TicketCustomRepository {
     List<TicketForUserResponseDto> findAllTicketInfoByLoginIdAndCafe(String loginId, Cafe cafe);
 
     public Long updateAllValidTicketState();
+
+    List<Ticket> findAllByIsValidTicketContains(TicketStateType ticketStateType);
 }

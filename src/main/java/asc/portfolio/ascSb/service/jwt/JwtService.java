@@ -21,7 +21,7 @@ public class JwtService {
       return null;
     }
 
-    String token = jwtTokenProvider.createToken(user.getLoginId());
+    String token = jwtTokenProvider.createAccessToken(user.getLoginId());
 
     return new UserLoginResponseDto(user.getRole(), token);
   }

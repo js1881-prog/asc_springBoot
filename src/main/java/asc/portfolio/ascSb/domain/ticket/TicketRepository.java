@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long>, TicketCustomRepository {
 
-    List<Ticket> findByIsValidTicketContains(TicketStateType ticketStateType);
-
     Ticket findByProductLabelContains(String productLabel);
 
 }
