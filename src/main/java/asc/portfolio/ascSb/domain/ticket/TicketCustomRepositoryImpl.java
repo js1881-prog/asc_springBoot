@@ -124,7 +124,7 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
     }
 
     @Override
-    public Long updateAllTicketState() {
+    public Long updateAllValidTicketState() {
         return query
                 .update(ticket)
                 .set(ticket.isValidTicket, TicketStateType.INVALID)

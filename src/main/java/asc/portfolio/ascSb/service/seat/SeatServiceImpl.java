@@ -172,7 +172,9 @@ public class SeatServiceImpl implements SeatService {
     }
 
     @Override
-    public void updateAllSeatState() {
-        seatRepository.updateAllSeatState();
+    public void updateAllReservedSeatState() {
+        seatRepository.updateAllReservedSeatStateWithFixedTermTicket();
+        seatRepository.updateAllReservedSeatStateWithPartTimeTicket();
+        seatRepository.updateAllReservedSeatStateWithStartTime();
     }
 }

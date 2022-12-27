@@ -1,7 +1,9 @@
 package asc.portfolio.ascSb.domain.seat;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
+import asc.portfolio.ascSb.domain.seatreservationinfo.QSeatReservationInfo;
 import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfo;
 import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfoRepository;
+import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfoStateType;
 import asc.portfolio.ascSb.domain.ticket.QTicket;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.web.dto.seat.SeatSelectResponseDto;
@@ -16,6 +18,7 @@ import java.util.List;
 
 import static asc.portfolio.ascSb.domain.cafe.QCafe.*;
 import static asc.portfolio.ascSb.domain.seat.QSeat.*;
+import static asc.portfolio.ascSb.domain.seatreservationinfo.QSeatReservationInfo.seatReservationInfo;
 import static asc.portfolio.ascSb.domain.ticket.QTicket.*;
 
 @Slf4j
@@ -28,7 +31,7 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
     private final SeatReservationInfoRepository seatReservationInfoRepository;
 
     @Override
-    public void updateAllSeatState() {
+    public void updateAllReservedSeatStateWithFixedTermTicket() {
 
         // Fixed-Term Ticket Update
         List<Seat> seatList = query
@@ -41,18 +44,14 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
 
         // 만료된 Fixed-Term Ticket 에 따른 Seat, seatReservationInfo 종료 처리
         for (Seat seatOne : seatList) {
-            String cafeName = seatOne.getCafe().getCafeName();
-            SeatReservationInfo seatRezInfo = seatReservationInfoRepository.findValidSeatRezInfoByCafeNameAndSeatNumber(cafeName, seatOne.getSeatNumber());
-            Ticket ticketOne = seatOne.getTicket();
-
-            log.debug("Seat 사용 종료. cafeName={}, seatNumber={}", cafeName, seatOne.getSeatNumber());
-            ticketOne.changeTicketStateToInvalid();
-            seatOne.exitSeat();
-            seatRezInfo.endUsingSeat();
+            exitSeatBySeatEntity(seatOne, null);
         }
+    }
 
+    @Override
+    public void updateAllReservedSeatStateWithPartTimeTicket() {
         // Part-Time Ticket Update
-        seatList = query
+        List<Seat> seatList = query
                 .selectFrom(seat)
                 .join(seat.ticket, ticket)
                 .where(seat.seatState.eq(SeatStateType.RESERVED),
@@ -60,19 +59,37 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
                 .fetch();
 
         for (Seat seatOne : seatList) {
-            String cafeName = seatOne.getCafe().getCafeName();
-            SeatReservationInfo seatRezInfo = seatReservationInfoRepository.findValidSeatRezInfoByCafeNameAndSeatNumber(cafeName, seatOne.getSeatNumber());
-            Ticket ticketOne = seatOne.getTicket();
-
-            //사용 시간 업데이트
-            Long timeInUse = seatRezInfo.updateTimeInUse();
-            if (timeInUse >= ticketOne.getRemainingTime()) {
-                log.debug("Seat 사용 종료. cafeName={}, seatNumber={}", cafeName, seatOne.getSeatNumber());
-                ticketOne.changeTicketStateToInvalid();
-                seatOne.exitSeat();
-                seatRezInfo.endUsingSeat();
-            }
+            exitSeatBySeatEntity(seatOne, null);
         }
+    }
+
+    @Override
+    public void updateAllReservedSeatStateWithStartTime() {
+        List<SeatReservationInfo> seatRezInfoList = query
+                .selectFrom(seatReservationInfo)
+                .where(seatReservationInfo.isValid.eq(SeatReservationInfoStateType.VALID),
+                        seatReservationInfo.endTime.after(LocalDateTime.now()))
+                .fetch();
+
+        for (SeatReservationInfo info : seatRezInfoList) {
+            Seat findSeat = findByCafeNameAndSeatNumber(info.getCafeName(), info.getSeatNumber());
+            exitSeatBySeatEntity(findSeat, info);
+        }
+    }
+
+    private void exitSeatBySeatEntity(Seat seatOne, SeatReservationInfo seatRezInfoEntity) {
+        String cafeName = seatOne.getCafe().getCafeName();
+
+        if (seatRezInfoEntity == null) {
+            seatRezInfoEntity = seatReservationInfoRepository.findValidSeatRezInfoByCafeNameAndSeatNumber(cafeName, seatOne.getSeatNumber());
+        }
+
+        Ticket ticketOne = seatOne.getTicket();
+
+        log.debug("Seat 사용 종료. cafeName={}, seatNumber={}", cafeName, seatOne.getSeatNumber());
+        ticketOne.exitUsingTicket(seatRezInfoEntity.updateTimeInUse());
+        seatOne.exitSeat();
+        seatRezInfoEntity.endUsingSeat();
     }
 
 //    public void updateSeatState(String cafeName) {

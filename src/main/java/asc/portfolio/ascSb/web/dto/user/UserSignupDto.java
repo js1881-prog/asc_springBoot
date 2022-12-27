@@ -20,7 +20,6 @@ public class UserSignupDto {
   @Length(min = 8, max = 16)
   private String loginId;
 
-  //TODO Password 암호화 저장
   @Schema(description = "패스워드", example = "abcdef123456")
   @NotBlank
   @Length(min = 8)

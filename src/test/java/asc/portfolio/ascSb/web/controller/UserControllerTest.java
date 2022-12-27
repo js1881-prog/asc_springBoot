@@ -94,7 +94,6 @@ class UserControllerTest {
     User findUser = userRepository.findByLoginId(loginId).orElseThrow();
 
     assertThat(findUser.getId()).isGreaterThan(0L);
-    assertThat(findUser.getPassword()).isEqualTo(password);
     assertThat(findUser.getEmail()).isEqualTo(email);
   }
 
@@ -144,8 +143,6 @@ class UserControllerTest {
     assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
     User findUser = userRepository.findByLoginId(loginId).orElseThrow();
-
-    assertThat(findUser.getPassword()).isEqualTo(password);
   }
 
   @Test
@@ -170,8 +167,6 @@ class UserControllerTest {
     assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
     User findUser = userRepository.findByLoginId(loginId).orElseThrow();
-
-    assertThat(findUser.getPassword()).isEqualTo(password);
   }
 
   @Test

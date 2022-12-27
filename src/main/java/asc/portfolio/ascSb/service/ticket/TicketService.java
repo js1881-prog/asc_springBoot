@@ -23,5 +23,5 @@ public interface TicketService {
 
     void setInvalidTicket(String productLabel);
 
-    public Long updateAllTicketState();
+    public Long updateAllValidTicketState();
 }

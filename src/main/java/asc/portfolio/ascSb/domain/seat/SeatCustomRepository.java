@@ -7,7 +7,11 @@ import java.util.List;
 
 public interface SeatCustomRepository {
 
-    public void updateAllSeatState();
+    public void updateAllReservedSeatStateWithFixedTermTicket();
+
+    public void updateAllReservedSeatStateWithPartTimeTicket();
+
+    public void updateAllReservedSeatStateWithStartTime();
     
     List<SeatSelectResponseDto> findSeatNumberAndSeatStateList(String cafeName);
 

@@ -45,6 +45,9 @@ public class SeatReservationInfo extends BaseTimeEntity {
     @Column(name = "S_T")
     private Long startTime;
 
+    @Column(name = "END_T")
+    private LocalDateTime endTime; // 좌석 종료 예정 시간. (now + startTime)
+
     private Long timeInUse; // 실제 사용한 시간, 분단위
 
     @Builder
@@ -54,8 +57,9 @@ public class SeatReservationInfo extends BaseTimeEntity {
         this.seatNumber = seat.getSeatNumber();
         this.ticket = ticket;
         this.startTime = startTime;
-        //자동 값 입력
         this.timeInUse = timeInUse;
+        //자동 값 입력
+        this.endTime = LocalDateTime.now().plusMinutes(startTime);
         this.isValid = SeatReservationInfoStateType.VALID;
     }
 
