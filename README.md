@@ -2,7 +2,7 @@
 
 ## 스터디카페 이용, 관리앱
 
-- 협업 Notion : https://www.notion.so/AladinStudyCafe-c52fc40073dd4ee696e8de365e73a75a
+- 협업 Notion : https://www.notion.so/d484ac9d91d84327a01a10238da944fe
 
 
 
