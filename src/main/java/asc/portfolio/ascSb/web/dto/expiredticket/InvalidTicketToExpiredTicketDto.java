@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ExpiredTicketForTransferDto {
+public class InvalidTicketToExpiredTicketDto {
 
 
     private String productLabel;
@@ -18,7 +18,7 @@ public class ExpiredTicketForTransferDto {
     private Long userId;
 
     // for transfer InvalidTicket
-    public ExpiredTicketForTransferDto(Ticket ticket) {
+    public InvalidTicketToExpiredTicketDto(Ticket ticket) {
         this.productLabel = ticket.getProductLabel();
         this.cafeId = ticket.getCafe().getId();
         this.userId = ticket.getUser().getId();

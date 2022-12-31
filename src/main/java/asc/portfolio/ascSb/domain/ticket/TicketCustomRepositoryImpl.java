@@ -73,7 +73,8 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
         QTicket qTicketTwo = new QTicket("qTW");
 
         try {
-            Optional<Ticket> checkRemainTimeIsNotNull = Optional.ofNullable(query.select(qTicket)
+            Optional<Ticket> checkRemainTimeIsNotNull = Optional.ofNullable(query
+                    .select(qTicket)
                     .from(qTicket)
                     .leftJoin(qTicket.user, user)
                     .leftJoin(qTicket.cafe, cafe)
@@ -82,7 +83,8 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
                             qTicket.remainingTime.gt(0)
                     )
                     .fetchOne()); // 시간제 티켓이 있는지 확인
-            Optional<Ticket> checkFixedTermIsNotNull = Optional.ofNullable(query.select(qTicketTwo)
+            Optional<Ticket> checkFixedTermIsNotNull = Optional.ofNullable(query
+                    .select(qTicketTwo)
                     .from(qTicketTwo)
                     .leftJoin(qTicketTwo.user, user)
                     .leftJoin(qTicketTwo.cafe, cafe)

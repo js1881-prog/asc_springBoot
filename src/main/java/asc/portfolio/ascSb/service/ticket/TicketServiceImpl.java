@@ -188,6 +188,6 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public void deleteInvalidTicket(List<Ticket> tickets) {
-        ticketRepository.deleteAll(tickets);
+       ticketRepository.deleteAll(tickets);
     }
 }

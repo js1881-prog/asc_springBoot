@@ -3,7 +3,7 @@ package asc.portfolio.ascSb.service.expiredticket;
 import asc.portfolio.ascSb.domain.expiredticket.ExpiredTicket;
 import asc.portfolio.ascSb.domain.expiredticket.ExpiredTicketRepository;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
-import asc.portfolio.ascSb.web.dto.expiredticket.ExpiredTicketForTransferDto;
+import asc.portfolio.ascSb.web.dto.expiredticket.InvalidTicketToExpiredTicketDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,8 +24,8 @@ public class ExpiredTicketServiceImpl implements ExpiredTicketService {
     @Override
     public boolean transferInvalidTicket(List<Ticket> ticket) {
         List<ExpiredTicket> expiredTickets = ticket.stream()
-                .map(ExpiredTicketForTransferDto::new)
-                .map(ExpiredTicketForTransferDto::toEntity)
+                .map(InvalidTicketToExpiredTicketDto::new)
+                .map(InvalidTicketToExpiredTicketDto::toEntity)
                 .collect(Collectors.toList());
         if (expiredTickets.isEmpty()) {
             return false;

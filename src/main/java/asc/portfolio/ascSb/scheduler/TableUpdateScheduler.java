@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,17 +35,19 @@ public class TableUpdateScheduler {
         log.info("update Ticket. count={}", updateCount);
     }
 
-    @Scheduled(cron = "30 50 23 * * *") // 30일 간격 23시 50분 마다 갱신 => 23시 50분 ~ 24시 은행 점검시간
+    @Scheduled(cron = "30 50 23 * * *") // 30일 간격 은행 점검 시간인 23시 50분 마다 갱신
     public void moveToExpiredTicket() {
         // ticket 테이블 전체에서 invalid 상태의 티켓을 뽑아온다
         List<Ticket> invalidTicketList = ticketService.allInvalidTicketInfo();
-        log.debug("find all invalid ticket list");
+        log.debug("Find all invalid ticket list");
         // invalid 상태의 티켓들을 EXPIRED_TICKET 테이블에 옮긴다
         boolean isSuccessTransfer = expiredTicketService.transferInvalidTicket(invalidTicketList);
+        log.debug("Move invalid ticket list to expired table");
 
         // invalid 상태의 티켓들을 테이블에서 제거
         if(isSuccessTransfer) {
             ticketService.deleteInvalidTicket(invalidTicketList);
+            // log.debug("Size of deleted invalid ticket = {}", invalidTicketList.size());
         }
     }
 }
