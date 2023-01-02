@@ -27,7 +27,7 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class TicketServiceImpl implements TicketService {
+public class TicketServiceImpl implements TicketService, TicketCustomService {
 
     private final TicketRepository ticketRepository;
 
@@ -125,55 +125,6 @@ public class TicketServiceImpl implements TicketService {
         Ticket deleteTicket = ticketRepository.findByProductLabelContains(productLabel);
         deleteTicket.changeTicketStateToInvalid();
         ticketRepository.save(deleteTicket);
-    }
-
-    private LocalDateTime distinguishFixedTermTicket(ProductNameType orderName) {
-        switch (orderName) {
-            case FOUR_WEEK_FIXED_TERM_TICKET:
-                return LocalDateTime.now().plusDays(28);
-            case THREE_WEEK_FIXED_TERM_TICKET:
-                return LocalDateTime.now().plusDays(21);
-            case TWO_WEEK_FIXED_TERM_TICKET:
-                return LocalDateTime.now().plusDays(14);
-            case WEEK_FIXED_TERM_TICKET:
-                return LocalDateTime.now().plusDays(7);
-            case TODAY_FIXED_TERM_TICKET:
-                return LocalDateTime.now().plusDays(1);
-            default: return LocalDateTime.now();
-        }
-    }
-
-    private LocalDateTime distinguishUpdatedFixedTermTicket(ProductNameType orderName, LocalDateTime fixedTermTicket) {
-        switch (orderName) {
-            case FOUR_WEEK_FIXED_TERM_TICKET:
-                return fixedTermTicket.plusDays(28);
-            case THREE_WEEK_FIXED_TERM_TICKET:
-                return fixedTermTicket.plusDays(21);
-            case TWO_WEEK_FIXED_TERM_TICKET:
-                return fixedTermTicket.plusDays(14);
-            case WEEK_FIXED_TERM_TICKET:
-                return fixedTermTicket.plusDays(7);
-            case TODAY_FIXED_TERM_TICKET:
-                return fixedTermTicket.plusDays(1);
-            default: return fixedTermTicket;
-        }
-    }
-
-    private Long distinguishPartTimeTicket(ProductNameType orderName) {
-        final long multiply = 60L; //시단위 -> 분단위
-        switch (orderName) {
-            case HUNDRED_HOUR_PART_TIME_TICKET:
-                return 100 * multiply;
-            case FIFTY_HOUR_PART_TIME_TICKET:
-                return 50 * multiply;
-            case TEN_HOUR_PART_TIME_TICKET:
-                return 10 * multiply;
-            case FOUR_HOUR_PART_TIME_TICKET:
-                return 4 * multiply;
-            case ONE_HOUR_PART_TIME_TICKET:
-                return 1 * multiply;
-            default: return 0L;
-        }
     }
 
     @Override

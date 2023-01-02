@@ -23,13 +23,14 @@ public class ExpiredTicketServiceImpl implements ExpiredTicketService {
     // invalid TicketList 를 ExpiredTicket Table에 insert
     @Override
     public boolean transferInvalidTicket(List<Ticket> ticket) {
+        if(ticket.isEmpty()) {
+            log.info("Invalid ticket does not exist");
+            return false;
+        }
         List<ExpiredTicket> expiredTickets = ticket.stream()
                 .map(InvalidTicketToExpiredTicketDto::new)
                 .map(InvalidTicketToExpiredTicketDto::toEntity)
                 .collect(Collectors.toList());
-        if (expiredTickets.isEmpty()) {
-            return false;
-        }
         expiredTicketRepository.saveAll(expiredTickets);
         return true;
     }
