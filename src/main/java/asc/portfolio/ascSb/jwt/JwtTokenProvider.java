@@ -1,17 +1,16 @@
 package asc.portfolio.ascSb.jwt;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JwtTokenProvider {
 
@@ -64,18 +63,24 @@ public class JwtTokenProvider {
             .compact();
   }
 
-  public String extractSubject(String token) {
+  public Claims validCheckAndGetBody(String token) {
     try {
       return Jwts.parserBuilder()
               .setSigningKey(secretKey)
               .build()
               .parseClaimsJws(token)
-              .getBody()
-              .getSubject();
+              .getBody();
     } catch (ExpiredJwtException e) {
+      log.debug("만료된 JWT 토큰입니다.");
       throw new IllegalStateException("만료된 JWT 토큰입니다.");
     } catch (JwtException e) {
+      log.debug("올바르지 않은 JWT 토큰입니다.");
       throw new IllegalStateException("올바르지 않은 JWT 토큰입니다.");
     }
+  }
+
+  public String validCheckAndGetSubject(String token) {
+    return validCheckAndGetBody(token)
+            .getSubject();
   }
 }

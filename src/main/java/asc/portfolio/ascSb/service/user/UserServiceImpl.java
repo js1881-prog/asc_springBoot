@@ -55,9 +55,9 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User checkJsonWebToken(String jwt) {
+  public User checkAccessToken(String jwt) {
     if ((jwt == null) || jwt.isBlank()) {
-      return null;
+      throw new IllegalStateException("jwt = null");
     }
 
     String[] jwtSplit = jwt.split(" ");
@@ -65,14 +65,10 @@ public class UserServiceImpl implements UserService {
       jwt = jwtSplit[1];
     }
 
-    try {
-      log.info("jwt = {}", jwt);
-      String loginId = jwtTokenProvider.extractSubject(jwt);
-      return userRepository.findByLoginId(loginId).orElse(null);
-    } catch (IllegalStateException e) {
-      log.error(e.toString());
-      return null;
-    }
+    log.debug("jwt = {}", jwt);
+    String loginId = jwtTokenProvider.validCheckAndGetSubject(jwt);
+
+    return userRepository.findByLoginId(loginId).orElseThrow();
   }
 
   @Override

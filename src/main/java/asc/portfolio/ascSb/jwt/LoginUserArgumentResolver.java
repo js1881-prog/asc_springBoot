@@ -12,8 +12,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import javax.servlet.http.HttpServletResponse;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -49,7 +47,11 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
       log.info("return principal");
       String jwt = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
 
-      return userService.checkJsonWebToken(jwt);
+      try {
+        return userService.checkAccessToken(jwt);
+      } catch (IllegalStateException e) {
+        return null;
+      }
     }
   }
 

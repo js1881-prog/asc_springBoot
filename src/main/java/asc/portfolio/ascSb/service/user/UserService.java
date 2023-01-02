@@ -11,7 +11,7 @@ public interface UserService {
 
   User checkPassword(String loginId, String password) throws Exception;
 
-  User checkJsonWebToken(String jwt);
+  User checkAccessToken(String jwt);
 
   UserQrAndNameResponseDto userQrAndName(Long id);
 
