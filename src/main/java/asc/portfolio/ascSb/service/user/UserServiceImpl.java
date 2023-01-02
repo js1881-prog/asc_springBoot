@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
         return validUser;
       }
     }
+
     log.error("비밀번호 혹은 아이디가 일치 하지 않습니다.");
     return null;
   }

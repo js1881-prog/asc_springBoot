@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Calendar;
 import java.util.Date;
 
 @Component
@@ -19,12 +18,27 @@ public class JwtTokenProvider {
 //  private final String secretKey;
   private final Key secretKey;
   private final long expireTime;
+  private final long refreshTime;
+
+  public long getExpireTime() {
+    return expireTime;
+  }
+
+  public long getRefreshTime() {
+    return refreshTime;
+  }
 
   public JwtTokenProvider(@Value("${jwt.secret}") String secretKey,
-                          @Value("${jwt.expiration-in-seconds}") Long expireTime) {
+                          @Value("${jwt.expiration-in-seconds}") Long expireTime,
+                          @Value("${jwt.refresh-in-hour}") Long refreshTime) {
+
+    final long second = 1_000L;
+    final long minute = 60 * second;
+    final long hour = 60 * minute;
 
     this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
-    this.expireTime = expireTime * 1000;
+    this.expireTime = expireTime * second;
+    this.refreshTime = refreshTime * hour;
   }
 
   public String createAccessToken(String subject) {
@@ -39,15 +53,12 @@ public class JwtTokenProvider {
             .compact();
   }
 
-  public String createRefreshToken(String subject) {
-    Calendar addDays = Calendar.getInstance();
-    addDays.setTime(new Date());
-    addDays.add(Calendar.DATE, 14);
-    Date expireDate = addDays.getTime();
+  public String createRefreshToken() {
+    Date now = new Date();
+    Date expireDate = new Date(now.getTime() + refreshTime);
 
     return Jwts.builder()
-            .setSubject(subject)
-            .setIssuedAt(new Date())
+            .setIssuedAt(now)
             .setExpiration(expireDate)
             .signWith(secretKey, SignatureAlgorithm.HS256)
             .compact();
