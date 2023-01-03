@@ -4,6 +4,7 @@ import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.jwt.AuthenticationContext;
 import asc.portfolio.ascSb.service.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +25,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
   private final UserService userService;
 
-  private ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -39,7 +40,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
       // Controller 진행
       return true;
-    } catch (IllegalStateException e) {
+    } catch (JwtException e) {
       log.debug("Unauthorized access = {}", request.getRequestURL());
 
       response.setContentType("application/json");
@@ -47,7 +48,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
       Map<String, String> map = new HashMap<>();
-      map.put("message", e.toString());
+      map.put("message", e.getMessage());
       String result = objectMapper.writeValueAsString(map);
 
       response.getWriter().write(result);

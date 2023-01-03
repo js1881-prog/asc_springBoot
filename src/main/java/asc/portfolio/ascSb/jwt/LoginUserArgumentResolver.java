@@ -2,6 +2,7 @@ package asc.portfolio.ascSb.jwt;
 
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.service.user.UserService;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -49,7 +50,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
       try {
         return userService.checkAccessToken(jwt);
-      } catch (IllegalStateException e) {
+      } catch (JwtException e) {
         return null;
       }
     }

@@ -29,13 +29,13 @@ public class SeatController {
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<String> nullPointExHandle(NullPointerException ex) {
         log.info("NullPointerException ex", ex);
-        return new ResponseEntity<>("Bad Request", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Null Exception", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> illegalArgumentExHandle(IllegalArgumentException ex) {
         log.info("IllegalArgumentException ex", ex);
-        return new ResponseEntity<>("Bad Request", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("IllegalArgument Exception", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/{cafeName}")
