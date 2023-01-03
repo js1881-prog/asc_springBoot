@@ -12,4 +12,5 @@ public class UserLoginResponseDto {
 
   UserRoleType roleType;
   String accessToken;
+  String refreshToken;
 }

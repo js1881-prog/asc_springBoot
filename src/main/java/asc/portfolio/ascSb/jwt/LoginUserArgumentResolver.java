@@ -2,6 +2,7 @@ package asc.portfolio.ascSb.jwt;
 
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.service.user.UserService;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -11,8 +12,6 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-
-import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @Component
@@ -49,7 +48,11 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
       log.info("return principal");
       String jwt = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
 
-      return userService.checkJsonWebToken(jwt);
+      try {
+        return userService.checkAccessToken(jwt);
+      } catch (JwtException e) {
+        return null;
+      }
     }
   }
 

@@ -6,9 +6,9 @@ import asc.portfolio.ascSb.jwt.LoginUser;
 import asc.portfolio.ascSb.service.jwt.JwtService;
 import asc.portfolio.ascSb.service.user.UserService;
 import asc.portfolio.ascSb.web.dto.user.*;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -24,6 +24,12 @@ public class UserController {
 
   private final UserService userService;
   private final JwtService jwtService;
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<String> jwtExExHandle(JwtException ex) {
+        log.info("JwtException ex", ex);
+        return new ResponseEntity<>("Invalid jwt", HttpStatus.UNAUTHORIZED);
+    }
 
   @PostMapping("/signup")
   public ResponseEntity<String> singUp(@RequestBody @Valid UserSignupDto signUpDto, BindingResult bindingResult) {
@@ -56,7 +62,8 @@ public class UserController {
       return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
-    UserLoginResponseDto loginRespDto = jwtService.createToken(loginDto.getLoginId(), loginDto.getPassword());
+//    UserLoginResponseDto loginRespDto = jwtService.createTokenWithLogin(loginDto.getLoginId(), loginDto.getPassword());
+    UserLoginResponseDto loginRespDto = userService.checkPassword(loginDto.getLoginId(), loginDto.getPassword());
 
     if (loginRespDto == null) {
       log.error("Unknown User");
@@ -89,6 +96,13 @@ public class UserController {
       log.info("user=null");
     }
     return new ResponseEntity<>("OK", HttpStatus.OK);
+  }
+
+  //
+  @PostMapping("/reissue")
+  public ResponseEntity<UserLoginResponseDto> reissueToken(@RequestBody @Valid UserTokenRequestDto tokenRequestDto) {
+    log.debug("try reissue token");
+    return new ResponseEntity<>(userService.reissueToken(tokenRequestDto), HttpStatus.OK);
   }
 
   @GetMapping("/qr-name")
