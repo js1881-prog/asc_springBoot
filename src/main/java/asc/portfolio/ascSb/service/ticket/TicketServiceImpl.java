@@ -1,6 +1,5 @@
 package asc.portfolio.ascSb.service.ticket;
 
-import asc.portfolio.ascSb.commonenum.product.ProductNameType;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.order.Orders;
 import asc.portfolio.ascSb.domain.product.ProductRepository;
@@ -16,6 +15,7 @@ import asc.portfolio.ascSb.web.dto.ticket.TicketForUserResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 @RequiredArgsConstructor
 @Slf4j
 public class TicketServiceImpl implements TicketService, TicketCustomService {
@@ -108,8 +108,8 @@ public class TicketServiceImpl implements TicketService, TicketCustomService {
         try {
             if (user.isPresent()) {
                 User userDto = user.get();
-                Long id = userDto.getId();
-                Ticket ticket = ticketRepository.findValidTicketInfoForAdminByUserIdAndCafeName(id, cafeName);
+                Long userDtoId = userDto.getId();
+                Ticket ticket = ticketRepository.findValidTicketInfoForAdminByUserIdAndCafeName(userDtoId, cafeName);
                 String productNameType = productRepository.findByProductLabelContains(ticket.getProductLabel()).getProductNameType().getValue();
                 return new TicketForAdminResponseDto(ticket, productNameType);
             }

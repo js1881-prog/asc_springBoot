@@ -3,10 +3,9 @@ package asc.portfolio.ascSb.web.controller;
 import asc.portfolio.ascSb.domain.order.Orders;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.jwt.LoginUser;
+import asc.portfolio.ascSb.service.nestedservice.payment.PaymentService;
 import asc.portfolio.ascSb.service.order.OrderService;
 import asc.portfolio.ascSb.bootpay.Bootpay;
-import asc.portfolio.ascSb.service.product.ProductService;
-import asc.portfolio.ascSb.service.ticket.TicketService;
 import asc.portfolio.ascSb.web.dto.bootpay.BootPayOrderDto;
 import asc.portfolio.ascSb.web.dto.order.OrderDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,10 +26,7 @@ import java.util.HashMap;
 public class BootPayController {
 
     private final OrderService orderService;
-
-    private final ProductService productService;
-
-    private final TicketService ticketService;
+    private final PaymentService paymentService;
 
     @PostMapping("/order")
     public ResponseEntity<String> pay(@LoginUser User user, @RequestBody OrderDto dto) {
@@ -74,14 +70,13 @@ public class BootPayController {
         log.info("findOrders완료");
         int price = Math.toIntExact(orders.getOrderPrice());
 
+        // 검증된 가격이 Orders에 저장 가격과 일치하는지(변조방지), 결제 승인 대기 상태가 맞는지, status가 200인지 확인
         if (dto.getStatus() == 200 && dto.getData().getPrice() == price && dto.getData().getStatus() == 2) {
-            // 검증된 가격이 Orders에 저장 가격과 일치하는지(변조방지), 결제 승인 대기 상태가 맞는지, status가 200인지 확인
             log.info("BootPay 서버 <-> 제품 검증 완료");
+
             /* 검증 완료시 orders 상태 Done(완료)으로 변경, Product에 제품추가, Ticket에 이용권추가 */
-            orders.completeOrder();
-            productService.saveProduct(user, dto, orders);
-            Long ticketSaveResult = ticketService.saveProductToTicket(user, dto, orders);
-            if(ticketSaveResult != null) {
+            boolean isCompleted = paymentService.modifyAndAddValidPayment(orders, user, dto);
+            if(isCompleted) {
                 return ResponseEntity.ok("OK");
             }
         }

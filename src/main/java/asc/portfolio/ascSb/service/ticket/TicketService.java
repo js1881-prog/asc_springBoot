@@ -1,6 +1,5 @@
 package asc.portfolio.ascSb.service.ticket;
 
-import asc.portfolio.ascSb.commonenum.product.ProductNameType;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.order.Orders;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
@@ -9,7 +8,6 @@ import asc.portfolio.ascSb.web.dto.bootpay.BootPayOrderDto;
 import asc.portfolio.ascSb.web.dto.ticket.TicketForAdminResponseDto;
 import asc.portfolio.ascSb.web.dto.ticket.TicketForUserResponseDto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TicketService {

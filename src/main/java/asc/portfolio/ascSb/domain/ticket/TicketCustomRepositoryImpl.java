@@ -82,7 +82,7 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
                             qTicket.remainingTime.isNotNull(),
                             qTicket.remainingTime.gt(0)
                     )
-                    .fetchOne()); // 시간제 티켓이 있는지 확인
+                    .fetchOne()); // 유효한 시간제 티켓이 있는지 확인
             Optional<Ticket> checkFixedTermIsNotNull = Optional.ofNullable(query
                     .select(qTicketTwo)
                     .from(qTicketTwo)
@@ -92,7 +92,7 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
                             qTicketTwo.fixedTermTicket.isNotNull(),
                             qTicketTwo.fixedTermTicket.gt(now)
                     )
-                    .fetchOne()); // 기간제 티켓이 있는지 확인
+                    .fetchOne()); // 유효한 기간제 티켓이 있는지 확인
             if(checkRemainTimeIsNotNull.isPresent()) {
                 return checkRemainTimeIsNotNull.get(); // 시간제 티켓이 존재 => 시간제 티켓 return
             } else if (checkFixedTermIsNotNull.isPresent()) {
