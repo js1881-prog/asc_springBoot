@@ -76,7 +76,7 @@ public class Ticket extends BaseTimeEntity {
             // partTime Ticket 일 때만 time 파라미터 사용
             remainingTime -= useTime;
             if (remainingTime <= 0) {
-                changeTicketStateToInvalid();
+                this.changeTicketStateToInvalid();
             }
             if (remainingTime < 0) {
                 log.error("Ticket.remainingTime is under 0");

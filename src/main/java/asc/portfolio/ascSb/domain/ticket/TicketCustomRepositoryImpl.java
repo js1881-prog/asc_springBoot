@@ -40,7 +40,7 @@ public class TicketCustomRepositoryImpl implements TicketCustomRepository {
             return findTicket.toTicketResponseDto();
         } else {
             log.error("Throw IllegalStateException. Ticket={}", findTicket);
-            throw new IllegalStateException();
+            throw new IllegalStateException("Invalid Ticket");
         }
     }
 
