@@ -123,4 +123,13 @@ public class UserServiceImpl implements UserService {
     }
     return null;
   }
+
+  @Override
+  public boolean checkLoginId(String userLoginId) {
+    Optional<User> isValidUser = userRepository.findByLoginId(userLoginId);
+    if (isValidUser.isPresent()) {
+      return true;
+    }
+    return false;
+  }
 }

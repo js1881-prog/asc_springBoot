@@ -1,7 +1,6 @@
 package asc.portfolio.ascSb.web.dto.seat;
 
 
-import asc.portfolio.ascSb.domain.seat.Seat;
 import asc.portfolio.ascSb.domain.seat.SeatStateType;
 import lombok.*;
 

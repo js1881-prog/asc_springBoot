@@ -130,4 +130,14 @@ public class UserController {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
   }
+
+  @GetMapping("/admin/check/user-id")
+  public ResponseEntity<?> adminCheckUserLoginId(@RequestParam String userLoginId) {
+      boolean checkUserId = userService.checkLoginId(userLoginId);
+      if (checkUserId) {
+        log.info("exist user id");
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+      }
+      return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+  }
 }

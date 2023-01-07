@@ -10,7 +10,6 @@ import lombok.Setter;
 @Setter
 public class InvalidTicketToExpiredTicketDto {
 
-
     private String productLabel;
 
     private Long cafeId;

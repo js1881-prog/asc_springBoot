@@ -1,16 +1,10 @@
 package asc.portfolio.ascSb.domain.cafe;
-import asc.portfolio.ascSb.domain.product.Product;
-import asc.portfolio.ascSb.domain.user.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
-
-@Setter // test를 위한 setter 나중에 제거
 @Getter
+@Setter // test 용
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "CAFE")

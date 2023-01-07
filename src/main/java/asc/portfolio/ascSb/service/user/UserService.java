@@ -16,4 +16,6 @@ public interface UserService {
   UserQrAndNameResponseDto userQrAndName(Long id);
 
   UserForAdminResponseDto AdminCheckUserInfo(String userId);
+
+  boolean checkLoginId(String userLoginId);
 }
