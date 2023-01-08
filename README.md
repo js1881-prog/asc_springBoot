@@ -2,9 +2,7 @@
 
 ## 스터디카페 이용, 관리앱
 
-- Notion : [https://www.notion.so/d484ac9d91d84327a01a10238da944fe](https://www.notion.so/AladinStudyCafe-c52fc40073dd4ee696e8de365e73a75a)
-
-
+- Notion : [협업노션, 자세한 개발 과정이 나와있습니다.](https://furry-ocean-0ef.notion.site/d484ac9d91d84327a01a10238da944fe)
 
 
 ## 1. 제작 기간 & 참여 인원
