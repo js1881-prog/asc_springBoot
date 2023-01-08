@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
   }
 
   private Boolean isValidRefreshToken(String refreshToken, String loginId) {
-    // refresh token 만료 검증 - 실패 시 trow
+    // refresh token 만료 검증 - 실패 시 throw
     Claims claims = jwtService.validCheckAndGetBody(refreshToken);
 
     // loginId 로 redis 에서 refresh token 검색 및 비교

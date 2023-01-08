@@ -24,6 +24,11 @@ public class RedisRepository {
                 .get(key);
     }
 
+    public Boolean hasKey(String string) {
+        return redisTemplate
+                .hasKey(string);
+    }
+
     public void deleteValue(String key) {
         redisTemplate.delete(key);
     }

@@ -22,7 +22,7 @@ public class Cafe {
 
     private String cafeState; // 카페 영업 여부
 
-    private int businessHour; // 영업시간 24시간,12시간
+    private int businessHour; // 영업시간
 
     @Builder
     public Cafe(String cafeName, String cafeArea, String cafeState, int businessHour) {
