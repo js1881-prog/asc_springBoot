@@ -26,6 +26,16 @@ public class FCMTokenServiceImpl implements FCMTokenService {
     // 관리자가 FCM 토큰을 이미 가지고 있는지, 가지고 있으면 유효한 토큰인지 검사
     @Override
     public Boolean isAdminHasToken(User user, String adminFCMToken) {
+        Optional<AdminFCMToken> token = adminFCMTokenRepository.findById(user.getId());
+        if(token.isPresent()) {
+            AdminFCMToken existToken = token.get();
+            String pastToken = token.get().getFCMToken();
+            if(!Objects.equals(pastToken, adminFCMToken)) {
+                // 이미 존재하는 토큰을 현재 유효한 토큰으로 바꾼다
+                existToken.setFCMToken(adminFCMToken);
+                adminFCMTokenRepository.save(existToken);
+                return true;
+            }
         Optional<AdminFCMToken> fcmToken = adminFCMTokenRepository.findById(user.getId());
         if(fcmToken.isPresent()) {
             String checkDistinct = fcmToken.get().getFCMToken();

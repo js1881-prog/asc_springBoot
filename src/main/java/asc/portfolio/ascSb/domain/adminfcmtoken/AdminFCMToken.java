@@ -30,13 +30,17 @@ public class AdminFCMToken extends BaseTimeEntity {
     @JoinColumn(name = "C_ID", nullable = false)
     private Cafe cafe;
 
-    @Column(unique = true)
+    @Column(name = "FCM_TOKEN", unique = true, nullable = false)
     private String fCMToken;
 
     @Builder
     public AdminFCMToken(User user, Cafe cafe, String fCMToken) {
         this.user = user;
         this.cafe = cafe;
+        this.fCMToken = fCMToken;
+    }
+
+    public void setFCMToken(String fCMToken) {
         this.fCMToken = fCMToken;
     }
 }
