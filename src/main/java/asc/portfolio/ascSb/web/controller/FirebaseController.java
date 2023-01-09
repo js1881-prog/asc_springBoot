@@ -3,15 +3,16 @@ package asc.portfolio.ascSb.web.controller;
 import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.domain.user.UserRoleType;
 import asc.portfolio.ascSb.jwt.LoginUser;
-import asc.portfolio.ascSb.service.fcmtoken.FCMTokenService;
+import asc.portfolio.ascSb.service.fcm.FirebaseCloudMessageService;
+import asc.portfolio.ascSb.service.fcm.fcmtoken.FCMTokenService;
+import asc.portfolio.ascSb.web.dto.fcm.FCMRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class FirebaseController {
 
     private final FCMTokenService fcmTokenService;
+
+    private final FirebaseCloudMessageService firebaseCloudMessageService;
 
     @PostMapping("/cm-token/confirm")
     public ResponseEntity<?> checkFCMToken(@LoginUser User user, @RequestParam String fCMToken) {
@@ -52,4 +55,19 @@ public class FirebaseController {
         log.info("fcm token check error");
         return  new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
     }
+
+    @PostMapping("/api/fcm")
+    public ResponseEntity<?> pushMessage(@RequestBody FCMRequestDto requestDTO) throws IOException {
+
+        log.info("FCM SEND {} {}", requestDTO.getTitle(), requestDTO.getBody());
+
+        firebaseCloudMessageService.sendMessageTo(
+                requestDTO.getTargetToken(),
+                requestDTO.getTitle(),
+                requestDTO.getBody());
+
+        return ResponseEntity.ok().build();
+    }
+
+
 }

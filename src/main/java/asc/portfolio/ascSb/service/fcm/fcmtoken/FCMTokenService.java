@@ -1,4 +1,4 @@
-package asc.portfolio.ascSb.service.fcmtoken;
+package asc.portfolio.ascSb.service.fcm.fcmtoken;
 
 import asc.portfolio.ascSb.domain.user.User;
 

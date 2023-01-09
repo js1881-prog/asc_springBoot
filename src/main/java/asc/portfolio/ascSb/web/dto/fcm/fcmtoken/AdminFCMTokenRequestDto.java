@@ -1,4 +1,4 @@
-package asc.portfolio.ascSb.web.dto.fcmtoken;
+package asc.portfolio.ascSb.web.dto.fcm.fcmtoken;
 
 import asc.portfolio.ascSb.domain.adminfcmtoken.AdminFCMToken;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
