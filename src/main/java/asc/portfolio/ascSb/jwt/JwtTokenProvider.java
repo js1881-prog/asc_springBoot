@@ -72,7 +72,7 @@ public class JwtTokenProvider {
               .getBody();
     } catch (ExpiredJwtException e) {
       log.debug("만료된 JWT 토큰입니다.");
-      throw new JwtException("만료된 JWT 토큰입니다.");
+      throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "만료된 JWT 토큰입니다.");
     } catch (JwtException e) {
       log.debug("올바르지 않은 JWT 토큰입니다.");
       throw new JwtException("올바르지 않은 JWT 토큰입니다.");
