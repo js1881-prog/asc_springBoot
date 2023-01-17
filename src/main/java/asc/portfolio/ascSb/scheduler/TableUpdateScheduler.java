@@ -35,6 +35,12 @@ public class TableUpdateScheduler {
         log.info("update Ticket. count={}", updateCount);
     }
 
+    @Scheduled(fixedDelay = 1000 * 120)
+    public void alertFCMAlmostFinishedSeat() {
+        log.debug("alert almost finished seat");
+        seatService.alertAlmostFinishedSeat();
+    }
+
     @Scheduled(cron = "30 50 23 * * *") // 30일 간격 은행 점검 시간인 23시 50분 마다 갱신
     public void moveToExpiredTicket() {
         // ticket 테이블 전체에서 invalid 상태의 티켓을 뽑아온다

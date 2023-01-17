@@ -177,4 +177,26 @@ public class SeatServiceImpl implements SeatService {
         seatRepository.updateAllReservedSeatStateWithPartTimeTicket();
         seatRepository.updateAllReservedSeatStateWithStartTime();
     }
+
+    private void alertFcm(List<Seat> list) {
+        //TODO
+    }
+
+    private void checkAlmostFinishedSeatWithFixedTermTicket() {
+        List<Seat> list = seatRepository.getAlmostFinishedSeatListWithFixedTermTicket(10L);
+
+        alertFcm(list);
+    }
+
+    private void checkAlmostFinishedSeatWithStartTime() {
+        List<Seat> list = seatRepository.getAlmostFinishedSeatListWithStartTime(10L);
+
+        alertFcm(list);
+    }
+
+    //1분 초과로 스케쥴 잡아야 중복 alert 없음
+    public void alertAlmostFinishedSeat() {
+        this.checkAlmostFinishedSeatWithFixedTermTicket();
+        this.checkAlmostFinishedSeatWithStartTime();
+    }
 }

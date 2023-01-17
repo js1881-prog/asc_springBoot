@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static asc.portfolio.ascSb.domain.cafe.QCafe.*;
@@ -75,6 +76,38 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
             Seat findSeat = findByCafeNameAndSeatNumber(info.getCafeName(), info.getSeatNumber());
             exitSeatBySeatEntity(findSeat, info);
         }
+    }
+
+    @Override
+    public List<Seat> getAlmostFinishedSeatListWithFixedTermTicket(Long minute) {
+        //after(10분전) ~ before(9분전) ~~~ 현재
+        return query
+                .selectFrom(seat)
+                .join(seat.ticket, ticket)
+                .where(seat.seatState.eq(SeatStateType.RESERVED),
+                        ticket.productLabel.contains("FIXED-TERM"),
+                        ticket.fixedTermTicket.after(LocalDateTime.now().minusMinutes(minute)),
+                        ticket.fixedTermTicket.before(LocalDateTime.now().minusMinutes(minute - 1)))
+                .fetch();
+    }
+
+    @Override
+    public List<Seat> getAlmostFinishedSeatListWithStartTime(Long minute) {
+        //after(10분전) ~ before(9분전) ~~~ 현재
+        List<SeatReservationInfo> seatRezInfoList = query
+                .selectFrom(seatReservationInfo)
+                .where(seatReservationInfo.isValid.eq(SeatReservationInfoStateType.VALID),
+                        seatReservationInfo.endTime.after(LocalDateTime.now().minusMinutes(minute)),
+                        seatReservationInfo.endTime.before(LocalDateTime.now().minusMinutes(minute - 1)))
+                .fetch();
+
+        List<Seat> seatList = new ArrayList<>();
+        for (SeatReservationInfo info : seatRezInfoList) {
+            Seat findSeat = findByCafeNameAndSeatNumber(info.getCafeName(), info.getSeatNumber());
+            seatList.add(findSeat);
+        }
+
+        return seatList;
     }
 
     private void exitSeatBySeatEntity(Seat seatOne, SeatReservationInfo seatRezInfoEntity) {

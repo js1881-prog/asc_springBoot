@@ -12,7 +12,11 @@ public interface SeatCustomRepository {
     public void updateAllReservedSeatStateWithPartTimeTicket();
 
     public void updateAllReservedSeatStateWithStartTime();
-    
+
+    public List<Seat> getAlmostFinishedSeatListWithFixedTermTicket(Long minute);
+
+    public List<Seat> getAlmostFinishedSeatListWithStartTime(Long minute);
+
     List<SeatSelectResponseDto> findSeatNumberAndSeatStateList(String cafeName);
 
     Seat findByCafeAndSeatNumber(Cafe cafeObject, Integer seatNumber);
