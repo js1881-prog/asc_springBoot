@@ -24,7 +24,6 @@ import java.util.HashMap;
 @Slf4j
 @RequestMapping("/api/v1/pay")
 public class BootPayController {
-
     private final OrderService orderService;
     private final PaymentService paymentService;
 

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -56,18 +57,23 @@ public class FirebaseController {
         return  new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/api/fcm")
+    @PostMapping("/send/cloud-message")
     public ResponseEntity<?> pushMessage(@RequestBody FCMRequestDto requestDTO) throws IOException {
 
         log.info("FCM SEND {} {}", requestDTO.getTitle(), requestDTO.getBody());
 
-        firebaseCloudMessageService.sendMessageTo(
-                requestDTO.getTargetToken(),
-                requestDTO.getTitle(),
-                requestDTO.getBody());
+        if (Objects.equals(requestDTO.getTarget(), "특정유저")) {
 
-        return ResponseEntity.ok().build();
+            String targetToken = fcmTokenService.adminFindSpecificToken(requestDTO.getSpecific_user());
+
+            firebaseCloudMessageService.sendMessageToSpecificUser(
+                    targetToken,
+                    requestDTO.getTitle(),
+                    requestDTO.getBody());
+
+            return ResponseEntity.ok().build();
+        } else {
+            return null;
+        }
     }
-
-
 }

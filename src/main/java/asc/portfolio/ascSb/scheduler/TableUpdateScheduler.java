@@ -28,7 +28,6 @@ public class TableUpdateScheduler {
         //현재 사용중인 전체 좌석에 대해 상태 업데이트를 진행한다. (seat, seatReservationInfo, ticket)
         log.debug("update All Seat State");
         seatService.updateAllReservedSeatState();
-
         //Fixed Ticket 상태 업데이트를 진행한다.
         log.debug("update All Ticket State");
         Long updateCount = ticketService.updateAllValidTicketState();

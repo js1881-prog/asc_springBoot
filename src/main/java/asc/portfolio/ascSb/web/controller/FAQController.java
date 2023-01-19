@@ -22,7 +22,6 @@ import java.util.List;
 public class FAQController {
 
     private final FAQService fAQService;
-
     @GetMapping("/list")
     public ResponseEntity<?> showFAQList(@LoginUser User user) {
 

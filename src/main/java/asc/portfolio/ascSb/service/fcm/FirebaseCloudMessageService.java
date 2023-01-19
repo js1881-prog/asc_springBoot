@@ -1,8 +1,7 @@
 package asc.portfolio.ascSb.service.fcm;
 
 
-import asc.portfolio.ascSb.web.dto.fcm.FCMMessage;
-import com.fasterxml.jackson.core.JsonParseException;
+import asc.portfolio.ascSb.web.dto.fcm.FCMMessageDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -22,7 +21,7 @@ public class FirebaseCloudMessageService {
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/asc-fcm/messages:send";
     private final ObjectMapper objectMapper;
 
-    public void sendMessageTo(String targetToken, String title, String body) throws IOException {
+    public void sendMessageToSpecificUser(String targetToken, String title, String body) throws IOException {
         String message = makeMessage(targetToken, title, body);
 
         OkHttpClient client = new OkHttpClient();
@@ -36,24 +35,25 @@ public class FirebaseCloudMessageService {
                 .build();
 
         Response response = client.newCall(request).execute();
-
     }
 
     private String makeMessage(String targetToken, String title, String body) throws JsonProcessingException {
-        FCMMessage fcmMessage = FCMMessage.builder()
-                .message(FCMMessage.Message.builder()
+        FCMMessageDto fcmMessageDto = FCMMessageDto.builder()
+                .message(FCMMessageDto.Message.builder()
                         .token(targetToken)
-                        .notification(FCMMessage.Notification.builder()
+                        .notification(FCMMessageDto.Notification.builder()
                                 .title(title)
                                 .body(body)
                                 .image(null)
                                 .build()
                         ).build()).validateOnly(false).build();
 
-        return objectMapper.writeValueAsString(fcmMessage);
+        return objectMapper.writeValueAsString(fcmMessageDto);
     }
 
     private String getAccessToken() throws IOException {
+
+        // Firebase springBoot private secret key
         String firebaseConfigPath = "firebase/asc-fcm-firebase-adminsdk-16y8u-046592cf63.json";
 
         GoogleCredentials googleCredentials = GoogleCredentials

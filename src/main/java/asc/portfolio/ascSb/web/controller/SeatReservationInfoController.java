@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class SeatReservationInfoController {
 
     private final SeatReservationInfoService seatReservationInfoService;
-
     @GetMapping("/")
     public ResponseEntity<SeatReservationInfoSelectResponseDto> userSeatReservationInfo(@LoginUser User user) {
         if(user == null) {

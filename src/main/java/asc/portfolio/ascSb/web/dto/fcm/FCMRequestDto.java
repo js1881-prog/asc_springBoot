@@ -8,8 +8,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class FCMRequestDto {
-    private String targetToken;
+    private String date;
+    private String type;
+    private String target;
+    private String specific_user;
     private String title;
     private String body;
-
 }

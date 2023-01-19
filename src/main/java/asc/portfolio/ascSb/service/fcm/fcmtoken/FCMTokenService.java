@@ -6,4 +6,5 @@ public interface FCMTokenService {
     Long confirmAdminFCMToken(User user, String adminFCMToken);
     Boolean isAdminHasToken(User user, String adminFCMToken);
     Boolean confirmToken(User user, String userFCMToken);
+    String adminFindSpecificToken(String userId);
 }
