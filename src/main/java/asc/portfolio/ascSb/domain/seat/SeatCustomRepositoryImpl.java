@@ -40,11 +40,12 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
                 .join(seat.ticket, ticket)
                 .where(seat.seatState.eq(SeatStateType.RESERVED),
                         ticket.productLabel.contains("FIXED-TERM"),
-                        ticket.fixedTermTicket.after(LocalDateTime.now()))
+                        ticket.fixedTermTicket.before(LocalDateTime.now()))
                 .fetch();
 
         // 만료된 Fixed-Term Ticket 에 따른 Seat, seatReservationInfo 종료 처리
         for (Seat seatOne : seatList) {
+            log.debug("Exited by FixedTermTicket update");
             exitSeatBySeatEntity(seatOne, null);
         }
     }
@@ -60,6 +61,7 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
                 .fetch();
 
         for (Seat seatOne : seatList) {
+            log.debug("Exited by PartTimeTicket update");
             exitSeatBySeatEntity(seatOne, null);
         }
     }
@@ -69,10 +71,11 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
         List<SeatReservationInfo> seatRezInfoList = query
                 .selectFrom(seatReservationInfo)
                 .where(seatReservationInfo.isValid.eq(SeatReservationInfoStateType.VALID),
-                        seatReservationInfo.endTime.after(LocalDateTime.now()))
+                        seatReservationInfo.endTime.before(LocalDateTime.now()))
                 .fetch();
 
         for (SeatReservationInfo info : seatRezInfoList) {
+            log.debug("Exited by StartTime update, endTime={}", info.getEndTime());
             Seat findSeat = findByCafeNameAndSeatNumber(info.getCafeName(), info.getSeatNumber());
             exitSeatBySeatEntity(findSeat, info);
         }

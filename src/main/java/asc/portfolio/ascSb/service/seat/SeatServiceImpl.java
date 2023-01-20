@@ -101,11 +101,14 @@ public class SeatServiceImpl implements SeatService {
 
                 //Ticket Exit
                 Ticket ticket = findSeat.getTicket();
-                if (ticket.isFixedTermTicket()) {
+                if (ticket == null) {
+                    log.error("ticket == null");
+                } else if (ticket.isFixedTermTicket()) {
                     ticket.exitUsingTicket(null);
                 } else {
                     ticket.exitUsingTicket(timeInUse); // 사용한 시간 startTime or timeInUse
                 }
+
             }
         }
 
