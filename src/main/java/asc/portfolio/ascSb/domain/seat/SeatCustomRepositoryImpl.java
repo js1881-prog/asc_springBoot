@@ -1,10 +1,8 @@
 package asc.portfolio.ascSb.domain.seat;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
-import asc.portfolio.ascSb.domain.seatreservationinfo.QSeatReservationInfo;
 import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfo;
 import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfoRepository;
 import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfoStateType;
-import asc.portfolio.ascSb.domain.ticket.QTicket;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.web.dto.seat.SeatSelectResponseDto;
 import com.querydsl.core.types.Projections;
@@ -67,9 +65,28 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
                 .fetch();
 
         for (Seat seatOne : seatList) {
-            count++;
-            log.debug("Exited by PartTimeTicket update");
-            exitSeatBySeatEntity(seatOne, null);
+            Cafe cafe = seatOne.getCafe();
+            SeatReservationInfo info = query
+                    .selectFrom(seatReservationInfo)
+                    .where(seatReservationInfo.isValid.eq(SeatReservationInfoStateType.VALID),
+                            seatReservationInfo.cafeName.eq(cafe.getCafeName()),
+                            seatReservationInfo.seatNumber.eq(seatOne.getSeatNumber()))
+                    .fetchOne();
+
+            if (info == null) {
+                log.error("예약된 Seat에 유효한 SeatReservationInfo가 없습니다. seat = {}, {}", cafe.getCafeName(), seatOne.getSeatNumber());
+                return 0;
+            }
+
+            Ticket ticketOne = info.getTicket();
+            Long remainTime = ticketOne.getRemainingTime();
+            Long timeInUse = info.updateTimeInUse();
+
+            if (timeInUse >= remainTime) {
+                count++;
+                log.debug("Exited by PartTimeTicket update");
+                exitSeatBySeatEntity(seatOne, info);
+            }
         }
 
         return count;
