@@ -175,10 +175,13 @@ public class SeatServiceImpl implements SeatService {
     }
 
     @Override
-    public void updateAllReservedSeatState() {
-        seatRepository.updateAllReservedSeatStateWithFixedTermTicket();
-        seatRepository.updateAllReservedSeatStateWithPartTimeTicket();
-        seatRepository.updateAllReservedSeatStateWithStartTime();
+    public int updateAllReservedSeatState() {
+        int count = 0;
+        count += seatRepository.updateAllReservedSeatStateWithFixedTermTicket();
+        count += seatRepository.updateAllReservedSeatStateWithPartTimeTicket();
+        count += seatRepository.updateAllReservedSeatStateWithStartTime();
+
+        return count;
     }
 
     private void alertFcm(List<Seat> list) {

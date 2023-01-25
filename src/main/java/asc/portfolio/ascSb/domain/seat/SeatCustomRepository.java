@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface SeatCustomRepository {
 
-    public void updateAllReservedSeatStateWithFixedTermTicket();
+    public int updateAllReservedSeatStateWithFixedTermTicket();
 
-    public void updateAllReservedSeatStateWithPartTimeTicket();
+    public int updateAllReservedSeatStateWithPartTimeTicket();
 
-    public void updateAllReservedSeatStateWithStartTime();
+    public int updateAllReservedSeatStateWithStartTime();
 
     public List<Seat> getAlmostFinishedSeatListWithFixedTermTicket(Long minute);
 

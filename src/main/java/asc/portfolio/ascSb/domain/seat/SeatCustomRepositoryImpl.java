@@ -32,7 +32,8 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
     private final SeatReservationInfoRepository seatReservationInfoRepository;
 
     @Override
-    public void updateAllReservedSeatStateWithFixedTermTicket() {
+    public int updateAllReservedSeatStateWithFixedTermTicket() {
+        int count = 0;
 
         // Fixed-Term Ticket Update
         List<Seat> seatList = query
@@ -45,13 +46,18 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
 
         // 만료된 Fixed-Term Ticket 에 따른 Seat, seatReservationInfo 종료 처리
         for (Seat seatOne : seatList) {
+            count++;
             log.debug("Exited by FixedTermTicket update");
             exitSeatBySeatEntity(seatOne, null);
         }
+
+        return count;
     }
 
     @Override
-    public void updateAllReservedSeatStateWithPartTimeTicket() {
+    public int updateAllReservedSeatStateWithPartTimeTicket() {
+        int count = 0;
+
         // Part-Time Ticket Update
         List<Seat> seatList = query
                 .selectFrom(seat)
@@ -61,13 +67,17 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
                 .fetch();
 
         for (Seat seatOne : seatList) {
+            count++;
             log.debug("Exited by PartTimeTicket update");
             exitSeatBySeatEntity(seatOne, null);
         }
+
+        return count;
     }
 
     @Override
-    public void updateAllReservedSeatStateWithStartTime() {
+    public int updateAllReservedSeatStateWithStartTime() {
+        int count = 0;
         List<SeatReservationInfo> seatRezInfoList = query
                 .selectFrom(seatReservationInfo)
                 .where(seatReservationInfo.isValid.eq(SeatReservationInfoStateType.VALID),
@@ -75,10 +85,13 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
                 .fetch();
 
         for (SeatReservationInfo info : seatRezInfoList) {
+            count++;
             log.debug("Exited by StartTime update, endTime={}", info.getEndTime());
             Seat findSeat = findByCafeNameAndSeatNumber(info.getCafeName(), info.getSeatNumber());
             exitSeatBySeatEntity(findSeat, info);
         }
+
+        return count;
     }
 
     @Override
