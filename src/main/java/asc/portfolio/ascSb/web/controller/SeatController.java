@@ -38,15 +38,6 @@ public class SeatController {
         return new ResponseEntity<>("IllegalArgument Exception", HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/{cafeName}")
-    public ResponseEntity<List<SeatSelectResponseDto>> seatStateList(@PathVariable String cafeName) {
-        if(cafeName.isEmpty()) {
-            log.info("cafeName이 비어 있습니다.");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(seatService.showCurrentAllSeatState(cafeName), HttpStatus.OK);
-    }
-
     @GetMapping("/one")
     public ResponseEntity<SeatResponseDto> seatStateOne(@LoginUser User user) {
 

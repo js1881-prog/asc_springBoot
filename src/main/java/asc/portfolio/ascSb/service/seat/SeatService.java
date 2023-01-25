@@ -18,5 +18,7 @@ public interface SeatService {
 
     public void exitSeatBySeatNumber(Cafe cafe, int seatNumber);
 
-    public void updateAllReservedSeatState();
+    public int updateAllReservedSeatState();
+
+    public void alertAlmostFinishedSeat();
 }

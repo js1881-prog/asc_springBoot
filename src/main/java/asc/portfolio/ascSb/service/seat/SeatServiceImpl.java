@@ -101,11 +101,14 @@ public class SeatServiceImpl implements SeatService {
 
                 //Ticket Exit
                 Ticket ticket = findSeat.getTicket();
-                if (ticket.isFixedTermTicket()) {
+                if (ticket == null) {
+                    log.error("ticket == null");
+                } else if (ticket.isFixedTermTicket()) {
                     ticket.exitUsingTicket(null);
                 } else {
                     ticket.exitUsingTicket(timeInUse); // 사용한 시간 startTime or timeInUse
                 }
+
             }
         }
 
@@ -172,9 +175,34 @@ public class SeatServiceImpl implements SeatService {
     }
 
     @Override
-    public void updateAllReservedSeatState() {
-        seatRepository.updateAllReservedSeatStateWithFixedTermTicket();
-        seatRepository.updateAllReservedSeatStateWithPartTimeTicket();
-        seatRepository.updateAllReservedSeatStateWithStartTime();
+    public int updateAllReservedSeatState() {
+        int count = 0;
+        count += seatRepository.updateAllReservedSeatStateWithFixedTermTicket();
+        count += seatRepository.updateAllReservedSeatStateWithPartTimeTicket();
+        count += seatRepository.updateAllReservedSeatStateWithStartTime();
+
+        return count;
+    }
+
+    private void alertFcm(List<Seat> list) {
+        //TODO
+    }
+
+    private void checkAlmostFinishedSeatWithFixedTermTicket() {
+        List<Seat> list = seatRepository.getAlmostFinishedSeatListWithFixedTermTicket(10L);
+
+        alertFcm(list);
+    }
+
+    private void checkAlmostFinishedSeatWithStartTime() {
+        List<Seat> list = seatRepository.getAlmostFinishedSeatListWithStartTime(10L);
+
+        alertFcm(list);
+    }
+
+    //1분 초과로 스케쥴 잡아야 중복 alert 없음
+    public void alertAlmostFinishedSeat() {
+        this.checkAlmostFinishedSeatWithFixedTermTicket();
+        this.checkAlmostFinishedSeatWithStartTime();
     }
 }

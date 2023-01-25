@@ -1,10 +1,8 @@
 package asc.portfolio.ascSb.domain.seat;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
-import asc.portfolio.ascSb.domain.seatreservationinfo.QSeatReservationInfo;
 import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfo;
 import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfoRepository;
 import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfoStateType;
-import asc.portfolio.ascSb.domain.ticket.QTicket;
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.web.dto.seat.SeatSelectResponseDto;
 import com.querydsl.core.types.Projections;
@@ -14,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static asc.portfolio.ascSb.domain.cafe.QCafe.*;
@@ -31,7 +30,8 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
     private final SeatReservationInfoRepository seatReservationInfoRepository;
 
     @Override
-    public void updateAllReservedSeatStateWithFixedTermTicket() {
+    public int updateAllReservedSeatStateWithFixedTermTicket() {
+        int count = 0;
 
         // Fixed-Term Ticket Update
         List<Seat> seatList = query
@@ -39,17 +39,23 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
                 .join(seat.ticket, ticket)
                 .where(seat.seatState.eq(SeatStateType.RESERVED),
                         ticket.productLabel.contains("FIXED-TERM"),
-                        ticket.fixedTermTicket.after(LocalDateTime.now()))
+                        ticket.fixedTermTicket.before(LocalDateTime.now()))
                 .fetch();
 
         // 만료된 Fixed-Term Ticket 에 따른 Seat, seatReservationInfo 종료 처리
         for (Seat seatOne : seatList) {
+            count++;
+            log.debug("Exited by FixedTermTicket update");
             exitSeatBySeatEntity(seatOne, null);
         }
+
+        return count;
     }
 
     @Override
-    public void updateAllReservedSeatStateWithPartTimeTicket() {
+    public int updateAllReservedSeatStateWithPartTimeTicket() {
+        int count = 0;
+
         // Part-Time Ticket Update
         List<Seat> seatList = query
                 .selectFrom(seat)
@@ -59,22 +65,82 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
                 .fetch();
 
         for (Seat seatOne : seatList) {
-            exitSeatBySeatEntity(seatOne, null);
+            Cafe cafe = seatOne.getCafe();
+            SeatReservationInfo info = query
+                    .selectFrom(seatReservationInfo)
+                    .where(seatReservationInfo.isValid.eq(SeatReservationInfoStateType.VALID),
+                            seatReservationInfo.cafeName.eq(cafe.getCafeName()),
+                            seatReservationInfo.seatNumber.eq(seatOne.getSeatNumber()))
+                    .fetchOne();
+
+            if (info == null) {
+                log.error("예약된 Seat에 유효한 SeatReservationInfo가 없습니다. seat = {}, {}", cafe.getCafeName(), seatOne.getSeatNumber());
+                return 0;
+            }
+
+            Ticket ticketOne = info.getTicket();
+            Long remainTime = ticketOne.getRemainingTime();
+            Long timeInUse = info.updateTimeInUse();
+
+            if (timeInUse >= remainTime) {
+                count++;
+                log.debug("Exited by PartTimeTicket update");
+                exitSeatBySeatEntity(seatOne, info);
+            }
         }
+
+        return count;
     }
 
     @Override
-    public void updateAllReservedSeatStateWithStartTime() {
+    public int updateAllReservedSeatStateWithStartTime() {
+        int count = 0;
         List<SeatReservationInfo> seatRezInfoList = query
                 .selectFrom(seatReservationInfo)
                 .where(seatReservationInfo.isValid.eq(SeatReservationInfoStateType.VALID),
-                        seatReservationInfo.endTime.after(LocalDateTime.now()))
+                        seatReservationInfo.endTime.before(LocalDateTime.now()))
                 .fetch();
 
         for (SeatReservationInfo info : seatRezInfoList) {
+            count++;
+            log.debug("Exited by StartTime update, endTime={}", info.getEndTime());
             Seat findSeat = findByCafeNameAndSeatNumber(info.getCafeName(), info.getSeatNumber());
             exitSeatBySeatEntity(findSeat, info);
         }
+
+        return count;
+    }
+
+    @Override
+    public List<Seat> getAlmostFinishedSeatListWithFixedTermTicket(Long minute) {
+        //after(10분전) ~ before(9분전) ~~~ 현재
+        return query
+                .selectFrom(seat)
+                .join(seat.ticket, ticket)
+                .where(seat.seatState.eq(SeatStateType.RESERVED),
+                        ticket.productLabel.contains("FIXED-TERM"),
+                        ticket.fixedTermTicket.after(LocalDateTime.now().minusMinutes(minute)),
+                        ticket.fixedTermTicket.before(LocalDateTime.now().minusMinutes(minute - 1)))
+                .fetch();
+    }
+
+    @Override
+    public List<Seat> getAlmostFinishedSeatListWithStartTime(Long minute) {
+        //after(10분전) ~ before(9분전) ~~~ 현재
+        List<SeatReservationInfo> seatRezInfoList = query
+                .selectFrom(seatReservationInfo)
+                .where(seatReservationInfo.isValid.eq(SeatReservationInfoStateType.VALID),
+                        seatReservationInfo.endTime.after(LocalDateTime.now().minusMinutes(minute)),
+                        seatReservationInfo.endTime.before(LocalDateTime.now().minusMinutes(minute - 1)))
+                .fetch();
+
+        List<Seat> seatList = new ArrayList<>();
+        for (SeatReservationInfo info : seatRezInfoList) {
+            Seat findSeat = findByCafeNameAndSeatNumber(info.getCafeName(), info.getSeatNumber());
+            seatList.add(findSeat);
+        }
+
+        return seatList;
     }
 
     private void exitSeatBySeatEntity(Seat seatOne, SeatReservationInfo seatRezInfoEntity) {
