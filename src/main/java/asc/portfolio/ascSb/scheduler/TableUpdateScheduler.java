@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -36,7 +37,7 @@ public class TableUpdateScheduler {
     }
 
     @Scheduled(fixedDelay = 1000 * 120)
-    public void alertFCMAlmostFinishedSeat() {
+        public void alertFCMAlmostFinishedSeat() throws IOException {
         log.debug("alert almost finished seat");
         seatService.alertAlmostFinishedSeat();
     }
