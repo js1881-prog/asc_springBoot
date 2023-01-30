@@ -4,6 +4,7 @@ import asc.portfolio.ascSb.domain.user.User;
 import asc.portfolio.ascSb.web.dto.seat.SeatResponseDto;
 import asc.portfolio.ascSb.web.dto.seat.SeatSelectResponseDto;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface SeatService {
@@ -20,5 +21,5 @@ public interface SeatService {
 
     public int updateAllReservedSeatState();
 
-    public void alertAlmostFinishedSeat();
+    public void alertAlmostFinishedSeat() throws IOException;
 }

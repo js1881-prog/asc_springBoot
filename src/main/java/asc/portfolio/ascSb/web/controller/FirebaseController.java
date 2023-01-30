@@ -6,6 +6,7 @@ import asc.portfolio.ascSb.jwt.LoginUser;
 import asc.portfolio.ascSb.service.fcm.FirebaseCloudMessageService;
 import asc.portfolio.ascSb.service.fcm.fcmtoken.FCMTokenService;
 import asc.portfolio.ascSb.web.dto.fcm.FCMRequestDto;
+import com.google.api.Http;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -62,18 +63,14 @@ public class FirebaseController {
 
         log.info("FCM SEND {} {}", requestDTO.getTitle(), requestDTO.getBody());
 
-        if (Objects.equals(requestDTO.getTarget(), "특정유저")) {
-
-            String targetToken = fcmTokenService.adminFindSpecificToken(requestDTO.getSpecific_user());
+            String targetToken = fcmTokenService.adminFindSpecificToken(requestDTO.getUser_name());
 
             firebaseCloudMessageService.sendMessageToSpecificUser(
                     targetToken,
                     requestDTO.getTitle(),
                     requestDTO.getBody());
 
-            return ResponseEntity.ok().build();
-        } else {
-            return null;
-        }
+            return new ResponseEntity<>("OK", HttpStatus.OK);
+
     }
 }

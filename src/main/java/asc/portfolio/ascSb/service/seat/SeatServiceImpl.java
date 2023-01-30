@@ -1,6 +1,7 @@
 package asc.portfolio.ascSb.service.seat;
 import asc.portfolio.ascSb.domain.cafe.Cafe;
 import asc.portfolio.ascSb.domain.cafe.CafeRepository;
+import asc.portfolio.ascSb.domain.redisrepo.RedisRepository;
 import asc.portfolio.ascSb.domain.seat.Seat;
 import asc.portfolio.ascSb.domain.seat.SeatRepository;
 import asc.portfolio.ascSb.domain.seat.SeatStateType;
@@ -9,6 +10,8 @@ import asc.portfolio.ascSb.domain.seatreservationinfo.SeatReservationInfoReposit
 import asc.portfolio.ascSb.domain.ticket.Ticket;
 import asc.portfolio.ascSb.domain.ticket.TicketRepository;
 import asc.portfolio.ascSb.domain.user.User;
+import asc.portfolio.ascSb.service.fcm.FirebaseCloudMessageService;
+import asc.portfolio.ascSb.service.fcm.fcmtoken.FCMTokenService;
 import asc.portfolio.ascSb.web.dto.seat.SeatResponseDto;
 import asc.portfolio.ascSb.web.dto.seat.SeatSelectResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,6 +37,10 @@ public class SeatServiceImpl implements SeatService {
     private final SeatReservationInfoRepository reservationInfoRepository;
 
     private final TicketRepository ticketRepository;
+
+    private final RedisRepository redisRepository;
+
+    private final FirebaseCloudMessageService firebaseCloudMessageService;
 
     @Override
     public List<SeatSelectResponseDto> showCurrentAllSeatState(String cafeName) {
@@ -185,7 +193,27 @@ public class SeatServiceImpl implements SeatService {
     }
 
     private void alertFcm(List<Seat> list) {
-        //TODO
+        // TODO
+        /* List<Seat>에서 FCM을 보낼 유저들을 특정 후 FireBase서버를 경유해 10분 남았다고 알림을 요청 */
+        List<String> userName = list.stream()
+                .map(u -> u.getUser().getLoginId())
+                .collect(Collectors.toList());
+
+        if (!userName.isEmpty()) {
+            for (String userNames : userName) {
+                String token = redisRepository.getValue(userNames + "_" + "USER" + "_FCM_TOKEN");
+                try {
+                    firebaseCloudMessageService.sendMessageToSpecificUser(token,
+                            "알라딘 스터디카페",
+                            "좌석이 10분 남았습니다.");
+                } catch (IOException e) {
+                    log.info("FCM Message sending failed");
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            log.info("alertFcm user is not exist");
+        }
     }
 
     private void checkAlmostFinishedSeatWithFixedTermTicket() {

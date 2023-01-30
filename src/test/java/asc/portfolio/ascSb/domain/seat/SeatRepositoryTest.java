@@ -58,7 +58,7 @@ public class SeatRepositoryTest {
         cafeRepository.deleteAllInBatch();
     }
 
-    private Cafe careateNewCafe(String cafeName) {
+    private Cafe createNewCafe(String cafeName) {
         Cafe cafe = Cafe.builder()
                 .cafeName(cafeName)
                 .build();
@@ -124,7 +124,7 @@ public class SeatRepositoryTest {
 
     @Test
     public void Seat_좌석생성기() {
-        Cafe cafe = careateNewCafe("testData_서울");
+        Cafe cafe = createNewCafe("testData_서울");
         User user = createNewUser("ascUser");
         Seat seat = createNewSeat(cafe, 0);
         Ticket ticket = createNewFixedTicket(cafe, user, LocalDateTime.now().plusSeconds(5));
@@ -137,7 +137,7 @@ public class SeatRepositoryTest {
 
     @Test
     public void Seat_Update_With_FixedTicket_0() {
-        Cafe cafe = careateNewCafe("testData_서울");
+        Cafe cafe = createNewCafe("testData_서울");
         User user = createNewUser("ascUser");
         Seat seat = createNewSeat(cafe, 0);
         cafeService.changeReservedUserCafe(user, "testData_서울");
@@ -155,7 +155,7 @@ public class SeatRepositoryTest {
 
     @Test
     public void Seat_Update_With_FixedTicket_1() {
-        Cafe cafe = careateNewCafe("testData_서울");
+        Cafe cafe = createNewCafe("testData_서울");
         User user = createNewUser("ascUser");
         Seat seat = createNewSeat(cafe, 0);
         cafeService.changeReservedUserCafe(user, "testData_서울");
@@ -173,7 +173,7 @@ public class SeatRepositoryTest {
 
     @Test
     public void Seat_Update_With_StartTime() {
-        Cafe cafe = careateNewCafe("testData_서울");
+        Cafe cafe = createNewCafe("testData_서울");
         User user = createNewUser("ascUser");
         Seat seat = createNewSeat(cafe, 0);
 
@@ -193,7 +193,7 @@ public class SeatRepositoryTest {
 
     @Test
     public void Seat_Update_With_PartTimeTicket_종료X() {
-        Cafe cafe = careateNewCafe("testData_서울");
+        Cafe cafe = createNewCafe("testData_서울");
         User user = createNewUser("ascUser");
         Seat seat = createNewSeat(cafe, 0);
         cafeService.changeReservedUserCafe(user, "testData_서울");
@@ -210,7 +210,7 @@ public class SeatRepositoryTest {
 
     @Test
     public void Seat_Update_With_PartTimeTicket_종료O() {
-        Cafe cafe = careateNewCafe("testData_서울");
+        Cafe cafe = createNewCafe("testData_서울");
         User user = createNewUser("ascUser");
         Seat seat = createNewSeat(cafe, 0);
         cafeService.changeReservedUserCafe(user, "testData_서울");
