@@ -9,9 +9,7 @@
 
 - 2022년 11월 01일 ~ 진행중 
 - ch-yang1273 
-- Ukid
-
-
+- padonan
 
 
 
@@ -83,25 +81,4 @@
 
 ![매출](https://user-images.githubusercontent.com/98295182/209657030-a6567c92-ded2-4b59-a743-908164ee65e8.gif)
 
-
-
-<details>
-<summary><b>핵심 기능 설명 펼치기</b></summary>
-<div markdown="1">
-
-### 4.1. 전체 흐름
-
-### 4.2. 사용자 요청
-
-### 4.3. Controller
-
-
-### 4.4. Service
-
-
-### 4.5. Repository
-
-
-</div>
-</details>
 
