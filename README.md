@@ -30,6 +30,9 @@
 
 # 📝 Front-end
 
+
+- Git : (https://github.com/padonan/asc_flutter)
+
 - flutter ‘3.3.4’
 - dart ‘2.18.2’
 - flutter_native_splash: ^2.2.13
@@ -42,17 +45,10 @@
 - flutter_form_builder: ^7.7.0
 - toast: ^0.3.0
 - url_launcher: ^6.1.7
-- flutter_riverpod: ^2.1.1
-- freezed_annotation: ^2.2.0
-- json_annotation: ^4.7.0
-- go_router: ^5.2.4
 - logger: ^1.1.0
 - flutter_local_notifications: ^12.0.4
 - build_runner: ^2.3.2
-- freezed: ^2.3.2
 - json_serializable: ^6.5.4
-
-
 
 
 
