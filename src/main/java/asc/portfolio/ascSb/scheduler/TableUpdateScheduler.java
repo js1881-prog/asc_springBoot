@@ -36,7 +36,7 @@ public class TableUpdateScheduler {
         log.info("update Ticket. count={}", updateCount);
     }
 
-    @Scheduled(fixedDelay = 1000 * 120)
+    @Scheduled(fixedDelay = 1000 * 60)
         public void alertFCMAlmostFinishedSeat() throws IOException {
         log.debug("alert almost finished seat");
         seatService.alertAlmostFinishedSeat();

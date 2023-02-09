@@ -218,12 +218,14 @@ public class SeatServiceImpl implements SeatService {
 
     private void checkAlmostFinishedSeatWithFixedTermTicket() {
         List<Seat> list = seatRepository.getAlmostFinishedSeatListWithFixedTermTicket(10L);
+        log.debug("Alert list size with FixedTerm Ticket = {}", list.size());
 
         alertFcm(list);
     }
 
     private void checkAlmostFinishedSeatWithStartTime() {
         List<Seat> list = seatRepository.getAlmostFinishedSeatListWithStartTime(10L);
+        log.debug("Alert list size with StartTime = {}", list.size());
 
         alertFcm(list);
     }

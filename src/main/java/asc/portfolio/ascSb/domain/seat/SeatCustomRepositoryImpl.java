@@ -114,25 +114,36 @@ public class SeatCustomRepositoryImpl implements SeatCustomRepository {
     @Override
     public List<Seat> getAlmostFinishedSeatListWithFixedTermTicket(Long minute) {
         //after(10분전) ~ before(9분전) ~~~ 현재
+
+        LocalDateTime timeNow = LocalDateTime.now();
+        LocalDateTime timeAfter = timeNow.plusMinutes(minute);
+        LocalDateTime timeBefore = timeNow.plusMinutes(minute + 1);
+
         return query
                 .selectFrom(seat)
                 .join(seat.ticket, ticket)
                 .where(seat.seatState.eq(SeatStateType.RESERVED),
                         ticket.productLabel.contains("FIXED-TERM"),
-                        ticket.fixedTermTicket.after(LocalDateTime.now().minusMinutes(minute)),
-                        ticket.fixedTermTicket.before(LocalDateTime.now().minusMinutes(minute - 1)))
+                        ticket.fixedTermTicket.after(timeAfter),
+                        ticket.fixedTermTicket.before(timeBefore))
                 .fetch();
     }
 
     @Override
     public List<Seat> getAlmostFinishedSeatListWithStartTime(Long minute) {
         //after(10분전) ~ before(9분전) ~~~ 현재
+
+        LocalDateTime timeNow = LocalDateTime.now();
+        LocalDateTime timeAfter = timeNow.plusMinutes(minute);
+        LocalDateTime timeBefore = timeNow.plusMinutes(minute + 1);
+
         List<SeatReservationInfo> seatRezInfoList = query
                 .selectFrom(seatReservationInfo)
                 .where(seatReservationInfo.isValid.eq(SeatReservationInfoStateType.VALID),
-                        seatReservationInfo.endTime.after(LocalDateTime.now().minusMinutes(minute)),
-                        seatReservationInfo.endTime.before(LocalDateTime.now().minusMinutes(minute - 1)))
+                        seatReservationInfo.endTime.after(timeAfter),
+                        seatReservationInfo.endTime.before(timeBefore))
                 .fetch();
+
 
         List<Seat> seatList = new ArrayList<>();
         for (SeatReservationInfo info : seatRezInfoList) {
