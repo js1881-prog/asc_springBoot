@@ -13,7 +13,8 @@
 
 
 ## 2. 전체 개요도 
-<img width="1280" alt="main_flow" src="https://user-images.githubusercontent.com/98295182/230914972-28f481e3-2f1a-4358-b541-f18ee1af17d1.png">
+<img width="1280" alt="main_" src="https://user-images.githubusercontent.com/98295182/230915321-dcad4031-a39f-4d4a-9573-4f77726fcb4b.png">
+
 
 - RESTful API + JwtToken 기반의 서버 <-> 클라이언트 
 - FCMToken, JwtToken은 Redis에서 별도의 관리
@@ -50,7 +51,8 @@
 ##
 ##
 ## 2.3 결제 흐름도
-<img width="1280" alt="payment_flow" src="https://user-images.githubusercontent.com/98295182/230903396-cb6f1ad8-cb2a-4c55-900f-b777837d1e24.png">
+<img width="1276" alt="main_flow_" src="https://user-images.githubusercontent.com/98295182/230915412-d545ff22-e7cd-4447-b108-3c9afe6c09ce.png">
+
 
 - 좀 더 세부적인 결제 흐름을 만들고자 flow를 Order, Product, Ticket DAO로 나누어 관리하였습니다. 
 1. OrderDAO 생성 => 유저가 결제를 시도한 경우 생성됩니다. 비검증 상태이고 테이블상에 해당 결제시도가 저장됩니다.
