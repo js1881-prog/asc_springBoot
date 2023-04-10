@@ -13,7 +13,7 @@
 
 
 ## 2. 전체 개요도 
-<img width="1280" alt="main_" src="https://user-images.githubusercontent.com/98295182/230893835-f88d6ed5-1222-40bc-a6fb-e42e61464554.png">
+<img width="1280" alt="main_flow" src="https://user-images.githubusercontent.com/98295182/230914972-28f481e3-2f1a-4358-b541-f18ee1af17d1.png">
 
 - RESTful API + JwtToken 기반의 서버 <-> 클라이언트 
 - FCMToken, JwtToken은 Redis에서 별도의 관리
